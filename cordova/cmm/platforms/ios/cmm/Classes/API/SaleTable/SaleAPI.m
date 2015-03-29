@@ -15,7 +15,13 @@
     
     if (HTTP_POSTMETHOD) {
         [LK_APIUtil postHttpRequest:request apiPath:URLPATH_SALEQUERY Success:^(NSObject *response,NSInteger result,NSString *msg){
-            sucess((SaleResponse *)response,result,msg);
+            NSArray *array = (NSArray *)response;
+            if (array.count > 0) {
+                sucess(array.firstObject,result,msg);
+            }else{
+                sucess(nil,result,msg);
+            }
+            
         } fail:^(NSString * descript){
             fail(descript);
         }class:[SaleResponse class]];

@@ -18,6 +18,7 @@
 #define URLPATH_UPDATASIGNNAME @"userSign"
 #define URLPATH_SALEQUERY @"saleQuery"
 
+#define URLPATH_TASKS @"taskList"
 
 
 #define HTTP_POSTMETHOD 1
