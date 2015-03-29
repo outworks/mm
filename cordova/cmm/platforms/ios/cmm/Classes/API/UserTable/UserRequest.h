@@ -15,7 +15,7 @@
 
 @end
 
-@interface UserSignRequest : LK_HttpBaseRequest
+@interface UserSignRequest : LK_MultipartHttpBaseRequest
 
 @property(nonatomic,strong) NSString *userId; 	//用户名
 @property(nonatomic,strong) NSString *signName; 	//密码

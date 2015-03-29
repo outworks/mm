@@ -13,6 +13,37 @@
 
 @end
 
+/**
+ *  文件数据(data/fileName二选一)
+ */
+@interface LK_FilePart : NSObject
+
+@property(nonatomic,strong) NSData *data;
+
+@property(nonatomic,strong) NSString *name;
+
+@property(nonatomic,strong) NSString *fileName;
+
+@property(nonatomic,strong) NSString *mimeType;
+
+-(id)initWithFileData:(NSData *)data
+                 name:(NSString *)name
+             fileName:(NSString *)fileName
+             mimeType:(NSString *)mimeType;
+
+@end
+
+@interface LK_MultipartHttpBaseRequest : LK_HttpBaseRequest
+
+@property(nonatomic,strong) NSMutableArray *fileMedias;
+
+- (void)appendPartWithFileData:(NSData *)data
+                                 name:(NSString *)name
+                             fileName:(NSString *)fileName
+                      mimeType:(NSString *)mimeType;
+
+@end
+
 @interface LK_HttpBasePageRequest : LK_HttpBaseRequest
 
 
