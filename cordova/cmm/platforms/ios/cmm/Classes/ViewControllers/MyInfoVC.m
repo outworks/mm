@@ -158,6 +158,7 @@
     [UserAPI updataSignNameHttpAPI:request Success:^(NSInteger result, NSString *msg) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     } fail:^(NSString *description) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [MBProgressHUD showError:description toView:self.view];
     }];
 }
