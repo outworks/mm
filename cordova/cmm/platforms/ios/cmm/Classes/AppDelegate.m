@@ -31,8 +31,6 @@
 
 #import "LoginVC.h"
 #import "BMapKit.h"
-#import "SaleAPI.h"
-
 
 #import <Cordova/CDVPlugin.h>
 
@@ -78,16 +76,6 @@
     self.viewController = [[UINavigationController alloc]initWithRootViewController:loginVC];
     self.viewController.navigationBarHidden = YES;
     self.window.rootViewController = self.viewController;
-    
-    SaleRequest *t_request = [[SaleRequest alloc] init];
-    t_request.userId = @"11";
-    [SaleAPI getSaleQueryHttpAPI:t_request Success:^(SaleResponse *response, NSInteger result, NSString *msg) {
-        NSLog(@"%@",response.curDayCount);
-    } fail:^(NSString *description) {
-        
-    }];
-    
-    
     
     NSString *savedPassword = [[NSUserDefaults standardUserDefaults] objectForKey:@"gesturePassword"];
     

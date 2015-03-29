@@ -8,10 +8,14 @@
 
 #import "MyWorkVC.h"
 #import "CommonTabBar.h"
+#import "BasicWorkVC.h"
 
 @interface MyWorkVC ()
 
 @property (nonatomic,strong) CommonTabBar *tabBar;
+@property (weak, nonatomic) IBOutlet UIView *v_content;
+
+@property (nonatomic,strong) BasicWorkVC *v_basicWork;
 
 @end
 
@@ -53,16 +57,27 @@
     [_tabBar drawItems];
     [self.view addSubview:_tabBar];
     [_tabBar setSelectedIndex:0];
-     
+    
+    [self buildBasicWorkVC];
 }
+
+#pragma mark - private methods
+
+-(void)buildBasicWorkVC{
+    _v_basicWork = [[BasicWorkVC alloc] initWithNibName:@"BasicWorkVC" bundle:nil];
+    _v_basicWork.view.frame = CGRectMake(0, 0, _v_content.frame.size.width, _v_content.frame.size.height);
+    [_v_content addSubview:_v_basicWork.view];
+    
+}
+
 
 
 #pragma mark - commonTabBarDelegate
 
 -(void)tabBar:(CommonTabBar *)tabBar didSelectIndex:(NSInteger)index{
-
-
-
+    
+    
+    
 }
 
 

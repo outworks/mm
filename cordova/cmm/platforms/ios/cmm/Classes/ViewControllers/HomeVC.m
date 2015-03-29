@@ -11,6 +11,10 @@
 #import "SliderVC.h"
 #import "UtilsMacro.h"
 #import "CommonTabBar.h"
+#import "ShareValue.h"
+#import "MyInfoVC.h"
+#import "UtilsMacro.h"
+#import "AppDelegate.h"
 
 
 #import "HaoKaVC.h"
@@ -47,7 +51,6 @@
     _imageV_userIcon.layer.masksToBounds = YES;
     [_btn_memu setEnlargeEdgeWithTop:20 right:20 bottom:20 left:20];
     
-    
     NSArray *t_arr = @[@{@"Title":@"号卡"},@{@"Title":@"终端"},@{@"Title":@"宽带"},@{@"Title":@"重点业务"}];
     _tabBar = [[CommonTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_v_top.frame), ScreenWidth, 35) buttonItems:t_arr CommonTabBarType:CommonTabBarTypeTitleOnly isAnimation:YES];
     _tabBar.delegate = (id<CommonTabBarDelegate>)self;
@@ -59,6 +62,8 @@
     _tabBar.titleSelectFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:15];
     _tabBar.selectedItemTopBackgroundColor = UIColorFromRGB(0x1fbbff);
     _tabBar.selectedItemTopBackroundColorHeight = 1.5f;
+    
+    _lb_userName.text = [ShareValue sharedShareValue].regiterUser.userName;
     
     [_tabBar drawItems];
     [self.scrollView addSubview:_tabBar];
@@ -83,6 +88,16 @@
 
 - (IBAction)todoAction:(id)sender {
     
+    
+    
+}
+
+-(IBAction)userIconAction:(id)sender{
+    MyInfoVC *vc = [[MyInfoVC alloc]init];
+    
+    [ApplicationDelegate.viewController presentViewController:vc animated:YES completion:^{
+        
+    }];
     
     
 }
