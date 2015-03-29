@@ -17,6 +17,7 @@
 #import "MBProgressHUD+Add.h"
 #import "TaskListVC.h"
 #import "ShareFun.h"
+#import "IQUIView+IQKeyboardToolbar.h"
 
 @interface MyInfoVC ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,LXActionSheetDelegate,UITextFieldDelegate>{
     UIImagePickerController *_picker;
@@ -55,8 +56,9 @@
     _iv_head.layer.cornerRadius = _iv_head.frame.size.width/2;
     _iv_head.layer.masksToBounds = YES;
     _iv_head.userInteractionEnabled = YES;
-    _lb_job.text = [NSString stringWithFormat:@"%@%@",[ShareValue sharedShareValue].regiterUser.unitName,[ShareValue sharedShareValue].regiterUser.jobName];
+    _lb_job.text = [NSString stringWithFormat:@"%@%@",[ShareValue sharedShareValue].regiterUser.unitName?[ShareValue sharedShareValue].regiterUser.unitName:@"",[ShareValue sharedShareValue].regiterUser.jobName?[ShareValue sharedShareValue].regiterUser.jobName:@""];
     [_iv_head sd_setImageWithURL:[ShareFun urlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
+    [_tf_sign addDoneOnKeyboardWithTarget:self action:@selector(upSign)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -188,40 +190,33 @@
 }
 
 #pragma mark - UITextFieldDelegate
-- (BOOL)textField:(UITextField *)textField did:(NSRange)range replacementString:(NSString *)string;{
-    if ([string isEqual:@"\n"]) {
-        [MBProgressHUD showMessag:@"正在提交" toView:self.view];
-        UserSignRequest *request = [[UserSignRequest alloc]init];
-        request.userId = [ShareValue sharedShareValue].regiterUser.userId;
-        request.signName = textField.text;
-        [UserAPI updataSignNameHttpAPI:request Success:^(NSInteger result, NSString *msg) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            [MBProgressHUD showSuccess:@"提交成功" toView:self.view];
-
-            [ShareValue sharedShareValue].regiterUser.signName = textField.text;
-            
-        } fail:^(NSString *failDescription) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            [MBProgressHUD showError:failDescription toView:self.view];
-        }];
-    }
-    return YES;
-}
-
--(BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return YES;
+- (void)upSign{
+    [_tf_sign resignFirstResponder];
+    [MBProgressHUD showMessag:@"正在提交" toView:self.view];
+    UserSignRequest *request = [[UserSignRequest alloc]init];
+    request.userId = [ShareValue sharedShareValue].regiterUser.userId;
+    request.signName = _tf_sign.text;
+    request.signImgUrl = @"";
+    [UserAPI updataSignNameHttpAPI:request Success:^(NSInteger result, NSString *msg) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [MBProgressHUD showSuccess:@"提交成功" toView:self.view];
+        
+        [ShareValue sharedShareValue].regiterUser.signName = _tf_sign.text;
+        
+    } fail:^(NSString *failDescription) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [MBProgressHUD showError:failDescription toView:self.view];
+    }];
 }
 
 #pragma mark - TestAction'
 
 - (IBAction)testAction:(id)sender {
-    TaskListVC *vc = [[TaskListVC alloc]init];
-    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
-    [self presentViewController:nav animated:YES completion:^{
-        
-    }];
+//    TaskListVC *vc = [[TaskListVC alloc]init];
+//    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
+//    [self presentViewController:nav animated:YES completion:^{
+//        
+//    }];
     
 }
 

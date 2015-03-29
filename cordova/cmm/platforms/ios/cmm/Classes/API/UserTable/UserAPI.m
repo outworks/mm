@@ -8,6 +8,7 @@
 
 #import "UserAPI.h"
 #import "LK_API.h"
+#import "ShareValue.h"
 
 @implementation UserAPI
 
@@ -15,6 +16,9 @@
 
     if (HTTP_POSTMETHOD) {
         [LK_APIUtil postHttpRequest:request apiPath:URLPATH_GETUSER Success:^(NSObject *response,NSInteger result,NSString *msg){
+            UserResponse *userResponse = (UserResponse *)response;
+            [ShareValue sharedShareValue].positionTimeInterval = userResponse.config.positionTimeInterval;
+            [ShareValue sharedShareValue].fileBaseUrl = userResponse.config.serverUrl;
             sucess((UserResponse *)response,result,msg);
         } fail:^(NSString * descript){
             fail(descript);

@@ -177,7 +177,7 @@
             progressblock(bytesWritten,totalBytesWritten);
         }
     }];
-    
+    [operation start];
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         if(responseObject){
             NSData *responseData = (NSData *)responseObject;
@@ -195,7 +195,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         fail(error.localizedDescription);
     }];
-    [operation start];
+    
 }
 
 @end

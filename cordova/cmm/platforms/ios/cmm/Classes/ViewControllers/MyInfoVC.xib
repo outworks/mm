@@ -48,8 +48,8 @@
                                 <constraint firstAttribute="width" constant="6" id="LLX-6w-M1s"/>
                             </constraints>
                         </imageView>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z4G-x2-iRl">
-                            <rect key="frame" x="81" y="22" width="198" height="30"/>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="磊" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z4G-x2-iRl">
+                            <rect key="frame" x="95" y="24" width="184" height="30"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>

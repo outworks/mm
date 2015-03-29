@@ -60,8 +60,8 @@
 
     if (itemView.tag == 1) {
         TaskListVC * t_vc =  [[TaskListVC alloc] init];
-       
-        [ApplicationDelegate.viewController pushViewController:t_vc animated:YES];
+        UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:t_vc];
+        [ApplicationDelegate.viewController presentViewController:nav animated:YES completion:nil];
     }
 
     

@@ -86,8 +86,6 @@
         [ShareValue sharedShareValue].loginUserName = _textF_userName.text;
         [ShareValue sharedShareValue].regiterUser
         = response.smUser;
-        [ShareValue sharedShareValue].positionTimeInterval = response.config.positionTimeInterval;
-        [ShareValue sharedShareValue].fileBaseUrl = response.config.serverUrl;
         SwipePasswordVC *t_vc = [[SwipePasswordVC alloc] init];
         [self.navigationController pushViewController:t_vc animated:YES];
         

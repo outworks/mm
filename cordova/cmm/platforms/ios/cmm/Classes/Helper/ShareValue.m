@@ -20,7 +20,8 @@
 #define SET_UNITID @"SET_UNITID"
 #define SET_PAYMENT @"SET_PAYMENT"
 #define SET_SIGNNAME @"SET_SIGNNAME"
-
+#define SET_FILEBASEURL @"SET_FILEBASEURL"
+#define SET_POSTIONTIMEINTERVAL @"SET_POSTIONTIMEINTERVAL"
 
 @implementation ShareValue
 
@@ -35,6 +36,24 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
 
 -(BOOL)isRember{
     return [[NSUserDefaults standardUserDefaults]boolForKey:SET_MEMBER];
+}
+
+-(void)setFileBaseUrl:(NSString *)fileBaseUrl{
+    [[NSUserDefaults standardUserDefaults]setValue:fileBaseUrl forKey:SET_FILEBASEURL];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(NSString *)fileBaseUrl{
+    return [[NSUserDefaults standardUserDefaults]stringForKey:SET_FILEBASEURL];
+}
+
+-(void)setPositionTimeInterval:(int)positionTimeInterval{
+    [[NSUserDefaults standardUserDefaults]setInteger:positionTimeInterval forKey:SET_POSTIONTIMEINTERVAL];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(int)positionTimeInterval{
+    return (int)[[NSUserDefaults standardUserDefaults]integerForKey:SET_POSTIONTIMEINTERVAL];
 }
 
 -(NSString *)loginUserName{

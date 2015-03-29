@@ -64,6 +64,11 @@
     [self addHeadAction];
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    _textf_signName.text = [ShareValue sharedShareValue].regiterUser.signName;
+}
+
 
 -(void)addHeadAction{
     UITapGestureRecognizer *tapGestreRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addHeadImage:)];

@@ -30,12 +30,12 @@
     [self loadDatas];
     self.navigationController.navigationBarHidden = NO;
     self.navigationController.navigationBar.backgroundColor = HEX_RGB(0x008cec);
+    self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],UITextAttributeTextColor,[UIFont systemFontOfSize:18],UITextAttributeFont, nil];
     [[UINavigationBar appearance] setBarTintColor:HEX_RGB(0x008cec)];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
     [item setTintColor:[UIColor whiteColor ]];
     self.navigationItem.leftBarButtonItem = item;
     self.navigationController.navigationBar.translucent = NO;
-    
     self.title = @"任务列表";
 }
 
