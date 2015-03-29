@@ -8,6 +8,9 @@
 
 #import "BasicWorkVC.h"
 #import "ItemView.h"
+#import "TaskListVC.h"
+#import "MyWorkVC.h"
+#import "AppDelegate.h"
 
 @interface BasicWorkVC ()
 
@@ -41,6 +44,7 @@
         ItemView *t_item = [ItemView initCustomView];
         t_item.frame = CGRectMake(i* ScreenWidth/3, 0, ScreenWidth/3, 127);
         [t_item setDelegate:(id<ItemDelegate>)self];
+        [t_item setTag:i];
         [t_item.imageV_item setImage:[UIImage imageNamed:[arr objectAtIndex:1]]];
         t_item.lb_itmeName.text = [arr objectAtIndex:0];
         [self.view addSubview:t_item];
@@ -54,7 +58,10 @@
 
 -(void)ItemButtonAction:(ItemView *)itemView{
 
-    
+    if (itemView.tag == 1) {
+        TaskListVC * t_vc =  [[TaskListVC alloc] init];
+        [ApplicationDelegate.viewController pushViewController:t_vc animated:YES];
+    }
 
     
     
