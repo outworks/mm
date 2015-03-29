@@ -417,6 +417,9 @@
     if (class == [NSObject class]) {
         return nil;
     }
+    if (class == [NSData class]) {
+        return nil;
+    }
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     unsigned int propertyCount = 0;
     objc_property_t *properties = class_copyPropertyList(class, &propertyCount);
@@ -455,7 +458,10 @@
                         }else if ([clazz isSubclassOfClass:[NSNumber class]]) {
                             [array addObject:cValue];
                         }else{
-                             [array addObject:[cValue dictionaryWithClass:clazz]];
+                            NSObject *obj = [cValue dictionaryWithClass:clazz];
+                            if (obj) {
+                                [array addObject:[cValue dictionaryWithClass:clazz]];
+                            }
                         }
                     }
                     value = array;

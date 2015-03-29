@@ -48,12 +48,12 @@
             if (UIImagePNGRepresentation(image) == nil)
             {
                 self.data = UIImageJPEGRepresentation(image, 0.8);
-                _fileName = [NSString stringWithFormat:@"%f.jpg",[[NSDate date ]timeIntervalSinceNow]];
+                _fileName = [NSString stringWithFormat:@"%ld.jpg",(long)[[NSDate date ]timeIntervalSince1970]];
             }
             else
             {
                 self.data = UIImagePNGRepresentation(image);
-                _fileName = [NSString stringWithFormat:@"%f.png",[[NSDate date ]timeIntervalSinceNow]];
+                _fileName = [NSString stringWithFormat:@"%ld.png",(long)[[NSDate date ]timeIntervalSince1970]];
                 _mimeType = @"image/png";
             }
         }

@@ -119,18 +119,29 @@
 }
 
 +(void)postFileByRequest:(LK_MultipartHttpBaseRequest *)request apiPath:(NSString *)path ProgressBlock:(void(^)(NSInteger bytesWritten, long long totalBytesWritten))progressblock Success:(void (^)(NSObject *response,NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *))fail class:(Class)responseClass {
-    AFHTTPClient *client = [[AFHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:BASE_SERVERLURL]];
-    NSMutableURLRequest *request1 = [client multipartFormRequestWithMethod:@"post" path:path parameters:request.lkDictionary constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        for (LK_FilePart *part in request.fileMedias) {
+    NSArray *files = request.fileMedias;
+    request.fileMedias = nil;
+    NSDictionary *dict = request.lkDictionary;
+    NSLog(@"%@",dict);
+    AFHTTPClient *client = [[AFHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BASE_SERVERLURL,path]]];//@"http://test.yuntu.devstudio.cn:8080/yuntu/photo/uploadImage.do"]];//BASE_SERVERLURL]];
+    NSMutableURLRequest *request1 = [client multipartFormRequestWithMethod:@"post" path:nil parameters:request.lkDictionary constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        for (LK_FilePart *part in files) {
             [formData appendPartWithFileData:part.data name:part.name fileName:part.fileName mimeType:part.mimeType];
         }
     }];
-    request1.timeoutInterval = 20;
+    if (request.heads) {
+        for (NSString *key in request.heads.allKeys) {
+            [request1 setValue:[request.heads objectForKey:key]  forHTTPHeaderField:key];
+        }
+    }
+    request1.timeoutInterval = 40;
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request1];
     [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-        progressblock(bytesWritten,totalBytesWritten);
+        if (progressblock) {
+            progressblock(bytesWritten,totalBytesWritten);
+        }
+        
     }];
-    [operation start];
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         if(responseObject){
             NSData *responseData = (NSData *)responseObject;
@@ -149,7 +160,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         fail(error.localizedDescription);
     }];
-
+    [operation start];
 }
 
 @end

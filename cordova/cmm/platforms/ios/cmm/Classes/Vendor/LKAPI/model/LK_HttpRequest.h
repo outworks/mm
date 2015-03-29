@@ -39,6 +39,8 @@
 
 @property(nonatomic,strong) NSMutableArray *fileMedias;
 
+@property(nonatomic,strong) NSDictionary *heads;
+
 - (void)appendPartWithFileData:(NSData *)data
                                  name:(NSString *)name
                              fileName:(NSString *)fileName

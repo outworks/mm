@@ -10,9 +10,7 @@
 
 
 
-#define BASE_SERVERLURL @"http://123.57.45.235:8090/SC/MobileService?requestType=" 
-
-
+#define BASE_SERVERLURL @"http://123.57.45.235:8090/SC/MobileService?requestType="
 
 // URL
 
