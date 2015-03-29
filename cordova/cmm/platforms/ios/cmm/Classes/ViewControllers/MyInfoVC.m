@@ -15,8 +15,10 @@
 #import "LK_API.h"
 #import "UserAPI.h"
 #import "MBProgressHUD+Add.h"
+#import "TaskListVC.h"
+#import "ShareFun.h"
 
-@interface MyInfoVC ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,LXActionSheetDelegate>{
+@interface MyInfoVC ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,LXActionSheetDelegate,UITextFieldDelegate>{
     UIImagePickerController *_picker;
 }
 
@@ -26,7 +28,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *lb_job;
 
-@property (weak, nonatomic) IBOutlet UILabel *lb_sign;
+@property (weak, nonatomic) IBOutlet UITextField *tf_sign;
 
 @property (weak, nonatomic) IBOutlet UIImageView *iv_head;
 
@@ -38,17 +40,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self updateUserInterface];
+    [self addHeadAction];
+}
+
+-(void)updateUserInterface{
     _lb_mobile.text = [ShareValue sharedShareValue].regiterUser.mobilePhone;
     
     _lb_nickname.text = [ShareValue sharedShareValue].regiterUser.userName;
     
-    _lb_sign.text = [ShareValue sharedShareValue].regiterUser.signName;
+    _tf_sign.text = [ShareValue sharedShareValue].regiterUser.signName;
+    [_tf_sign setDelegate:self];
     
     _iv_head.layer.cornerRadius = _iv_head.frame.size.width/2;
     _iv_head.layer.masksToBounds = YES;
     _iv_head.userInteractionEnabled = YES;
-    [_iv_head sd_setImageWithURL:[NSURL URLWithString:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
-    [self addHeadAction];
+    _lb_job.text = [NSString stringWithFormat:@"%@%@",[ShareValue sharedShareValue].regiterUser.unitName,[ShareValue sharedShareValue].regiterUser.jobName];
+    [_iv_head sd_setImageWithURL:[ShareFun urlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -144,22 +152,31 @@
         [self uploadImage];
     }];
     _picker = nil;
-    
 }
 
 -(void)uploadImage{
-    UserSignRequest *request = [[UserSignRequest alloc]init];
-    request.userId = [ShareValue sharedShareValue].regiterUser.userId;
-    request.signName = @"测试";
-    if (self.headImage) {
-        [request appendImage:self.headImage name:nil];
-    }
-    [MBProgressHUD showMessag:@"正在上传" toView:self.view];
-    [UserAPI updataSignNameHttpAPI:request Success:^(NSInteger result, NSString *msg) {
+    MBProgressHUD *hud = [MBProgressHUD showMessag:@"正在上传" toView:self.view];
+    [hud setMode:MBProgressHUDModeDeterminateHorizontalBar];
+    [LK_APIUtil postFileByImage:self.headImage progressBlock:^(NSInteger bytesWritten, long long totalBytesWritten) {
+        hud.progress = (float)bytesWritten/totalBytesWritten;
+    } Success:^(NSString *fileUrl) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-    } fail:^(NSString *description) {
+        UserSignRequest *request = [[UserSignRequest alloc]init];
+        request.signImgUrl = fileUrl;
+        request.userId = [ShareValue sharedShareValue].regiterUser.userId;
+        request.signName = [ShareValue sharedShareValue].regiterUser.signName;
+        [UserAPI updataSignNameHttpAPI:request Success:^(NSInteger result, NSString *msg) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [MBProgressHUD showSuccess:@"上传成功" toView:self.view];
+            [ShareValue sharedShareValue].regiterUser.signImgUrl = fileUrl;
+            [self updateUserInterface];
+        } fail:^(NSString *description) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [MBProgressHUD showError:description toView:self.view];
+        }];
+    } fail:^(NSString *failDescription) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [MBProgressHUD showError:description toView:self.view];
+        [MBProgressHUD showError:failDescription toView:self.view];
     }];
 }
 
@@ -168,6 +185,44 @@
     NSLog(@"您取消了选择图片");
     [picker dismissViewControllerAnimated:YES completion:nil];
     _picker = nil;
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField did:(NSRange)range replacementString:(NSString *)string;{
+    if ([string isEqual:@"\n"]) {
+        [MBProgressHUD showMessag:@"正在提交" toView:self.view];
+        UserSignRequest *request = [[UserSignRequest alloc]init];
+        request.userId = [ShareValue sharedShareValue].regiterUser.userId;
+        request.signName = textField.text;
+        [UserAPI updataSignNameHttpAPI:request Success:^(NSInteger result, NSString *msg) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [MBProgressHUD showSuccess:@"提交成功" toView:self.view];
+
+            [ShareValue sharedShareValue].regiterUser.signName = textField.text;
+            
+        } fail:^(NSString *failDescription) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [MBProgressHUD showError:failDescription toView:self.view];
+        }];
+    }
+    return YES;
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+#pragma mark - TestAction'
+
+- (IBAction)testAction:(id)sender {
+    TaskListVC *vc = [[TaskListVC alloc]init];
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:^{
+        
+    }];
+    
 }
 
 

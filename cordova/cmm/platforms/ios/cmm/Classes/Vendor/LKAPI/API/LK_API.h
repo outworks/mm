@@ -20,4 +20,6 @@
 
 +(void)postFileByRequest:(LK_MultipartHttpBaseRequest *)request apiPath:(NSString *)path ProgressBlock:(void(^)(NSInteger bytesWritten, long long totalBytesWritten))progressblock Success:(void (^)(NSObject *response,NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *))fail class:(Class)responseClass;
 
++(void)postFileByImage:(UIImage *)image progressBlock:(void(^)(NSInteger bytesWritten, long long totalBytesWritten))progressblock Success:(void (^)(NSString *fileUrl))sucess fail:(void (^)(NSString *))fail;
+
 @end

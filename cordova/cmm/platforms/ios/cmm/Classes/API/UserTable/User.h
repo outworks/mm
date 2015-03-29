@@ -18,7 +18,8 @@
 @property(nonatomic,strong) NSString *mobilePhone;
 
 @property(nonatomic,strong) NSString * signImgUrl;	//	头像
-
+@property(nonatomic,strong) NSString *jobName;//
+@property(nonatomic,strong) NSString *unitName;//
 @property(nonatomic,strong) NSString * jobId;	//	职位
 @property(nonatomic,strong) NSString * unitId;	//	片区
 @property(nonatomic,strong) NSString * payMent;	//	我的薪酬

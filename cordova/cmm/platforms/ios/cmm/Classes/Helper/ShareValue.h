@@ -26,6 +26,8 @@
 @property(nonatomic,strong) NSString *loginUserName;
 @property(nonatomic,strong) NSString *password;
 @property(nonatomic,strong) User *regiterUser;
+@property(nonatomic,strong) NSString *fileBaseUrl;
+@property(nonatomic,assign) int positionTimeInterval;
 
 
 SYNTHESIZE_SINGLETON_FOR_HEADER(ShareValue)

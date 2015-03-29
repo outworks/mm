@@ -32,6 +32,9 @@
     if (self = [super init]) {
         self.data = data;
         self.name = name;
+        if(!name){
+            self.name = @"file";
+        }
         self.fileName = fileName;
         self.mimeType = mimeType;
     }
@@ -44,7 +47,6 @@
         if (image) {
             _name = @"file";
             _mimeType = @"image/jpg";
-            self.name = @"imageFile";
             if (UIImagePNGRepresentation(image) == nil)
             {
                 self.data = UIImageJPEGRepresentation(image, 0.8);

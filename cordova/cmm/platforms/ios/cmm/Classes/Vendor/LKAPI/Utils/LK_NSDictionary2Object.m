@@ -224,6 +224,8 @@
         return [self asData];
     }else if(class == [NSDate class]){
         return [self asDate];
+    }else if(class == [NSObject class]){
+        return self;
     }
     return [NSNull null];
 }

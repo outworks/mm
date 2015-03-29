@@ -10,10 +10,18 @@
 #import "User.h"
 #import "Menu.h"
 
+@interface Configer : NSObject
+
+@property(nonatomic,assign) int positionTimeInterval;
+
+@property(nonatomic,strong) NSString *serverUrl;
+
+@end
 
 @interface UserResponse : NSObject
 
 @property(nonatomic,strong)User *smUser;
 @property(nonatomic,strong)NSArray *menu;
-@property(nonatomic,strong)NSDictionary *config;
+@property(nonatomic,strong)Configer *config;
+
 @end

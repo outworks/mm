@@ -12,6 +12,7 @@
 
 #define BASE_SERVERLURL @"http://123.57.45.235:8090/SC/MobileService?requestType="
 
+#define BASE_UPLOADSERVERL @"http://123.57.45.235:8090/SC"
 // URL
 
 #define URLPATH_GETUSER @"user"
@@ -19,6 +20,7 @@
 #define URLPATH_SALEQUERY @"saleQuery"
 
 #define URLPATH_TASKS @"taskList"
+#define URLPATH_FILEUPLOAD @"MobileService?requestType=upload&userId="
 
 
 #define HTTP_POSTMETHOD 1

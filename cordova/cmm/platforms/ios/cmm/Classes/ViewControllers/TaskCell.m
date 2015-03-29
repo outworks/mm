@@ -36,12 +36,12 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    _v_progress = [[KACircleProgressView alloc] initWithSize:_vi_progress.frame.size.width withType:KACircleProgressViewTypeCircleBacked andProgressBarLineWidth:6 andCircleBackLineWidth:6];
+    _v_progress = [[KACircleProgressView alloc] initWithSize:_vi_progress.frame.size.width withType:KACircleProgressViewTypeCircleBacked andProgressBarLineWidth:3 andCircleBackLineWidth:3];
     [_v_progress setProgress:.65]; // set progress to 0.3 out of 1.0
     [_v_progress setColorOfBackCircle:HEX_RGB(0xf2f2f2)];
     [_v_progress setColorOfProgressBar:HEX_RGB(0x1fbbff)];
-    [_v_progress setCenter:CGPointMake(_vi_progress.frame.size.width/2,90)];
-    [self addSubview:_v_progress];
+    [_v_progress setCenter:_vi_progress.center];
+    [self.contentView addSubview:_v_progress];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

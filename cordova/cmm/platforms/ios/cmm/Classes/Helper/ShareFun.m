@@ -7,6 +7,7 @@
 //
 
 #import "ShareFun.h"
+#import "ShareValue.h"
 
 
 @implementation ShareFun
@@ -41,6 +42,12 @@ BOOL isTongyi;
     UIImage *t_image = [UIImage imageWithContentsOfFile:path];
     
     return  t_image;
+}
+
++(NSURL *)urlFormPath:(NSString *)path{
+    NSString *realPath = [NSString stringWithFormat:@"%@%@",[ShareValue sharedShareValue].fileBaseUrl,path];
+    return [NSURL URLWithString:realPath];
+    
 }
 
 @end

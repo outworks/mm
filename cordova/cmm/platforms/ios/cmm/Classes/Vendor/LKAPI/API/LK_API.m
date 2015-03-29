@@ -12,6 +12,7 @@
 #import "JSONKit.h"
 #import "LK_NSDictionary2Object.h"
 #import "ServerConfig.h"
+#import "ShareValue.h"
 
 #define TIMEOUT_DEFAULT 30
 
@@ -153,6 +154,40 @@
                 sucess(responseData,[(LK_HttpBaseResponse *)object result],[(LK_HttpBaseResponse *)object msg]);
             }else{
                 sucess(responseString,0,nil);
+            }
+        }else{
+            fail(@"上传失败");
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        fail(error.localizedDescription);
+    }];
+    [operation start];
+}
+
++(void)postFileByImage:(UIImage *)image progressBlock:(void(^)(NSInteger bytesWritten, long long totalBytesWritten))progressblock Success:(void (^)(NSString *fileUrl))sucess fail:(void (^)(NSString *))fail;{
+    LK_FilePart *part = [[LK_FilePart alloc]initWithImage:image];
+    AFHTTPClient *client = [[AFHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:BASE_UPLOADSERVERL]];
+    NSMutableURLRequest *request1 = [client multipartFormRequestWithMethod:@"post" path:[NSString stringWithFormat:@"%@%@",URLPATH_FILEUPLOAD,[ShareValue sharedShareValue].regiterUser.userId] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFileData:part.data name:part.name fileName:part.fileName mimeType:part.mimeType];
+    }];
+    request1.timeoutInterval = 40;
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request1];
+    [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+        if (progressblock) {
+            progressblock(bytesWritten,totalBytesWritten);
+        }
+    }];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if(responseObject){
+            NSData *responseData = (NSData *)responseObject;
+            NSString *responseString = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
+            NSDictionary *dict = [responseString objectFromJSONString];
+            if (dict) {
+                LK_HttpBaseResponse *object = [dict objectByClass:[LK_HttpBaseResponse class]];
+                sucess((NSString *)object.data);
+            }else{
+                fail(@"服务器返回失败");
             }
         }else{
             fail(@"上传失败");

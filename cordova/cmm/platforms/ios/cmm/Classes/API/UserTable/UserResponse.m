@@ -8,6 +8,10 @@
 
 #import "UserResponse.h"
 
+@implementation Configer
+
+@end
+
 @implementation UserResponse
 
 +(Class)__menuClass{

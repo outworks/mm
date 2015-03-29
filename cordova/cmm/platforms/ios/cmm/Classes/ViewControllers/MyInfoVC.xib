@@ -11,7 +11,7 @@
                 <outlet property="lb_job" destination="3ci-gA-GQh" id="AEc-6Q-MGu"/>
                 <outlet property="lb_mobile" destination="zbF-R0-1Hb" id="22O-KK-xAy"/>
                 <outlet property="lb_nickname" destination="i1I-OM-1MH" id="2SY-SA-mGx"/>
-                <outlet property="lb_sign" destination="uZ8-c2-UqZ" id="7oI-um-LHk"/>
+                <outlet property="tf_sign" destination="z4G-x2-iRl" id="Ttv-0P-pKP"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -29,11 +29,11 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="akv-7H-coq">
                     <rect key="frame" x="0.0" y="446" width="320" height="77"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CVi-O0-4CA">
+                        <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CVi-O0-4CA">
                             <rect key="frame" x="0.0" y="76" width="320" height="1"/>
                             <color key="backgroundColor" red="0.78887143339999999" green="0.78887143339999999" blue="0.78887143339999999" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="个性签名" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sQ2-Wz-qgW">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="个性签名" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sQ2-Wz-qgW">
                             <rect key="frame" x="17" y="28" width="68" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="68" id="iFa-AG-HFp"/>
@@ -42,33 +42,26 @@
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="动感地带，我的地盘我做主" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uZ8-c2-UqZ">
-                            <rect key="frame" x="93" y="28" width="179" height="21"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="个人信息_图标_更多箭头" translatesAutoresizingMaskIntoConstraints="NO" id="st3-Ke-9Lx">
+                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" misplaced="YES" image="个人信息_图标_更多箭头" translatesAutoresizingMaskIntoConstraints="NO" id="st3-Ke-9Lx">
                             <rect key="frame" x="287" y="33" width="6" height="11"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="6" id="LLX-6w-M1s"/>
                             </constraints>
                         </imageView>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z4G-x2-iRl">
+                            <rect key="frame" x="81" y="22" width="198" height="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="st3-Ke-9Lx" firstAttribute="leading" secondItem="uZ8-c2-UqZ" secondAttribute="trailing" constant="15" id="252-Lw-BjR"/>
-                        <constraint firstItem="uZ8-c2-UqZ" firstAttribute="centerY" secondItem="st3-Ke-9Lx" secondAttribute="centerY" id="6Ye-is-Ded"/>
                         <constraint firstAttribute="trailing" secondItem="st3-Ke-9Lx" secondAttribute="trailing" constant="27" id="9oW-ej-cSw"/>
-                        <constraint firstItem="uZ8-c2-UqZ" firstAttribute="centerY" secondItem="akv-7H-coq" secondAttribute="centerY" id="GB9-B8-dpF"/>
                         <constraint firstItem="CVi-O0-4CA" firstAttribute="top" secondItem="st3-Ke-9Lx" secondAttribute="bottom" constant="32" id="Gjv-1j-WDw"/>
                         <constraint firstItem="CVi-O0-4CA" firstAttribute="leading" secondItem="akv-7H-coq" secondAttribute="leading" id="Mq9-tC-yIT"/>
                         <constraint firstItem="CVi-O0-4CA" firstAttribute="top" secondItem="sQ2-Wz-qgW" secondAttribute="bottom" constant="27" id="Rrv-hh-4mF"/>
                         <constraint firstItem="sQ2-Wz-qgW" firstAttribute="leading" secondItem="akv-7H-coq" secondAttribute="leading" constant="17" id="W2c-Xc-Dux"/>
-                        <constraint firstItem="uZ8-c2-UqZ" firstAttribute="leading" secondItem="sQ2-Wz-qgW" secondAttribute="trailing" constant="8" symbolic="YES" id="YsO-0t-DkJ"/>
-                        <constraint firstItem="uZ8-c2-UqZ" firstAttribute="baseline" secondItem="sQ2-Wz-qgW" secondAttribute="baseline" id="ZWy-ZA-xYo"/>
                         <constraint firstAttribute="height" constant="77" id="cS5-pt-T93"/>
-                        <constraint firstItem="sQ2-Wz-qgW" firstAttribute="top" secondItem="uZ8-c2-UqZ" secondAttribute="top" id="cc8-KX-MhU"/>
                         <constraint firstAttribute="trailing" secondItem="CVi-O0-4CA" secondAttribute="trailing" id="dD1-0h-j5Y"/>
                         <constraint firstAttribute="bottom" secondItem="CVi-O0-4CA" secondAttribute="bottom" id="wZN-9H-U6f"/>
                     </constraints>
@@ -200,6 +193,9 @@
                             <exclude reference="Bcc-py-0Wy"/>
                         </mask>
                     </variation>
+                    <connections>
+                        <outletCollection property="gestureRecognizers" destination="12h-wp-pts" appends="YES" id="m7F-Ef-MBB"/>
+                    </connections>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="鼓楼区营销经理" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ci-gA-GQh">
                     <rect key="frame" x="108" y="263" width="197" height="21"/>
@@ -279,8 +275,13 @@
                 <constraint firstAttribute="trailing" secondItem="akv-7H-coq" secondAttribute="trailing" id="zKU-BE-dp7"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-            <point key="canvasLocation" x="-157" y="-303"/>
+            <point key="canvasLocation" x="-122" y="-660"/>
         </view>
+        <tapGestureRecognizer id="12h-wp-pts">
+            <connections>
+                <action selector="testAction:" destination="-1" id="QWN-IR-Q9u"/>
+            </connections>
+        </tapGestureRecognizer>
     </objects>
     <resources>
         <image name="个人信息_图标_星星" width="7" height="7"/>
