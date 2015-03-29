@@ -12,6 +12,7 @@
                 <outlet property="lb_regional" destination="j76-7n-eo9" id="nX5-TW-R6y"/>
                 <outlet property="lb_userName" destination="yUU-Un-mdr" id="JZO-e6-e18"/>
                 <outlet property="tableView" destination="LmC-9N-8Vb" id="1lk-oy-YAT"/>
+                <outlet property="textf_signName" destination="2d8-Rk-H4z" id="0vT-L8-Na7"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

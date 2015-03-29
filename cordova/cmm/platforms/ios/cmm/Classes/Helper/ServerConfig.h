@@ -17,6 +17,7 @@
 // URL
 
 #define URLPATH_GETUSER @"user"
+#define URLPATH_UPDATASIGNNAME @"userSign"
 
 
 

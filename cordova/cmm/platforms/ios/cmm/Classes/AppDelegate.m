@@ -31,6 +31,8 @@
 
 #import "LoginVC.h"
 
+#import "AFNetworking.h"
+
 #import <Cordova/CDVPlugin.h>
 
 @implementation AppDelegate
@@ -70,12 +72,23 @@
     self.viewController.navigationBarHidden = YES;
     self.window.rootViewController = self.viewController;
     
+//    UserSignRequest *t_request = [[UserSignRequest alloc] init];
+//    t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
+//    t_request.signName = @"我一定要争取第一";
+    
+    AFHTTPClient *t_client = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://123.57.45.235:8090/SC/MobileService?requestType=userSign&signName=%E6%88%91%E4%B8%80%E5%AE%9A%E8%A6%81%E4%BA%89%E5%8F%96%E7%AC%AC%E4%B8%80&userId=1005992"]];
+    [t_client multipartFormRequestWithMethod:@"POST" path:<#(NSString *)#> parameters:<#(NSDictionary *)#> constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        
+    }];
+    
     NSString *savedPassword = [[NSUserDefaults standardUserDefaults] objectForKey:@"gesturePassword"];
     
     if (savedPassword != nil) {
         SwipeLoginVC *swipeLoginVC = [[SwipeLoginVC alloc] init];
         [self.viewController pushViewController:swipeLoginVC animated:NO];
     }
+    
+    
     
     
     [self.window makeKeyAndVisible];

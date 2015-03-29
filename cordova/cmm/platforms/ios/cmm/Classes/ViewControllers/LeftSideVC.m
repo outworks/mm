@@ -16,6 +16,7 @@
 
 @property (strong,nonatomic)NSArray *arr_data;
 
+@property (weak, nonatomic) IBOutlet UITextField *textf_signName;
 
 
 
@@ -55,9 +56,9 @@
                 ];
     
     
-    _lb_userName.text = [ShareValue sharedShareValue].user.userName;
-    _lb_regional.text = [ShareValue sharedShareValue].user.jobId;
-
+    _lb_userName.text = [ShareValue sharedShareValue].regiterUser.userName;
+    _lb_regional.text = [ShareValue sharedShareValue].regiterUser.jobId;
+    _textf_signName.text = [ShareValue sharedShareValue].regiterUser.signName;
 }
 
 #pragma mark - button Action

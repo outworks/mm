@@ -140,7 +140,6 @@ NSString * AFQueryStringFromParametersWithEncoding(NSDictionary *parameters, NSS
         [mutablePairs addObject:[pair URLEncodedStringValueWithEncoding:stringEncoding]];
     }
     
-    NSLog(@"%@",[mutablePairs componentsJoinedByString:@"&"]);
     return [mutablePairs componentsJoinedByString:@"&"];
 }
 
@@ -493,6 +492,7 @@ static void AFNetworkReachabilityReleaseCallback(const void *info) {
                 case AFFormURLParameterEncoding:;
                     [request setValue:[NSString stringWithFormat:@"application/x-www-form-urlencoded; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
                     [request setHTTPBody:[AFQueryStringFromParametersWithEncoding(parameters, self.stringEncoding) dataUsingEncoding:self.stringEncoding]];
+                    NSLog(@"%@&%@",[url absoluteString],AFQueryStringFromParametersWithEncoding(parameters, self.stringEncoding));
                     break;
                 case AFJSONParameterEncoding:;
                     [request setValue:[NSString stringWithFormat:@"application/json; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];

@@ -16,14 +16,16 @@
 
 #define VERSION 16
 
-@interface ShareValue : NSObject
+@interface ShareValue : NSObject{
+    User *_regiterUser;
+}
 
 
 
 @property(nonatomic,assign) BOOL isRember;
-@property(nonatomic,strong) NSString *userName;
+@property(nonatomic,strong) NSString *loginUserName;
 @property(nonatomic,strong) NSString *password;
-@property(nonatomic,strong) User *user;
+@property(nonatomic,strong) User *regiterUser;
 
 
 SYNTHESIZE_SINGLETON_FOR_HEADER(ShareValue)

@@ -44,7 +44,7 @@
         self.isSelected = YES;
     }
     
-    _textF_userName.text = [ShareValue sharedShareValue].userName;
+    _textF_userName.text = [ShareValue sharedShareValue].loginUserName;
     if (_isSelected == YES) {
         _textF_password.text = [ShareValue sharedShareValue].password;
         [_btn_remenber setImage:[UIImage imageNamed:@"登录页_背景_复选框_选中"] forState:UIControlStateNormal];
@@ -83,8 +83,9 @@
     [UserAPI getUserTableHttpAPI:t_request Success:^(UserResponse *response, NSInteger result, NSString *msg) {
         [_hud hide:NO];
         
-        [ShareValue sharedShareValue].userName = _textF_userName.text;
-        [ShareValue sharedShareValue].user = response.smUser;
+        [ShareValue sharedShareValue].loginUserName = _textF_userName.text;
+        [ShareValue sharedShareValue].regiterUser
+        = response.smUser;
         SwipePasswordVC *t_vc = [[SwipePasswordVC alloc] init];
         [self.navigationController pushViewController:t_vc animated:YES];
         

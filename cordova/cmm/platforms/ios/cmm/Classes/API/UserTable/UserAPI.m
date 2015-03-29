@@ -31,4 +31,22 @@
 }
 
 
++(void)updataSignNameHttpAPI:(UserSignRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
+
+    if (HTTP_POSTMETHOD) {
+        [LK_APIUtil postHttpRequest:request apiPath:URLPATH_UPDATASIGNNAME Success:^(NSObject *response,NSInteger result,NSString *msg){
+            sucess(result,msg);
+        } fail:^(NSString * descript){
+            fail(descript);
+        }class:nil];
+    }else{
+        [LK_APIUtil getHttpRequest:request apiPath:URLPATH_UPDATASIGNNAME Success:^(NSObject *response,NSInteger result,NSString *msg){
+            sucess(result,msg);
+        } fail:^(NSString * descript){
+            fail(descript);
+        }class:nil];
+    }
+    
+}
+
 @end

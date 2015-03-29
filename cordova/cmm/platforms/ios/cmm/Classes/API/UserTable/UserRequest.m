@@ -11,3 +11,8 @@
 @implementation UserRequest
 
 @end
+
+
+@implementation UserSignRequest
+
+@end
