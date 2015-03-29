@@ -269,25 +269,25 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 #pragma clang diagnostic pop
-                            if ([cValue isKindOfClass:[NSString class]]) {
-                                [array addObject:cValue];
-                            }else if([cValue isKindOfClass:[NSNumber class]]){
-                                [array addObject:cValue];
-                            }else  if([cValue isKindOfClass:[NSDictionary class]]){
-                                NSString *propertyClass = [NSString stringWithFormat:@"__%@Class",key];
-                                SEL sel = NSSelectorFromString(propertyClass);
-                                if ([clazz respondsToSelector:sel]) {
+                        if ([cValue isKindOfClass:[NSString class]]) {
+                            [array addObject:cValue];
+                        }else if([cValue isKindOfClass:[NSNumber class]]){
+                            [array addObject:cValue];
+                        }else  if([cValue isKindOfClass:[NSDictionary class]]){
+                            NSString *propertyClass = [NSString stringWithFormat:@"__%@Class",key];
+                            SEL sel = NSSelectorFromString(propertyClass);
+                            if ([clazz respondsToSelector:sel]) {
                                 Class propertyClass = [clazz performSelector:sel];
                                 id tvalue = [(NSDictionary *)cValue objectByClass:propertyClass];
-                                    if (tvalue != nil) {
-                                        [array addObject:tvalue];
-                                    }
-                                }else {
-                                    [array addObject:cValue];
+                                if (tvalue != nil) {
+                                    [array addObject:tvalue];
                                 }
+                            }else {
+                                [array addObject:cValue];
                             }
                         }
-                        value = array;
+                    }
+                    value = array;
                 }else if ([value isKindOfClass:[NSDictionary class]]) {
                     const char *	attr = property_getAttributes(protpery_t);
                     if ( attr[0] != 'T' ){
@@ -347,7 +347,7 @@
                         {
                             long tvalue =[(NSObject *)value asLong];
                             value = [NSNumber numberWithLong:tvalue];
-                             [object setValue:value forKey:key];
+                            [object setValue:value forKey:key];
                             flag = YES;
                         }
                         else if ( type[0] == _C_ULNG_LNG)
@@ -367,21 +367,21 @@
                             float tvalue = [(NSObject *)value asFloat];
                             NSNumber *number = [NSNumber numberWithFloat:tvalue];
                             [object setValue:number forKey:key];
-//                            NSString *topchar = [[key substringToIndex:1]uppercaseString];
-//                            NSString *selectorString = [NSString stringWithFormat:@"set%@:",[key stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:topchar]];
-//                            SEL selector = NSSelectorFromString(selectorString);
-//                            [object setValue:[NSValue value:tvalue withObjCType:_C_FLT] forKey:<#(NSString *)#>]
-//                            objc_msgSend(object, selector,tvalue);
+                            //                            NSString *topchar = [[key substringToIndex:1]uppercaseString];
+                            //                            NSString *selectorString = [NSString stringWithFormat:@"set%@:",[key stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:topchar]];
+                            //                            SEL selector = NSSelectorFromString(selectorString);
+                            //                            [object setValue:[NSValue value:tvalue withObjCType:_C_FLT] forKey:<#(NSString *)#>]
+                            //                            objc_msgSend(object, selector,tvalue);
                             flag = YES;
                         }
                         else if ( type[0] == _C_LNG_LNG)
                         {
                             double tvalue = [(NSObject *)value asFloat];
                             [object setValue:[NSValue value:&tvalue withObjCType:@encode(int)] forKey:key];
-//                            NSString *topchar = [[key substringToIndex:1]uppercaseString];
-//                            NSString *selectorString = [NSString stringWithFormat:@"set%@:",[key stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:topchar]];
-//                            SEL selector = NSSelectorFromString(selectorString);
-//                            objc_msgSend(object, selector,tvalue);
+                            //                            NSString *topchar = [[key substringToIndex:1]uppercaseString];
+                            //                            NSString *selectorString = [NSString stringWithFormat:@"set%@:",[key stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:topchar]];
+                            //                            SEL selector = NSSelectorFromString(selectorString);
+                            //                            objc_msgSend(object, selector,tvalue);
                             flag = YES;
                         }
                         continue;
@@ -417,9 +417,6 @@
     if (class == [NSObject class]) {
         return nil;
     }
-    if (class == [NSData class]) {
-        return nil;
-    }
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     unsigned int propertyCount = 0;
     objc_property_t *properties = class_copyPropertyList(class, &propertyCount);
@@ -450,7 +447,7 @@
             }
             if (typeClazz) {
                 if ([value isKindOfClass:[NSArray class]]) {
-                     NSMutableArray *array =  [NSMutableArray array];
+                    NSMutableArray *array =  [NSMutableArray array];
                     for (NSObject * cValue in (NSArray *)value) {
                         Class clazz = (Class)[cValue class];
                         if ([clazz isSubclassOfClass:[NSString class]]) {
@@ -458,10 +455,7 @@
                         }else if ([clazz isSubclassOfClass:[NSNumber class]]) {
                             [array addObject:cValue];
                         }else{
-                            NSObject *obj = [cValue dictionaryWithClass:clazz];
-                            if (obj) {
-                                [array addObject:[cValue dictionaryWithClass:clazz]];
-                            }
+                            [array addObject:[cValue dictionaryWithClass:clazz]];
                         }
                     }
                     value = array;
@@ -509,7 +503,7 @@
                     value = [NSNumber numberWithFloat:intvalue];
                 }
                 number = (NSNumber *)value;
-
+                
                 [dict setObject:number forKey:propertyName];
             }
         }

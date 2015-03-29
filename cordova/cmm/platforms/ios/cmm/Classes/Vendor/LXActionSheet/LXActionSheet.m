@@ -82,16 +82,6 @@
             }
         }
         
-        
-//        if (otherButtonTitles) {
-//            [otherButtonTitlesArray addObject:otherButtonTitles];
-//            NSString *title = nil;
-//            while((title = va_arg(argp,id)))
-//            {
-//                [otherButtonTitlesArray addObject:title];
-//            }
-//            
-//        }
         va_end(argp);
         [self creatButtonsWithTitle:title cancelButtonTitle:cancelButtonTitle destructionButtonTitle:destructiveButtonTitle otherButtonTitles:otherButtonTitlesArray];
 

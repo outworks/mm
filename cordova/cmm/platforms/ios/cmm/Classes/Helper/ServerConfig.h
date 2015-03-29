@@ -16,7 +16,7 @@
 
 #define URLPATH_GETUSER @"user"
 #define URLPATH_UPDATASIGNNAME @"userSign"
-
+#define URLPATH_SALEQUERY @"saleQuery"
 
 
 
