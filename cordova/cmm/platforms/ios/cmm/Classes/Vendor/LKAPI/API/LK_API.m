@@ -51,9 +51,19 @@
             if (dict) {
                 LK_HttpBaseResponse *response = [dict objectByClass:[LK_HttpBaseResponse class]];
                 if ([dict objectForKey:@"data"]) {
-                    NSDictionary *dict2 = [dict objectForKey:@"data"];
-                    NSObject *result = [dict2 objectByClass:responseClass];
-                    response.data = result;
+                    if([[dict objectForKey:@"data"] isKindOfClass:[NSArray class]]){
+                        NSMutableArray *array = [NSMutableArray array];
+                        NSArray *data = [dict objectForKey:@"data"];
+                        for (NSDictionary *dict1 in data) {
+                            NSObject *result = [dict1 objectByClass:responseClass];
+                            [array addObject:result];
+                        }
+                        response.data = array;
+                    }else if([[dict objectForKey:@"data"] isKindOfClass:[NSDictionary class]]){
+                        NSDictionary *dict2 = [dict objectForKey:@"data"];
+                        NSObject *result = [dict2 objectByClass:responseClass];
+                        response.data = result;
+                    }
                 }
                 sucess(response.data,response.result,response.msg);
             }else{
@@ -77,9 +87,23 @@
             NSLog(@"%@",responseString);
             NSDictionary *dict = [responseString objectFromJSONString];
             if (dict) {
-                NSObject *object = [dict objectByClass:responseClass];
-                NSObject *responseData = [(LK_HttpBaseResponse *)object data];
-                sucess(responseData,[(LK_HttpBaseResponse *)object result],[(LK_HttpBaseResponse *)object msg]);
+                LK_HttpBaseResponse *response = [dict objectByClass:[LK_HttpBaseResponse class]];
+                if ([dict objectForKey:@"data"]) {
+                    if([[dict objectForKey:@"data"] isKindOfClass:[NSArray class]]){
+                        NSMutableArray *array = [NSMutableArray array];
+                        NSArray *data = [dict objectForKey:@"data"];
+                        for (NSDictionary *dict1 in data) {
+                            NSObject *result = [dict1 objectByClass:responseClass];
+                            [array addObject:result];
+                        }
+                        response.data = array;
+                    }else if([[dict objectForKey:@"data"] isKindOfClass:[NSDictionary class]]){
+                        NSDictionary *dict2 = [dict objectForKey:@"data"];
+                        NSObject *result = [dict2 objectByClass:responseClass];
+                        response.data = result;
+                    }
+                }
+                sucess(response.data,response.result,response.msg);
             }else{
                 fail(@"服务器异常");
             }

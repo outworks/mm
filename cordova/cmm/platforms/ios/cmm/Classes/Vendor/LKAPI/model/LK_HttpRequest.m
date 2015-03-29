@@ -38,6 +38,29 @@
     return self;
 }
 
+-(id)initWithImage:(UIImage *)image{
+    self = [super init];
+    if (self) {
+        if (image) {
+            _name = @"file";
+            _mimeType = @"image/jpg";
+            self.name = @"imageFile";
+            if (UIImagePNGRepresentation(image) == nil)
+            {
+                self.data = UIImageJPEGRepresentation(image, 0.8);
+                _fileName = [NSString stringWithFormat:@"%f.jpg",[[NSDate date ]timeIntervalSinceNow]];
+            }
+            else
+            {
+                self.data = UIImagePNGRepresentation(image);
+                _fileName = [NSString stringWithFormat:@"%f.png",[[NSDate date ]timeIntervalSinceNow]];
+                _mimeType = @"image/png";
+            }
+        }
+    }
+    return self;
+}
+
 @end
 
 @interface LK_MultipartHttpBaseRequest ()
@@ -61,6 +84,15 @@
                       fileName:(NSString *)fileName
                       mimeType:(NSString *)mimeType{
     LK_FilePart *part = [[LK_FilePart alloc]initWithFileData:data name:name fileName:fileName mimeType:mimeType];
+    [self.fileMedias addObject:part];
+}
+
+- (void)appendImage:(UIImage *)image
+               name:(NSString *)name{
+    LK_FilePart *part = [[LK_FilePart alloc]initWithImage:image];
+    if (name) {
+        part.name = name;
+    }
     [self.fileMedias addObject:part];
 }
 

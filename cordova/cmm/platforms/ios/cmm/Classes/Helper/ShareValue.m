@@ -154,7 +154,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
 -(void)setRegiterUser:(User *)bindUser{
     _regiterUser = bindUser;
     if (_regiterUser == nil) {
-        
         [self setUserId:nil];
         [self setUserName:nil];
         [self setSignImgUrl:nil];
@@ -162,7 +161,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
         [self setUnitId:nil];
         [self setPayMent:nil];
         [self setSignName:nil];
-        
     }else{
         [self setUserId:_regiterUser.userId];
         [self setUserName:_regiterUser.userName];
@@ -171,7 +169,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
         [self setUnitId:_regiterUser.unitId];
         [self setPayMent:_regiterUser.payMent];
         [self setSignName:_regiterUser.signName];
-        
     }
 }
 

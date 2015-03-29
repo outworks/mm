@@ -8,6 +8,8 @@
 
 #import "LeftSideVC.h"
 #import "ShareValue.h"
+#import "MyInfoVC.h"
+#import "AppDelegate.h"
 
 @interface LeftSideVC ()
 
@@ -59,6 +61,21 @@
     _lb_userName.text = [ShareValue sharedShareValue].regiterUser.userName;
     _lb_regional.text = [ShareValue sharedShareValue].regiterUser.jobId;
     _textf_signName.text = [ShareValue sharedShareValue].regiterUser.signName;
+    [self addHeadAction];
+}
+
+
+-(void)addHeadAction{
+    UITapGestureRecognizer *tapGestreRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addHeadImage:)];
+    [_imageV_userIcon addGestureRecognizer:tapGestreRecognizer];
+}
+
+
+-(void)addHeadImage:(UITapGestureRecognizer *)tapGestreRecognizer{
+    MyInfoVC *vc = [[MyInfoVC alloc]init];
+    [ApplicationDelegate.viewController presentViewController:vc animated:YES completion:^{
+        
+    }];
 }
 
 #pragma mark - button Action

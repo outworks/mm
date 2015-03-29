@@ -31,6 +31,8 @@
              fileName:(NSString *)fileName
              mimeType:(NSString *)mimeType;
 
+-(id)initWithImage:(UIImage *)image;
+
 @end
 
 @interface LK_MultipartHttpBaseRequest : LK_HttpBaseRequest
@@ -41,6 +43,9 @@
                                  name:(NSString *)name
                              fileName:(NSString *)fileName
                       mimeType:(NSString *)mimeType;
+
+- (void)appendImage:(UIImage *)image
+                          name:(NSString *)name;
 
 @end
 

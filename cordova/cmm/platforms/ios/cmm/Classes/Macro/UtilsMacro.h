@@ -86,7 +86,7 @@
 #pragma mark -Redefine
 
 
-#define ApplicationDelegate                 ((BubblyAppDelegate *)[[UIApplication sharedApplication] delegate])
+#define ApplicationDelegate                 ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 #define NotificationCenter                  [NSNotificationCenter defaultCenter]
 #define UserDefaults                        [NSUserDefaults standardUserDefaults]
 #define SharedApplication                   [UIApplication sharedApplication]
