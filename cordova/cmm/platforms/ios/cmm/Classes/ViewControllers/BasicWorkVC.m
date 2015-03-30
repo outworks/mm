@@ -60,6 +60,7 @@
 
     if (itemView.tag == 1) {
         TaskListVC * t_vc =  [[TaskListVC alloc] init];
+       
         [ApplicationDelegate.viewController pushViewController:t_vc animated:YES];
     }
 

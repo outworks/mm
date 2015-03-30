@@ -82,7 +82,7 @@
     [_hud show:YES];
     [UserAPI getUserTableHttpAPI:t_request Success:^(UserResponse *response, NSInteger result, NSString *msg) {
         [_hud hide:NO];
-        
+        [ShareValue sharedShareValue].password = _textF_password.text;
         [ShareValue sharedShareValue].loginUserName = _textF_userName.text;
         [ShareValue sharedShareValue].regiterUser
         = response.smUser;

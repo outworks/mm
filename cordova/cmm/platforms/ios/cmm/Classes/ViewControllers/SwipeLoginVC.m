@@ -10,8 +10,14 @@
 #import "YLSwipeLockView.h"
 #import "LeftSideVC.h"
 #import "MainVC.h"
+#import "MBProgressHUD+Add.h"
+#import "UserAPI.h"
+#import "ShareValue.h"
 
-@interface SwipeLoginVC ()<YLSwipeLockViewDelegate>
+@interface SwipeLoginVC ()<YLSwipeLockViewDelegate>{
+
+    MBProgressHUD *_hud;
+}
 
 @property (strong, nonatomic)  YLSwipeLockView *v_swipe;
 @property (nonatomic, strong) NSString *passwordString;
@@ -59,14 +65,38 @@
     if ([savedPassword isEqualToString:password]) {
         self.sliderVC = [SliderVC shareSliderVC];
         
-        LeftSideVC *leftVC = [[LeftSideVC alloc] initWithNibName:@"LeftSideVC" bundle:nil];
         
-        MainVC *mainVC = [[MainVC alloc] init];
+        UserRequest * t_request = [[UserRequest alloc] init];
+        t_request.username = [ShareValue sharedShareValue].loginUserName;
+        t_request.pass = [ShareValue sharedShareValue].password;
         
-        self.sliderVC.leftVC = leftVC;
-        self.sliderVC.mainVC = mainVC;
         
-        [self.navigationController pushViewController:self.sliderVC animated:YES];
+        _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [_hud setLabelText:@"登录中"];
+        [_hud show:YES];
+        [UserAPI getUserTableHttpAPI:t_request Success:^(UserResponse *response, NSInteger result, NSString *msg) {
+            [_hud hide:NO];
+            
+            [ShareValue sharedShareValue].regiterUser
+            = response.smUser;
+            LeftSideVC *leftVC = [[LeftSideVC alloc] initWithNibName:@"LeftSideVC" bundle:nil];
+            
+            MainVC *mainVC = [[MainVC alloc] init];
+            
+            self.sliderVC.leftVC = leftVC;
+            self.sliderVC.mainVC = mainVC;
+            
+            [self.navigationController pushViewController:self.sliderVC animated:YES];
+            
+        } fail:^(NSString *description) {
+            [_hud hide:NO];
+            [MBProgressHUD showError:description toView:self.view];
+            
+        }];
+        
+        
+        
+        
         
         return YLSwipeLockViewStateNormal;
     }else{
