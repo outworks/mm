@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "UtilsMacro.h"
+#import "NoticeMacro.h"
+
 
 @interface BasicVC : UIViewController
 

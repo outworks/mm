@@ -47,7 +47,9 @@
 
 - (IBAction)forgetAction:(id)sender {
     
-    
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    [userDefault setObject:nil forKey:@"gesturePassword"];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (IBAction)otherUserAction:(id)sender {

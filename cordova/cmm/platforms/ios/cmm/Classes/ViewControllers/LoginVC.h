@@ -7,7 +7,8 @@
 //
 
 #import "BasicVC.h"
+#import "SliderVC.h"
 
 @interface LoginVC : BasicVC
-
+@property(strong,nonatomic)SliderVC *sliderVC;
 @end

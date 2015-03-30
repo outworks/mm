@@ -22,9 +22,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *lb_doneCount;
 
 @property (weak, nonatomic) IBOutlet UILabel *lb_todayCount;
-@property (weak, nonatomic) IBOutlet UILabel *lb_lastCount;
+@property (weak, nonatomic) IBOutlet UILabel *lb_quyu; // 区域排名
 @property (weak, nonatomic) IBOutlet UILabel *lb_wangdianCount;
 @property (weak, nonatomic) IBOutlet UILabel *lb_pingjunCount;
+@property (weak, nonatomic) IBOutlet UILabel *lb_zuigaoCount;
 
 @end
 
@@ -65,9 +66,10 @@
         [weakSelf.v_progress setProgress:[response.totalCount integerValue]/[response.curMonthTargetCount integerValue]*100]; // set progress to 0.3 out of 1.0
         
         weakSelf.lb_todayCount.text = [response.curDayCount stringValue];
-        weakSelf.lb_lastCount.text = [NSString stringWithFormat:@"%ld",[response.curMonthTargetCount integerValue]-[response.totalCount integerValue]];
+       
         weakSelf.lb_wangdianCount.text = [NSString stringWithFormat:@"%ld/%ld",[response.saleCount integerValue],[response.unitCount integerValue]];;
-        weakSelf.lb_pingjunCount.text = [NSString stringWithFormat:@"%ld/%ld",[response.avgSaleCount integerValue],[response.highestSaleCount integerValue]];
+        weakSelf.lb_pingjunCount.text = [response.avgSaleCount stringValue];[response.highestSaleCount integerValue];
+        weakSelf.lb_zuigaoCount.text = [response.highestSaleCount stringValue];
         
     } fail:^(NSString *description) {
         [_hud hide:YES];

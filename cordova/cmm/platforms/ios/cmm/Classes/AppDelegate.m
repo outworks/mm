@@ -28,6 +28,7 @@
 #import "AppDelegate.h"
 #import "LKNavController.h"
 #import "SwipeLoginVC.h"
+#import "ShareValue.h"
 
 #import "LoginVC.h"
 #import "BMapKit.h"
@@ -78,8 +79,9 @@
     self.window.rootViewController = self.viewController;
     
     NSString *savedPassword = [[NSUserDefaults standardUserDefaults] objectForKey:@"gesturePassword"];
-    
-    if (savedPassword != nil) {
+    BOOL isLoginOut = [ShareValue sharedShareValue].isLoginOut;
+
+    if (savedPassword != nil && isLoginOut == NO) {
         SwipeLoginVC *swipeLoginVC = [[SwipeLoginVC alloc] init];
         [self.viewController pushViewController:swipeLoginVC animated:NO];
     }

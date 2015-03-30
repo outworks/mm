@@ -23,6 +23,7 @@
 
 
 @property(nonatomic,assign) BOOL isRember;
+@property(nonatomic,assign) BOOL isLoginOut;
 @property(nonatomic,strong) NSString *loginUserName;
 @property(nonatomic,strong) NSString *password;
 @property(nonatomic,strong) User *regiterUser;

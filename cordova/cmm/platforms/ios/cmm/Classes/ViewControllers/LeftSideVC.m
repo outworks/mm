@@ -10,6 +10,8 @@
 #import "ShareValue.h"
 #import "MyInfoVC.h"
 #import "AppDelegate.h"
+#import "ShareFun.h"
+#import "UIImageView+WebCache.h"
 
 @interface LeftSideVC ()
 
@@ -43,30 +45,51 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _imageV_userIcon.layer.cornerRadius = _imageV_userIcon.frame.size.width/2;
-    _imageV_userIcon.layer.masksToBounds = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataImage:) name:NOTIFICATION_UPDATAIMAGE object:nil];
     
-    _imageV_bg_info.layer.cornerRadius = 3;
-    _imageV_bg_info.layer.masksToBounds = YES;
-    
-    self.arr_data = @[@[@"我的收藏", @"首页_图标_我的收藏.png"],
-                @[@"通用设置", @"首页_图标_通用设置.png"],
-                @[@"账号管理", @"首页_图标_账户管理.png"],
-                @[@"提醒通知", @"首页_图标_提醒与通知.png"],
-                @[@"版本更新", @"首页_图标_版本更新.png"],
-                @[@"关于平台", @"首页_图标_关于平台.png"],
-                ];
-    
-    
-    _lb_userName.text = [ShareValue sharedShareValue].regiterUser.userName;
-    _lb_regional.text = [ShareValue sharedShareValue].regiterUser.jobId;
-    _textf_signName.text = [ShareValue sharedShareValue].regiterUser.signName;
+    [self resetUI];
     [self addHeadAction];
 }
+
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+
+
+    
+    
+}
+
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     _textf_signName.text = [ShareValue sharedShareValue].regiterUser.signName;
+}
+
+
+
+#pragma mark - private methods
+
+-(void)resetUI{
+    
+    _imageV_userIcon.layer.cornerRadius = _imageV_userIcon.frame.size.width/2;
+    _imageV_userIcon.layer.masksToBounds = YES;
+    NSLog(@"%@",[ShareValue sharedShareValue].regiterUser.signImgUrl);
+    [_imageV_userIcon sd_setImageWithURL:[NSURL URLWithString:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
+    _imageV_bg_info.layer.cornerRadius = 3;
+    _imageV_bg_info.layer.masksToBounds = YES;
+    
+    self.arr_data = @[@[@"我的收藏", @"首页_图标_我的收藏.png"],
+                      @[@"通用设置", @"首页_图标_通用设置.png"],
+                      @[@"账号管理", @"首页_图标_账户管理.png"],
+                      @[@"提醒通知", @"首页_图标_提醒与通知.png"],
+                      @[@"版本更新", @"首页_图标_版本更新.png"],
+                      @[@"关于平台", @"首页_图标_关于平台.png"],
+                      ];
+    _lb_userName.text = [ShareValue sharedShareValue].regiterUser.userName;
+    _lb_regional.text = [ShareValue sharedShareValue].regiterUser.jobId;
+    _textf_signName.text = [ShareValue sharedShareValue].regiterUser.signName;
+
 }
 
 
@@ -86,9 +109,9 @@
 #pragma mark - button Action
 
 - (IBAction)quitAciton:(id)sender {
-
     NSLog(@"退出账号");
-    
+    [ShareValue sharedShareValue].isLoginOut = YES;
+    [ApplicationDelegate.viewController popToRootViewControllerAnimated:YES];
     
     
     
@@ -151,6 +174,13 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     
+}
+
+#pragma mark - Notification methods
+
+-(void)handleUpdataImage:(NSNotification *)note{
+    
+    [_imageV_userIcon sd_setImageWithURL:[ShareFun urlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
 }
 
 

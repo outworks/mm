@@ -13,6 +13,7 @@
 #define SET_LOGINUSERNAME @"SET_LOGINUSERNAME"
 #define SET_PASSWORD @"SET_PASSWORD"
 
+#define SET_LOGINOUT @"SET_LOGINOUT"
 #define SET_USERID @"SETUSERID"
 #define SET_USERNAME @"SET_USERNAME"
 #define SET_SIGNIMGURL @"SET_SIGNIMGURL"
@@ -37,6 +38,17 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
 -(BOOL)isRember{
     return [[NSUserDefaults standardUserDefaults]boolForKey:SET_MEMBER];
 }
+
+-(void)setIsLoginOut:(BOOL)isLoginOut{
+    [[NSUserDefaults standardUserDefaults]setBool:isLoginOut forKey:SET_LOGINOUT];
+
+}
+
+-(BOOL)isLoginOut{
+    return [[NSUserDefaults standardUserDefaults]boolForKey:SET_LOGINOUT];
+
+}
+
 
 -(void)setFileBaseUrl:(NSString *)fileBaseUrl{
     [[NSUserDefaults standardUserDefaults]setValue:fileBaseUrl forKey:SET_FILEBASEURL];
