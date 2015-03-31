@@ -92,7 +92,9 @@
 - (void)showInView:(UIView *)view
 {
     [view addSubview:self];
-//    [[UIApplication sharedApplication].delegate.window.rootViewController.view addSubview:self];
+    if (!view) {
+        [[UIApplication sharedApplication].delegate.window.rootViewController.view addSubview:self];
+    }
 }
 
 -(void)setCancelButtonColor:(UIColor *)color titleColor:(UIColor *)titleColor  icon:(UIImage *)image{

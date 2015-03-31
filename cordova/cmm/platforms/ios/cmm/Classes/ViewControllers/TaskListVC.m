@@ -12,12 +12,24 @@
 #import "MBProgressHUD+Add.h"
 #import "UIColor+External.h"
 #import "LXActionSheet.h"
+#import "MJRefresh.h"
+#import "TaskDetailVC.h"
 
-@interface TaskListVC ()<UITableViewDataSource,UITableViewDelegate>
+@interface TaskListVC ()<UITableViewDataSource,UITableViewDelegate,LXActionSheetDelegate>
 
-@property(nonatomic,strong) NSArray *list;
+@property(nonatomic,strong) NSMutableArray *list;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (weak, nonatomic) IBOutlet UIButton *btn_timeState;
+
+@property(nonatomic,strong) NSString *timeorder;
+
+@property(nonatomic,assign) int page;
+
+@property(nonatomic,assign) int size;
+
+@property(nonatomic,assign) BOOL isLastPage;
 
 @end
 
@@ -27,7 +39,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
 //    [_tableView registerClass:[TaskCell class] forCellReuseIdentifier:NSStringFromClass([TaskCell class])];
-    [self loadDatas];
     self.navigationController.navigationBarHidden = NO;
     self.navigationController.navigationBar.backgroundColor = HEX_RGB(0x008cec);
     self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],UITextAttributeTextColor,[UIFont systemFontOfSize:18],UITextAttributeFont, nil];
@@ -37,6 +48,21 @@
     self.navigationItem.leftBarButtonItem = item;
     self.navigationController.navigationBar.translucent = NO;
     self.title = @"任务列表";
+    _isLastPage = YES;
+    self.list = [[NSMutableArray alloc]init];
+    [self.tableView addLegendHeaderWithRefreshingBlock:^{
+        [self reloadDatas];
+    }];
+    [self.tableView.header  beginRefreshing];
+    
+    [self.tableView addLegendFooterWithRefreshingBlock:^{
+        if (!_isLastPage) {
+            [self loadNextPageDatas];
+        }else{
+            [self.tableView.footer noticeNoMoreData];
+        }
+    }];
+    self.tableView.footer.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,24 +85,42 @@
 }
 */
 
+-(void)reloadDatas{
+    self.page = 0;
+    [self.list removeAllObjects];
+    [self loadDatas];
+}
+
+-(void)loadNextPageDatas{
+    self.page ++;
+    [self loadDatas];
+}
+
 -(void)loadDatas{
-    [MBProgressHUD showMessag:@"正在加载..." toView:self.view];
     TaskRequest *request = [[TaskRequest alloc]init];
     request.userId = @"1024921";
     [TaskAPI getTasksByHttpRequest:request Success:^(NSArray *tasks) {
-        self.list = tasks;
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [self.tableView.header endRefreshing];
+        [self.list addObjectsFromArray:tasks];
         [_tableView reloadData];
+        if (!_isLastPage) {
+            self.tableView.footer.hidden = NO;
+        }else{
+            self.tableView.footer.hidden = YES;
+        }
     } fail:^(NSString *description) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [MBProgressHUD showMessag:@"正在加载..." toView:self.view];
+        [self.tableView.header endRefreshing];
+        [MBProgressHUD showError:description toView:self.view];
     }];
 }
 
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    //
+    TaskDetailVC *vc = [[TaskDetailVC alloc]init];
+    vc.task = [_list objectAtIndex:indexPath.row];
+    [self.navigationController pushViewController:vc
+                                         animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -101,12 +145,48 @@
 
 
 #pragma mark - Action
-
-- (IBAction)dateOrderChange:(id)sender {
-    
+/**
+ *  显示任务状态
+ *
+ */
+- (IBAction)chooseState:(id)sender {
+    LXActionSheet *sheet = [[LXActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"全部" otherButtonTitles:@"未启动",@"进行中",@"已完成",@"超时完成", nil];
+    [sheet setdestructiveButtonColor:RGB(86, 170, 14) titleColor:[UIColor whiteColor] icon:nil];
+    [sheet setCancelButtonColor:[UIColor whiteColor] titleColor:[UIColor redColor] icon:nil];
+    [sheet showInView:self.navigationController.view];
 }
 
 
+/**
+ *  显示筛选选项
+ *
+ */
+- (IBAction)showRequire:(id)sender {
+    
+}
 
+/**
+ *  时间排序
+ *
+ */
+- (IBAction)dateOrderChange:(id)sender {
+    if (_btn_timeState.tag == 0) {
+        _btn_timeState.tag = 1;
+        [_btn_timeState setImage:[UIImage imageNamed:@"任务_图标_从低到高"] forState:UIControlStateNormal];
+        _timeorder = @"asc";
+        
+    }else{
+        _btn_timeState.tag = 0;
+        [_btn_timeState setImage:[UIImage imageNamed:@"任务_图标_从高到低"] forState:UIControlStateNormal];
+        _timeorder = @"dec";
+        
+    }
+}
+
+
+#pragma mark - LXActionSheetDelegate
+- (void)lxactionSheet:(LXActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+}
 
 @end

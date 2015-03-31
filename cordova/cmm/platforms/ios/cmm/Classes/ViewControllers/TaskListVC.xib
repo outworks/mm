@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TaskListVC">
             <connections>
+                <outlet property="btn_timeState" destination="mLH-IN-ADe" id="sGW-Br-abO"/>
                 <outlet property="tableView" destination="476-bE-IaS" id="ajd-sC-4by"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -49,6 +50,9 @@
                                 <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="chooseState:" destination="-1" eventType="touchUpInside" id="lNA-Oj-mxh"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Xs-2a-P7K">
                             <rect key="frame" x="214" y="0.0" width="106" height="48"/>
@@ -61,6 +65,9 @@
                                 <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="showRequire:" destination="-1" eventType="touchUpInside" id="6pm-Qs-6aZ"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.87865149460000003" green="0.87865149460000003" blue="0.87865149460000003" alpha="1" colorSpace="calibratedRGB"/>
