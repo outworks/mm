@@ -1,56 +1,26 @@
 //
-//  HaoKaVC.m
+//  BroadbandVC.m
 //  cmm
 //
-//  Created by Hcat on 15/3/20.
+//  Created by Hcat on 15/4/1.
 //
 //
 
-#import "HaoKaVC.h"
+#import "BroadbandVC.h"
 
-#import "MBProgressHUD+Add.h"
-
-@interface HaoKaVC (){
-    
-    MBProgressHUD * _hud;
-}
+@interface BroadbandVC ()
 
 @end
 
-@implementation HaoKaVC
-
-#pragma mark - viewLift
+@implementation BroadbandVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
-  
-    
-    [self datarequest];
-    
+    // Do any additional setup after loading the view from its nib.
 }
-
-#pragma mark - private methods
-
--(void)datarequest{
-
-   
-    
-    
-
-
-}
-
-
-#pragma mark - dealloc
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
-    
-    
-    
     // Dispose of any resources that can be recreated.
 }
 

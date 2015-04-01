@@ -12,7 +12,7 @@
 
 @interface SaleAPI : NSObject
 
-+(void)getSaleQueryHttpAPI:(SaleRequest *)request Success:(void (^)(SaleResponse *response,NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail;
++(void)getSaleQueryHttpAPI:(SaleRequest *)request Success:(void (^)(NSArray *response,NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail;
 
 
 @end

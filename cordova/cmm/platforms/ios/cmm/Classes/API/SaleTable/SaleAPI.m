@@ -11,13 +11,13 @@
 
 @implementation SaleAPI
 
-+(void)getSaleQueryHttpAPI:(SaleRequest *)request Success:(void (^)(SaleResponse *response,NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
++(void)getSaleQueryHttpAPI:(SaleRequest *)request Success:(void (^)(NSArray *response,NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
     
     if (HTTP_POSTMETHOD) {
         [LK_APIUtil postHttpRequest:request apiPath:URLPATH_SALEQUERY Success:^(NSObject *response,NSInteger result,NSString *msg){
             NSArray *array = (NSArray *)response;
             if (array.count > 0) {
-                sucess(array.firstObject,result,msg);
+                sucess(array,result,msg);
             }else{
                 sucess(nil,result,msg);
             }

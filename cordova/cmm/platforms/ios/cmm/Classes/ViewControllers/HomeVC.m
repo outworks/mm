@@ -20,6 +20,9 @@
 
 
 #import "HaoKaVC.h"
+#import "KeyBusinessVC.h"
+#import "TerminalVC.h"
+#import "BroadbandVC.h"
 
 @interface HomeVC ()
 
@@ -36,6 +39,11 @@
 
 @property (nonatomic,strong) CommonTabBar *tabBar;
 
+
+@property (nonatomic,strong)KeyBusinessVC *keyBusinessVC;
+@property (nonatomic,strong)HaoKaVC *haokaVC;
+@property (nonatomic,strong)BroadbandVC *broadbandVC;
+@property (nonatomic,strong)TerminalVC *terminalVC;
 
 @end
 
@@ -57,6 +65,43 @@
 }
 
 #pragma mark - private methods
+
+-(BroadbandVC *)broadbandVC{
+    if (_broadbandVC == nil) {
+        _broadbandVC = [[BroadbandVC alloc] init];
+    }
+    
+    return _broadbandVC;
+}
+
+-(TerminalVC *)terminalVC{
+    if (_terminalVC == nil) {
+        _terminalVC = [[TerminalVC alloc] init];
+    }
+
+    return _terminalVC;
+}
+
+-(HaoKaVC *)haokaVC{
+
+    if (_haokaVC == nil) {
+        _haokaVC = [[HaoKaVC alloc] init];
+    }
+    
+    return _haokaVC;
+}
+
+
+-(KeyBusinessVC *)keyBusinessVC{
+    
+    if (_keyBusinessVC == nil) {
+        _keyBusinessVC = [[KeyBusinessVC alloc] init];
+    }
+    
+    return _keyBusinessVC;
+}
+
+
 
 -(void)resetUI{
     
@@ -119,8 +164,24 @@
 #pragma mark - commonTabBarDelegate
 
 -(void)tabBar:(CommonTabBar *)tabBar didSelectIndex:(NSInteger)index{
-    HaoKaVC *t_vc = [[HaoKaVC alloc] init];
-    [_v_bottm addSubview:t_vc.view];
+    
+    for (UIView *t_view in [_v_bottm subviews]) {
+        [t_view removeFromSuperview];
+    }
+    if (index == 0) {
+        [self haokaVC];
+        [_v_bottm addSubview:_haokaVC.view];
+    }else if(index == 1){
+        [self terminalVC];
+        [_v_bottm addSubview:_terminalVC.view];
+    }else if(index == 2){
+        [self broadbandVC];
+        [_v_bottm addSubview:_broadbandVC.view];
+    }else{
+        [self keyBusinessVC];
+        [_v_bottm addSubview:_keyBusinessVC.view];
+    }
+    
     [_scrollView setContentSize:CGSizeMake(ScreenWidth, CGRectGetMaxY(_v_bottm.frame))];
 }
 
