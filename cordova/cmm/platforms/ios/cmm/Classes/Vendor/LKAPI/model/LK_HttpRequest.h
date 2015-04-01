@@ -13,6 +13,16 @@
 
 @end
 
+@interface LK_HttpBasePageRequest : LK_HttpBaseRequest
+
+@property(nonatomic,assign) int curPageNum;//当前页
+@property(nonatomic,assign) int pageSize;//每页条数
+
+@end
+
+
+
+
 /**
  *  文件数据(data/fileName二选一)
  */
@@ -51,7 +61,3 @@
 
 @end
 
-@interface LK_HttpBasePageRequest : LK_HttpBaseRequest
-
-
-@end

@@ -15,8 +15,8 @@
 @property(nonatomic,strong) NSString *	userId	;//创建者村
 @property(nonatomic,strong) NSString *	visitnum	;//任务编号
 @property(nonatomic,strong) NSString *	name	;//任务名称
-@property(nonatomic,strong) NSString *	starttime	;//任务开始时间
-@property(nonatomic,strong) NSString *	endtime	;//任务结束时间
+@property(nonatomic,strong) NSString *	starttimeString	;//任务开始时间
+@property(nonatomic,strong) NSString *	endtimeString	;//任务结束时间
 @property(nonatomic,strong) NSString *	typeid	;//任务类型
 @property(nonatomic,strong) NSString *	typeidLabel	;//任务类型名称
 @property(nonatomic,strong) NSString *	opetypeid	;//任务操作类型

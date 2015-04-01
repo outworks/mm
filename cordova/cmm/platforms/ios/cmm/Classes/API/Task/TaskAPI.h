@@ -12,7 +12,7 @@
 
 @interface TaskAPI : NSObject
 
-+(void)getTasksByHttpRequest:(TaskRequest *)request Success:(void (^)(NSArray *tasks))sucess fail:(void (^)(NSString *description))fail;
++(void)getTasksByHttpRequest:(TaskRequest *)request Success:(void (^)(NSArray *tasks,BOOL isLastPage))sucess fail:(void (^)(NSString *description))fail;
 
 
 @end

@@ -54,7 +54,7 @@
     _task = task;
     _lb_taskname.text = task.name;
     _lb_typename.text = [NSString stringWithFormat:@"任务类型:%@",task.opetypeidLabel];
-    _lb_time.text = [NSString stringWithFormat:@"时间:%@ ~ %@",task.starttime,task.endtime];
+    _lb_time.text = [NSString stringWithFormat:@"时间:%@ ~ %@",task.starttimeString,task.endtimeString];
     _v_progress.progress = 0.79;
 }
 

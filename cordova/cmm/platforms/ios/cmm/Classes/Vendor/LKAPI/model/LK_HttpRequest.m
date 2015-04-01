@@ -22,6 +22,19 @@
 @end
 
 
+@implementation LK_HttpBasePageRequest
+
+-(id)init{
+    self = [super init];
+    if (self) {
+        _curPageNum = 1;
+        _pageSize = 20;
+    }
+    return self;
+}
+
+@end
+
 
 @implementation LK_FilePart
 
@@ -100,17 +113,5 @@
 
 @end
 
-@implementation LK_HttpBasePageRequest
 
--(id)init{
-    self = [super init];
-    if (self) {
-    
-        
-    
-    }
-    return self;
-}
-
-@end
 

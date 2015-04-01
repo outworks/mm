@@ -13,6 +13,7 @@
 #import "LK_NSDictionary2Object.h"
 #import "ServerConfig.h"
 #import "ShareValue.h"
+#import <objc/runtime.h>
 
 #define TIMEOUT_DEFAULT 30
 
@@ -67,6 +68,40 @@
                     }
                 }
                 sucess(response.data,response.result,response.msg);
+            }else{
+                fail(@"服务器异常");
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        fail(error.localizedDescription);
+    }];
+}
+
++(void)postHttpPageRequest:(LK_HttpBasePageRequest *)request apiPath:(NSString *)path Success:(void (^)(LK_HttpBasePageResponse *response,NSInteger result,NSString *msg))success fail:(void (^)(NSString *description))fail class:(Class)resultClass{
+    if (!resultClass) {
+        resultClass = [NSObject class];
+    }
+    NSDictionary *dict = request.lkDictionary;
+    AFHTTPClient *client = LK_APIUtil.client;
+    path = [NSString stringWithFormat:@"%@%@",BASE_SERVERLURL,path];
+    [client postPath:path parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if(responseObject){
+            NSData *responseData = (NSData *)responseObject;
+            NSString *responseString = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
+            NSLog(@"%@",responseString);
+            NSDictionary *dict = [responseString objectFromJSONString];
+            if (dict) {
+                LK_HttpBasePageResponse *response1 = [dict objectByClass:[LK_HttpBasePageResponse class]];
+                if (response1) {
+                    NSArray *result  = response1.data.result;
+                    NSMutableArray *array = [[NSMutableArray alloc]init];
+                    for (NSDictionary *dict in result) {
+                        NSObject *classResult = [dict objectByClass:resultClass];
+                        [array addObject:classResult];
+                    }
+                    response1.data.result = array;
+                }
+                success(response1,response1.result,response1.msg);
             }else{
                 fail(@"服务器异常");
             }

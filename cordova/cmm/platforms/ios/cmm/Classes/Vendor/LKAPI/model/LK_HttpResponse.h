@@ -16,13 +16,15 @@
 
 @interface LK_BasePageRespson : NSObject
 
+@property(nonatomic,assign) BOOL lastPage;
 
+@property(nonatomic,strong) NSArray *result;
 
 @end
 
 @interface LK_HttpBasePageResponse : LK_HttpBaseResponse
 
-@property(nonatomic,strong) LK_BasePageRespson *page;
+@property(nonatomic,strong) LK_BasePageRespson *data;
 
 @end
 

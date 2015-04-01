@@ -14,6 +14,8 @@
 
 +(void)postHttpRequest:(LK_HttpBaseRequest *)request apiPath:(NSString *)path Success:(void (^)(NSObject *response,NSInteger result,NSString *msg))response fail:(void (^)(NSString *description))fail class:(Class)responseClass;
 
++(void)postHttpPageRequest:(LK_HttpBasePageRequest *)request apiPath:(NSString *)path Success:(void (^)(LK_HttpBasePageResponse *response,NSInteger result,NSString *msg))response fail:(void (^)(NSString *description))fail class:(Class)class;
+
 +(void)getHttpRequest:(LK_HttpBaseRequest *)request apiPath:(NSString *)path Success:(void (^)(NSObject *response,NSInteger result,NSString *msg))response fail:(void (^)(NSString *))fail class:(Class)responseClass;
 
 +(void)cancelAllHttpRequestByApiPath:(NSString *)path;

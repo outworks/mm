@@ -99,11 +99,12 @@
 -(void)loadDatas{
     TaskRequest *request = [[TaskRequest alloc]init];
     request.userId = @"1024921";
-    [TaskAPI getTasksByHttpRequest:request Success:^(NSArray *tasks) {
+    [TaskAPI getTasksByHttpRequest:request Success:^(NSArray *tasks, BOOL isLastPage) {
         [self.tableView.header endRefreshing];
         [self.list addObjectsFromArray:tasks];
         [_tableView reloadData];
-        if (!_isLastPage) {
+        _isLastPage = isLastPage;
+        if (!isLastPage) {
             self.tableView.footer.hidden = NO;
         }else{
             self.tableView.footer.hidden = YES;
