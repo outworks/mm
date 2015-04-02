@@ -8,14 +8,26 @@
 
 #import "MyWorkVC.h"
 #import "CommonTabBar.h"
+
 #import "BasicWorkVC.h"
+#import "VisitSupportVC.h"
+#import "FourPromotionVC.h"
+#import "PerformanceQuery.h"
 
 @interface MyWorkVC ()
 
 @property (nonatomic,strong) CommonTabBar *tabBar;
-@property (weak, nonatomic) IBOutlet UIView *v_content;
+
+
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
+
 
 @property (nonatomic,strong) BasicWorkVC *v_basicWork;
+@property (nonatomic,strong) VisitSupportVC *v_visitSupport;
+@property (nonatomic,strong) FourPromotionVC *v_fourPromotion;
+@property (nonatomic,strong) PerformanceQuery *v_performanceQuery;
+
 
 @end
 
@@ -58,16 +70,39 @@
     [self.view addSubview:_tabBar];
     [_tabBar setSelectedIndex:0];
     
-    [self buildBasicWorkVC];
+    [_scrollView setContentSize:CGSizeMake([t_arr count]*_scrollView.frame.size.width, _scrollView.frame.size.height)];
+    
+    
 }
 
 #pragma mark - private methods
 
 -(void)buildBasicWorkVC{
-    _v_basicWork = [[BasicWorkVC alloc] initWithNibName:@"BasicWorkVC" bundle:nil];
-    _v_basicWork.view.frame = CGRectMake(0, 0, _v_content.frame.size.width, _v_content.frame.size.height);
-    [_v_content addSubview:_v_basicWork.view];
+    if (_v_basicWork == nil) {
+         _v_basicWork = [[BasicWorkVC alloc] initWithNibName:@"BasicWorkVC" bundle:nil];
+        _v_basicWork.view.frame = CGRectMake(0, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+        [_scrollView addSubview:_v_basicWork.view];
+    }
+}
+
+-(void)buildVisitSupportVC{
+    _v_visitSupport = [[VisitSupportVC alloc] initWithNibName:@"VisitSupportVC" bundle:nil];
+    _v_visitSupport.view.frame = CGRectMake(_scrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+    [_scrollView addSubview:_v_visitSupport.view];
     
+}
+
+-(void)buildFourPromotionVC{
+    
+    _v_fourPromotion = [[FourPromotionVC alloc] initWithNibName:@"FourPromotionVC" bundle:nil];
+    _v_fourPromotion.view.frame = CGRectMake(2*_scrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+    [_scrollView addSubview:_v_fourPromotion.view];
+}
+-(void)buildPerformanceQuery{
+    _v_performanceQuery = [[PerformanceQuery alloc] initWithNibName:@"PerformanceQuery" bundle:nil];
+    _v_performanceQuery.view.frame = CGRectMake(3*_scrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+    [_scrollView addSubview:_v_performanceQuery.view];
+
 }
 
 
@@ -76,6 +111,44 @@
 
 -(void)tabBar:(CommonTabBar *)tabBar didSelectIndex:(NSInteger)index{
     
+    [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width*index, 0) animated:YES];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        double delayInSeconds = 0.5;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            if (index == 0) {
+                [self buildBasicWorkVC];
+            }else if (index == 1) {
+                [self buildVisitSupportVC];
+            }else if(index == 2){
+                [self buildFourPromotionVC];
+            }else if(index == 3){
+                [self buildPerformanceQuery];
+                
+            }
+        });
+    });
+    
+    
+}
+
+#pragma mark -ScrollView
+
+-(void) scrollViewDidScroll:(UIScrollView *) scrollView{
+    
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    int index = fabs(scrollView.contentOffset.x) / scrollView.frame.size.width;
+    NSLog(@"%d",index);
+    
+    [self.tabBar setSelectedIndex:index];
+    
+}
+
+-(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
     
     
 }

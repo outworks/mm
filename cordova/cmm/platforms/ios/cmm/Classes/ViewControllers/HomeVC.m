@@ -125,7 +125,7 @@
     
     [_tabBar drawItems];
     [self.scrollView addSubview:_tabBar];
-    [_tabBar setSelectedIndex:0];
+    [_tabBar setSelectedIndex:3];
 
 }
 

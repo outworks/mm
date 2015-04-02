@@ -9,6 +9,9 @@
 #import "HaoKaVC.h"
 
 #import "MBProgressHUD+Add.h"
+#import "KeyItem.h"
+
+#import "SaleAPI.h"
 
 @interface HaoKaVC (){
     
@@ -30,15 +33,41 @@
     
 }
 
+
 #pragma mark - private methods
 
 -(void)datarequest{
+    
+    __block HaoKaVC *weakSelf = self;
+    
+    _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [_hud setLabelText:@"请求中"];
+    [_hud show:YES];
+    SaleRequest *t_request = [[SaleRequest alloc] init];
+    t_request.userId = @"11";
+    [SaleAPI getSaleQueryHttpAPI:t_request Success:^(NSArray *response, NSInteger result, NSString *msg) {
+        [_hud hide:YES];
+        
+        if ([response count] > 0) {
+            
+            for (int i = 0 ; i < [response count]; i++) {
+                
+                SaleResponse *res = response[i];
 
-   
+                KeyItem *t_item = [KeyItem initCustomView];
+                [t_item setNeedsDisplay];
+                t_item.data_sale = res;
+                t_item.frame = CGRectMake(i*ScreenWidth, 0, ScreenWidth, CGRectGetHeight(t_item.frame));
+                [weakSelf.view addSubview:t_item];
+            }
+        
+        }
+        
+    } fail:^(NSString *description) {
+        [_hud hide:YES];
+    }];
     
     
-
-
 }
 
 
