@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Channel.h"
+#import "Unit.h"
 
 @interface ChannelCell : UITableViewCell
 
-@property(nonatomic,strong)Channel *channel;
+@property(nonatomic,strong)Unit *unit;
 
 @end

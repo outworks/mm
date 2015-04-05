@@ -8,6 +8,10 @@
 
 #import "TaskDetailVC.h"
 #import "ChannelCell.h"
+#import "TaskAPI.h"
+#import "MBProgressHUD+Add.h"
+#import "Unit.h"
+#import "UIColor+External.h"
 
 @interface TaskDetailVC ()
 
@@ -30,7 +34,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    _lb_title.text = _task.name;
+    _lb_state.text = _task.stateString;
+    _lb_time.text = [NSString stringWithFormat:@"%@ ~ %@",_task.stateString,_task.endtimeString];
+    _lb_type.text = _task.typeidLabel;
+    [self loadDatas];
+    [[UINavigationBar appearance] setBarTintColor:HEX_RGB(0x008cec)];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
+    [item setTintColor:[UIColor whiteColor ]];
+    self.navigationItem.leftBarButtonItem = item;
+    self.title = @"任务详情";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -40,6 +53,22 @@
 
 
 -(void)loadDatas{
+    [MBProgressHUD showMessag:@"正在加载..." toView:self.view];
+    TaskDetailRequest *request = [[TaskDetailRequest alloc]init];
+    request.visitId = self.task.id;
+    [TaskAPI getDetailByHttpRequest:request Success:^(Task *task) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        _lb_title.text = task.name;
+        _lb_state.text = task.stateString;
+        _lb_time.text = [NSString stringWithFormat:@"%@ ~ %@",task.stateString,task.endtimeString];
+        _lb_type.text = task.typeidLabel;
+        self.task = task;
+        self.channels = task.unit;
+        [self.tableView reloadData];
+    } fail:^(NSString *description) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [MBProgressHUD showError:description toView:self.view];
+    }];
     
 }
 
@@ -47,7 +76,9 @@
     
 }
 
-
+-(void)backAction{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

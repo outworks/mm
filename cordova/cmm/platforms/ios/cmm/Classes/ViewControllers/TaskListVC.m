@@ -14,8 +14,14 @@
 #import "LXActionSheet.h"
 #import "MJRefresh.h"
 #import "TaskDetailVC.h"
+#import "TaskSearchVC.h"
+#import "AppDelegate.h"
 
-@interface TaskListVC ()<UITableViewDataSource,UITableViewDelegate,LXActionSheetDelegate>
+#define TASKLISTPAGESIZE 20
+
+
+@interface TaskListVC ()<UITableViewDataSource,UITableViewDelegate,LXActionSheetDelegate,TaskSearchVCDelegate>
+
 
 @property(nonatomic,strong) NSMutableArray *list;
 
@@ -25,11 +31,25 @@
 
 @property(nonatomic,strong) NSString *timeorder;
 
-@property(nonatomic,assign) int page;
+@property(nonatomic,assign) int curPageNum;
 
-@property(nonatomic,assign) int size;
+@property(nonatomic,assign) int pageSize;
 
 @property(nonatomic,assign) BOOL isLastPage;
+
+@property(nonatomic,strong) NSString *requestType;
+
+@property(nonatomic,strong) NSString *name;
+
+@property(nonatomic,strong) NSString *state;
+
+@property(nonatomic,strong) NSString *typeId;
+
+@property(nonatomic,strong) NSString *startTime;
+
+@property(nonatomic,strong) NSString *endTime;
+
+@property(nonatomic,strong) TaskSearchVC *searchVC;
 
 @end
 
@@ -37,6 +57,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.timeorder = @"DESC";
     // Do any additional setup after loading the view from its nib.
 //    [_tableView registerClass:[TaskCell class] forCellReuseIdentifier:NSStringFromClass([TaskCell class])];
     self.navigationController.navigationBarHidden = NO;
@@ -86,19 +107,35 @@
 */
 
 -(void)reloadDatas{
-    self.page = 0;
+    self.curPageNum = 0;
+    self.pageSize = TASKLISTPAGESIZE;
     [self.list removeAllObjects];
-    [self loadDatas];
+    [self loadNextPageDatas];
 }
 
 -(void)loadNextPageDatas{
-    self.page ++;
+    self.curPageNum ++;
     [self loadDatas];
 }
 
 -(void)loadDatas{
     TaskRequest *request = [[TaskRequest alloc]init];
     request.userId = @"1024921";
+    request.name = _name;
+    request.typeId = _typeId;
+    request.orderDirection = _timeorder;
+    if (_startTime) {
+        request.startTime = [NSString stringWithFormat:@"%@ 00:00:00",_startTime];
+    }
+    if (_endTime) {
+        request.endTime = [NSString stringWithFormat:@"%@ 23:59:59",_endTime];
+    }
+    if ([_state isEqual:@"0"]) {
+        _state = nil;
+    }
+    request.state = _state;
+    request.curPageNum = _curPageNum;
+    request.pageSize = _pageSize;
     [TaskAPI getTasksByHttpRequest:request Success:^(NSArray *tasks, BOOL isLastPage) {
         [self.tableView.header endRefreshing];
         [self.list addObjectsFromArray:tasks];
@@ -151,7 +188,7 @@
  *
  */
 - (IBAction)chooseState:(id)sender {
-    LXActionSheet *sheet = [[LXActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"全部" otherButtonTitles:@"未启动",@"进行中",@"已完成",@"超时完成", nil];
+    LXActionSheet *sheet = [[LXActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"全部" otherButtonTitles:@"未启动",@"进行中",@"已完成",@"超时完成",@"中止",nil];
     [sheet setdestructiveButtonColor:RGB(86, 170, 14) titleColor:[UIColor whiteColor] icon:nil];
     [sheet setCancelButtonColor:[UIColor whiteColor] titleColor:[UIColor redColor] icon:nil];
     [sheet showInView:self.navigationController.view];
@@ -163,7 +200,50 @@
  *
  */
 - (IBAction)showRequire:(id)sender {
+    if (!self.searchVC) {
+        self.searchVC = [[TaskSearchVC alloc]init];
+        self.searchVC.delegate = self;
+    }
     
+    CGRect rect = self.searchVC.view.frame;
+    CGRect realRect = CGRectMake(CGRectGetWidth(rect), 0,CGRectGetWidth(rect),CGRectGetHeight(rect));
+    self.searchVC.view.frame= realRect;
+    self.searchVC.view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+//    vc.view.backgroundColor = [UIColor clearColor];
+    [ApplicationDelegate.window addSubview:self.searchVC.view];
+    self.searchVC.name = _name;
+    self.searchVC.state = _state;
+    self.searchVC.startTime = _startTime;
+    self.searchVC.endTime = _endTime;
+    self.searchVC.typeId = _typeId;
+    __weak TaskSearchVC *weakVc = self.searchVC;
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect resultRect = CGRectInset(rect, 0, 0);
+        weakVc.view.frame =resultRect;
+    }];
+    
+}
+
+#pragma mark - TaskSearchVCDelegate
+-(void)taskSearchVCBack:(TaskSearchVC *)vc{
+    self.searchVC.delegate = nil;
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect resultRect = CGRectMake(CGRectGetWidth(self.view.frame), 0, CGRectGetWidth(self.searchVC.view.frame), CGRectGetHeight(self.searchVC.view.frame));
+        self.searchVC.view.frame =resultRect;
+    } completion:^(BOOL finished) {
+        [self.searchVC.view removeFromSuperview];
+        self.searchVC = nil;
+    }];
+}
+
+-(void)searchName:(NSString *)name state:(NSString *)state typeId:(NSString *)typeId startTime:(NSString *)startTime endTime:(NSString *)endTime;{
+    self.name = name;
+    self.state = state;
+    self.typeId = typeId;
+    self.startTime = startTime;
+    self.endTime = endTime;
+    [self.tableView.header  beginRefreshing];
+    [self taskSearchVCBack:nil];
 }
 
 /**
@@ -174,20 +254,20 @@
     if (_btn_timeState.tag == 0) {
         _btn_timeState.tag = 1;
         [_btn_timeState setImage:[UIImage imageNamed:@"任务_图标_从低到高"] forState:UIControlStateNormal];
-        _timeorder = @"asc";
-        
+        _timeorder = @"DESC";
     }else{
         _btn_timeState.tag = 0;
         [_btn_timeState setImage:[UIImage imageNamed:@"任务_图标_从高到低"] forState:UIControlStateNormal];
-        _timeorder = @"dec";
-        
+        _timeorder = @"ASC";
     }
+    [self.tableView.header  beginRefreshing];
 }
 
 
 #pragma mark - LXActionSheetDelegate
 - (void)lxactionSheet:(LXActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
+    self.state = [NSString stringWithFormat:@"%d",(int)buttonIndex];
+    [self.tableView.header  beginRefreshing];
 }
 
 @end

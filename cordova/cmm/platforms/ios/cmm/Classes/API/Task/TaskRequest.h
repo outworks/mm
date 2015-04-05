@@ -25,8 +25,18 @@
 
 @property(nonatomic,strong) NSString *endTime;//结束时间
 
+@property(nonatomic,strong) NSString *orderDirection;
+
 @property(nonatomic,assign) int curPageNum;//当前页
 
 @property(nonatomic,assign) int pageSize;//每页多少条
+
+@end
+
+@interface TaskDetailRequest : LK_HttpBaseRequest
+
+@property(nonatomic,strong) NSString *userId;
+
+@property(nonatomic,strong) NSString *visitId;
 
 @end

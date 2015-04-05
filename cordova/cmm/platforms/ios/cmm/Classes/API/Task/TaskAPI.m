@@ -19,4 +19,12 @@
     } class:([Task class])];
 }
 
++(void)getDetailByHttpRequest:(TaskDetailRequest *)request Success:(void (^)(Task *task))sucess fail:(void (^)(NSString *description))fail{
+    [LK_APIUtil postHttpRequest:request apiPath:URLPATH_TASKDETAIL Success:^(NSObject *response, NSInteger result, NSString *msg) {
+        sucess((Task *)response);
+    } fail:^(NSString *description) {
+        
+    } class:[Task class]];
+}
+
 @end

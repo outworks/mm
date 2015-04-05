@@ -20,6 +20,7 @@
 #define URLPATH_SALEQUERY @"saleQuery"
 
 #define URLPATH_TASKS @"taskList"
+#define URLPATH_TASKDETAIL @"taskDetail"
 #define URLPATH_FILEUPLOAD @"MobileService?requestType=upload&userId="
 
 

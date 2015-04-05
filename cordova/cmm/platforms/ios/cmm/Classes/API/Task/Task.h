@@ -34,7 +34,13 @@
 @property(nonatomic,strong) NSString *	finishtime	;//任务完成时间
 @property(nonatomic,strong) NSString *	smsDate	;//短信催办时间
 @property(nonatomic,strong) NSString *	marketingmanagerid	;//营销经理ID
+@property(nonatomic,strong) NSString * state;
 @property(nonatomic,strong) NSString *	marketingmanagername	;//营销经理名称
+@property(nonatomic,assign) int totalUnitinfo;//总网点个数
+@property(nonatomic,assign) int finishUnitNum;//已完成网点个数
 
+@property(nonatomic,strong) NSArray *unit;
+
+-(NSString *)stateString;
 
 @end

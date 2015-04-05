@@ -28,10 +28,11 @@
     // Configure the view for the selected state
 }
 
--(void)setChannel:(Channel *)channel{
-    _channel = channel;
+-(void)setUnit:(Unit *)unit{
+    _unit = unit;
     _lb_state.text = @"正在进行";
-    _lb_name.text = @"xxxx公司";
+    _lb_name.text = unit.unitname;
 }
+
 
 @end
