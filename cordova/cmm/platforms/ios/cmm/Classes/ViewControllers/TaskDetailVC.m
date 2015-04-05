@@ -27,6 +27,7 @@
 
 @property(nonatomic,strong) NSArray *channels;
 
+@property (weak, nonatomic) IBOutlet UIButton *btn_beginAction;
 
 @end
 
@@ -44,6 +45,9 @@
     [item setTintColor:[UIColor whiteColor ]];
     self.navigationItem.leftBarButtonItem = item;
     self.title = @"任务详情";
+    if([_task.isfinish isEqual:@"1"]){
+        [_btn_beginAction setHidden:YES];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -85,7 +89,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 92.0;
+    return 50.0;
 }
 
 #pragma mark - UITableViewDataSource
@@ -96,10 +100,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     ChannelCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([ChannelCell class])];
     if (!cell) {
-        NSArray *array = [[NSBundle mainBundle]loadNibNamed:@"TaskCell" owner:self options:nil];
+        NSArray *array = [[NSBundle mainBundle]loadNibNamed:@"ChannelCell" owner:self options:nil];
         cell = [array lastObject];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    cell.unit = [_task.unit objectAtIndex:indexPath.row];
 //    cell. = [_list objectAtIndex:indexPath.row];
     return cell;
 }

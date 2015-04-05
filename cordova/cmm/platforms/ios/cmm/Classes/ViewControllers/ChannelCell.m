@@ -7,6 +7,7 @@
 //
 
 #import "ChannelCell.h"
+#import "UIColor+External.h"
 
 @interface ChannelCell()
 
@@ -30,7 +31,13 @@
 
 -(void)setUnit:(Unit *)unit{
     _unit = unit;
-    _lb_state.text = @"正在进行";
+    if (![unit.isFinish isEqual:@"1"]) {
+        _lb_state.text = @"正在进行";
+        _lb_state.textColor = HEX_RGB(0xfc0000);
+    }else{
+        _lb_state.text = @"已完成";
+        _lb_state.textColor = HEX_RGB(0x55c55a);
+    }
     _lb_name.text = unit.unitname;
 }
 

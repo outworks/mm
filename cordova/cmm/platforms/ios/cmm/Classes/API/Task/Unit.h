@@ -24,5 +24,6 @@
 @property(nonatomic,strong) NSString *unitname;
 @property(nonatomic,strong) NSString *unitnum;
 @property(nonatomic,strong) NSString *unittypeid;
+@property(nonatomic,strong) NSString *isFinish;
 
 @end

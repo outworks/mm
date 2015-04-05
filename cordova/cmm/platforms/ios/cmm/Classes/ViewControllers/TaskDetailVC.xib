@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TaskDetailVC">
             <connections>
+                <outlet property="btn_beginAction" destination="SFS-u1-2Tb" id="hNY-XF-bCL"/>
                 <outlet property="lb_state" destination="qBD-nK-ohy" id="J5L-xy-BRg"/>
                 <outlet property="lb_time" destination="ccv-51-u2V" id="iCI-0e-oUf"/>
                 <outlet property="lb_title" destination="d4q-Z5-qLP" id="O3p-CB-Hmi"/>
@@ -249,7 +250,7 @@
                 <constraint firstItem="OoF-K0-CII" firstAttribute="top" secondItem="Llv-5R-llm" secondAttribute="bottom" constant="8" id="rrz-Pk-pCJ"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-            <point key="canvasLocation" x="-183" y="-202"/>
+            <point key="canvasLocation" x="-186" y="-281"/>
         </view>
     </objects>
 </document>
