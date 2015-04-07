@@ -74,8 +74,7 @@
     
     _imageV_userIcon.layer.cornerRadius = _imageV_userIcon.frame.size.width/2;
     _imageV_userIcon.layer.masksToBounds = YES;
-    NSLog(@"%@",[ShareValue sharedShareValue].regiterUser.signImgUrl);
-    [_imageV_userIcon sd_setImageWithURL:[NSURL URLWithString:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
+    [_imageV_userIcon sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl]  placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
     _imageV_bg_info.layer.cornerRadius = 3;
     _imageV_bg_info.layer.masksToBounds = YES;
     
@@ -180,7 +179,7 @@
 
 -(void)handleUpdataImage:(NSNotification *)note{
     
-    [_imageV_userIcon sd_setImageWithURL:[NSURL URLWithString:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
+    [_imageV_userIcon sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl]  placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
 }
 
 

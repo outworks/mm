@@ -24,6 +24,6 @@
 
 +(UIImage *) getPathforImage:(NSString *)imageName withType:(NSString *)t_type;
 
-+(NSURL *)urlFormPath:(NSString *)path;
++(NSURL *)fileUrlFormPath:(NSString *)path;
 
 @end

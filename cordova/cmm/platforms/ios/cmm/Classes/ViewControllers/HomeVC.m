@@ -108,7 +108,7 @@
     _imageV_userIcon.layer.cornerRadius = _imageV_userIcon.frame.size.width/2;
     _imageV_userIcon.layer.masksToBounds = YES;
     [_btn_memu setEnlargeEdgeWithTop:20 right:20 bottom:20 left:20];
-    [_imageV_userIcon sd_setImageWithURL:[NSURL URLWithString:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
+    [_imageV_userIcon sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
     NSArray *t_arr = @[@{@"Title":@"号卡"},@{@"Title":@"终端"},@{@"Title":@"宽带"},@{@"Title":@"重点业务"}];
     _tabBar = [[CommonTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_v_top.frame), ScreenWidth, 35) buttonItems:t_arr CommonTabBarType:CommonTabBarTypeTitleOnly isAnimation:YES];
     _tabBar.delegate = (id<CommonTabBarDelegate>)self;
@@ -189,7 +189,7 @@
 
 -(void)handleUpdataImage:(NSNotification *)note{
 
-    [_imageV_userIcon sd_setImageWithURL:[NSURL URLWithString:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
+    [_imageV_userIcon sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl]  placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
 }
 
 #pragma mark - dealloc

@@ -24,7 +24,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
+	<string>zh_CN</string>
 	<key>CFBundleDisplayName</key>
 	<string>福州移动统一平台</string>
 	<key>CFBundleExecutable</key>

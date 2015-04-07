@@ -59,8 +59,7 @@
     coor.latitude = [ShareValue sharedShareValue].latitude;
     coor.longitude = [ShareValue sharedShareValue].longitude;
     [_mapView setCenterCoordinate:coor];
-    [_mapView setZoomLevel:19.f];
-    
+    [_mapView setZoomLevel:13];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -75,24 +74,18 @@
     _mapView.delegate = nil; // 不用时，置nil
 }
 
-
-
-
 #pragma mark - private methods 
 
 -(void)setUnitPoint{
     if (_task != nil) {
         if (_annotationArrays != nil) {
-            [_mapView removeAnnotations:_annotationArrays];
-            [_annotationArrays removeAllObjects];
-            _annotationArrays = nil;
+            return;
         }
         _annotationArrays = [NSMutableArray array];
         
         if(_task.unit != nil && [_task.unit count] != 0){
         
             for(NSInteger i = 0 ; i < [_task.unit count]; i++){
-                
                 Unit *t_unit = _task.unit[i];
                 UnitPointAnnotation *pointAnnotation = [[UnitPointAnnotation alloc]init];
                 CLLocationCoordinate2D coor;
@@ -111,8 +104,7 @@
     }
     
     if (_unit != nil) {
-        
-        
+        if(_unitPonit)return;
         UnitPointAnnotation *pointAnnotation = [[UnitPointAnnotation alloc]init];
         CLLocationCoordinate2D coor;
         coor.latitude = [_unit.lat doubleValue];
@@ -128,8 +120,8 @@
         coor.latitude = [_unit.lat doubleValue];
         coor.longitude = [_unit.lon doubleValue];
         [_mapView setCenterCoordinate:coor];
-        [_mapView setZoomLevel:11.f];
-        
+        [_mapView setZoomLevel:14.f];
+        _unitPonit = pointAnnotation;
     }
 
 }
@@ -144,8 +136,9 @@
         coor.longitude = [ShareValue sharedShareValue].longitude;
         _positionAnnotation.coordinate = coor;
         _positionAnnotation.title = @"你所在的位置";
+        [_mapView addAnnotation:_positionAnnotation];
     }
-    [_mapView addAnnotation:_positionAnnotation];
+    
 }
 
 
@@ -251,7 +244,7 @@
         }
         */
         
-        [annotationView setSelected:YES animated:YES];
+//        [annotationView setSelected:YES animated:YES];
         
         
     }else{

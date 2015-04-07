@@ -39,7 +39,7 @@
     [super viewDidLoad];
     _lb_title.text = _task.name;
     _lb_state.text = _task.stateString;
-    _lb_time.text = [NSString stringWithFormat:@"%@ ~ %@",_task.stateString,_task.endtimeString];
+    _lb_time.text = [NSString stringWithFormat:@"%@ ~ %@",_task.starttimeString,_task.endtimeString];
     _lb_type.text = _task.typeidLabel;
     [self loadDatas];
     [[UINavigationBar appearance] setBarTintColor:HEX_RGB(0x008cec)];

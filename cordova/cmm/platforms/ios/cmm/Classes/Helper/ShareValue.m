@@ -9,6 +9,7 @@
 #import "ShareValue.h"
 #import "NSUserDefaults+Helpers.h"
 
+
 #define SET_MEMBER @"SET_MEMBER"
 #define SET_LOGINUSERNAME @"SET_LOGINUSERNAME"
 #define SET_PASSWORD @"SET_PASSWORD"
@@ -27,6 +28,14 @@
 @implementation ShareValue
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
+
+-(id)init{
+    self = [super init];
+    if(self){
+       
+    }
+    return self;
+}
 
 -(void)setIsRember:(BOOL)isRember{
     [[NSUserDefaults standardUserDefaults]setBool:isRember forKey:SET_MEMBER];
@@ -184,6 +193,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
 
 -(void)setRegiterUser:(User *)bindUser{
     _regiterUser = bindUser;
+    [self addObserver];
     if (_regiterUser == nil) {
         [self setUserId:nil];
         [self setUserName:nil];

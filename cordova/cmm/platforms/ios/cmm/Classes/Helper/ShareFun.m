@@ -44,7 +44,7 @@ BOOL isTongyi;
     return  t_image;
 }
 
-+(NSURL *)urlFormPath:(NSString *)path{
++(NSURL *)fileUrlFormPath:(NSString *)path{
     NSString *realPath = [NSString stringWithFormat:@"%@%@",[ShareValue sharedShareValue].fileBaseUrl,path];
     return [NSURL URLWithString:realPath];
     

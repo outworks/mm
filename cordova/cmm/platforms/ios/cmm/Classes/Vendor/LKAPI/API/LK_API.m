@@ -207,9 +207,10 @@
     }];
     request1.timeoutInterval = 40;
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request1];
+    long long fileLength= part.data.length;
     [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
         if (progressblock) {
-            progressblock(bytesWritten,totalBytesWritten);
+            progressblock(totalBytesWritten,fileLength);
         }
     }];
     [operation start];
