@@ -21,7 +21,7 @@
 // 传的是只有一个网点的时候调用
 @property(nonatomic,strong)Unit *unit;
 @property(nonatomic,strong)NSString *taskName;
-@property(nonatomic,strong)NSString *opetypeidLabel;
+@property(nonatomic,strong)NSString *opetypeid;
 @property(nonatomic,strong)NSString *taskId;
 
 @end

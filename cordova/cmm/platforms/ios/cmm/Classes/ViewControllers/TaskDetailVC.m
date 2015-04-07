@@ -96,7 +96,7 @@
     TaskExecutionVC *t_vc = [[TaskExecutionVC alloc] init];
     t_vc.unit = t_unit;
     t_vc.taskName = _task.name;
-    t_vc.opetypeidLabel = _task.opetypeidLabel;
+    t_vc.opetypeid = _task.opetypeid;
     t_vc.taskId =_task.id;
     [self.navigationController pushViewController:t_vc animated:YES];
 }

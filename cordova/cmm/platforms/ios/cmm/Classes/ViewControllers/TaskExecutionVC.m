@@ -94,7 +94,7 @@
                 pointAnnotation.coordinate = coor;
                 pointAnnotation.unit = t_unit;
                 pointAnnotation.taskName = _task.name;
-                pointAnnotation.opetypeidLabel = _task.opetypeidLabel;
+                pointAnnotation.opetypeid = _task.opetypeid;
                 pointAnnotation.taskId = _task.id;
                 [_annotationArrays addObject:pointAnnotation];
                 
@@ -112,7 +112,7 @@
         pointAnnotation.coordinate = coor;
         pointAnnotation.unit = _unit;
         pointAnnotation.taskName = _taskName;
-        pointAnnotation.opetypeidLabel = _opetypeidLabel;
+        pointAnnotation.opetypeid = _opetypeid;
         pointAnnotation.taskId = _taskId;
         [_mapView addAnnotation:pointAnnotation];
         
@@ -179,16 +179,15 @@
         t_paopaoView.taskName = pointAnnotation.taskName;
         t_paopaoView.taskId = pointAnnotation.taskId;
         
-        NSArray *b = [pointAnnotation.opetypeidLabel componentsSeparatedByString:@","];
+        NSArray *b = [pointAnnotation.opetypeid componentsSeparatedByString:@","];
         for (int i = 0 ; i < [b count]; i++ ) {
             NSString *t_str = b[i];
             NSLog(@"%@",t_str);
-            
-            if ([t_str isEqualToString:@"现场拍照"]) {
+            if ([t_str isEqualToString:@"2"]) {
                 t_paopaoView.isTakePicture  = YES;
-            }else if([t_str isEqualToString:@"短信确认"]) {
+            }else if([t_str isEqualToString:@"1"]) {
                 t_paopaoView.isSMSConfirmation = YES;
-            }else if([t_str isEqualToString:@"现场确认"]) {
+            }else if([t_str isEqualToString:@"3"]) {
                 t_paopaoView.issceneConfirmation = YES;
             }
         }
@@ -299,9 +298,23 @@
     t_paopaoView.lb_wangdian.text = view.unit.unitname;
     t_paopaoView.tx_phone.text = view.unit.bossphonenum;
     [t_paopaoView setDelegate:(id<SMSSendPaopaoViewDelegate>)self];
+    t_paopaoView.frame = view.frame;
+    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    backView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    backView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeSmsView:)];
+    gestureRecognizer.numberOfTapsRequired = 1;
+    [backView addGestureRecognizer:gestureRecognizer];
+    t_paopaoView.center = CGPointMake(CGRectGetWidth(backView.frame)/2, CGRectGetHeight(backView.frame)/2);
+    [backView addSubview:t_paopaoView];
+    [self.view addSubview:backView];
+//    [view addSubview:t_paopaoView];
     
-    [view addSubview:t_paopaoView];
-    
+}
+
+-(void)removeSmsView:(UITapGestureRecognizer *)tapGestureRecognizer{
+    UIView *view = tapGestureRecognizer.view;
+    [view removeFromSuperview];
 }
 
 -(void)sceneConfirmationAction:(PointPaopaoView *)view{
@@ -379,8 +392,7 @@
 
 -(void)VerificationAction:(SMSVerificationView *)view{
     if ([view.tx_verification.text isEqualToString:@""]) {
-        [MBProgressHUD showError:@"验证码不能为空" toView:self];
-        
+        [MBProgressHUD showError:@"验证码不能为空" toView:self.view];
         return;
     }
     

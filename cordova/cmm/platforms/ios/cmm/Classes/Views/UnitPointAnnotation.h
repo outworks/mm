@@ -12,7 +12,7 @@
 @interface UnitPointAnnotation : BMKPointAnnotation
 @property(nonatomic,strong)Unit *unit;
 @property(nonatomic,strong)NSString *taskName;
-@property(nonatomic,strong)NSString *opetypeidLabel;
+@property(nonatomic,strong)NSString *opetypeid;
 @property(nonatomic,strong)NSString *taskId;
 
 
