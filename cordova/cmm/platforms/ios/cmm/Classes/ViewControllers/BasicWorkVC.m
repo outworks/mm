@@ -12,6 +12,9 @@
 #import "MyWorkVC.h"
 #import "AppDelegate.h"
 
+
+#import "TaskExecutionVC.h"
+
 @interface BasicWorkVC ()
 
 @property(nonatomic,strong)NSArray *arr_data;
@@ -62,10 +65,10 @@
         TaskListVC * t_vc =  [[TaskListVC alloc] init];
         UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:t_vc];
         [ApplicationDelegate.viewController presentViewController:nav animated:YES completion:nil];
+    }else{
+        TaskExecutionVC *t_vc = [[TaskExecutionVC alloc] init];
+        [ApplicationDelegate.viewController presentViewController:t_vc animated:YES completion:nil];
     }
-
-    
-    
     
 
 

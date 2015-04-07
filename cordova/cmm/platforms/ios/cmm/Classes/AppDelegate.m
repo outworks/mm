@@ -33,11 +33,13 @@
 #import "LoginVC.h"
 #import "BMapKit.h"
 
+
 #import <Cordova/CDVPlugin.h>
 
 @interface AppDelegate()
 
 @property(nonatomic,strong)BMKMapManager* mapManager;
+@property (nonatomic, strong) NSTimer *updateTimer;
 
 @end
 
@@ -88,6 +90,7 @@
     
     
     [self thirdPartInit];
+    [self initData];
     
     [self.window makeKeyAndVisible];
     
@@ -101,6 +104,26 @@
         NSLog(@"manager start failed!");
     }
 }
+
+//初始化数据
+-(void)initData{
+    
+    if ([CLLocationManager locationServicesEnabled]) {
+        
+        self.locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyBest; //控制定位精度,越高耗电量越大。
+        _locationManager.distanceFilter = 100; //控制定位服务更新频率。单位是“米”
+        [_locationManager startUpdatingLocation];
+        
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+            
+            [_locationManager requestAlwaysAuthorization];  //调用了这句,就会弹出允许框了.
+        
+    }
+   
+}
+
 
 
 #pragma mark UIApplicationDelegate implementation
@@ -184,5 +207,88 @@
 {
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    [BMKMapView willBackGround];//当应用即将后台时调用，停止一切调用opengl相关的操作
+}
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [BMKMapView didForeGround];//当应用恢复前台状态时调用，回复地图的渲染和opengl相关的操作
+}
+
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
+    
+    switch (status) {
+            
+        case kCLAuthorizationStatusNotDetermined:
+            
+            if([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]){
+                
+                [self.locationManager requestAlwaysAuthorization];
+                
+            }
+            
+            break;
+            
+        case kCLAuthorizationStatusDenied:
+            
+            [[[UIAlertView alloc] initWithTitle:@"" message:@"请在设置-隐私-定位服务中开启定位功能！" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            
+            break;
+            
+        case kCLAuthorizationStatusRestricted:
+            
+             [[[UIAlertView alloc] initWithTitle:@"" message:@"定位服务无法使用！" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+
+        default:
+            
+            break;
+            
+    }
+    
+}
+
+//吏新定位
+- (void)locationManager:(CLLocationManager *)manager
+    didUpdateToLocation:(CLLocation *)newLocation
+           fromLocation:(CLLocation *)oldLocation
+{
+    //在地图上加大头针
+
+    [ShareValue sharedShareValue].latitude = newLocation.coordinate.latitude; //纬度
+    [ShareValue sharedShareValue].longitude = newLocation.coordinate.longitude; // 经度
+
+    if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_UPDATALOCATIONPOINT object:nil];
+        
+    }
+    else
+    {
+        NSLog(@"applicationD in Background,newLocation:%@", newLocation);
+    }
+    
+    if(_updateTimer == nil){
+        NSLog(@"updatetimer");
+        _updateTimer = [NSTimer scheduledTimerWithTimeInterval:60
+                                                        target:self
+                                                      selector:@selector(UpdateLocation)
+                                                      userInfo:nil
+                                                       repeats:NO];
+        [[NSRunLoop currentRunLoop] addTimer:_updateTimer forMode:NSRunLoopCommonModes];
+    }
+    
+    
+}
+
+-(void)UpdateLocation{
+     NSLog(@"UpdateLocation");
+    [_updateTimer invalidate];
+    _updateTimer = nil;
+}
+
+
+
+
 
 @end

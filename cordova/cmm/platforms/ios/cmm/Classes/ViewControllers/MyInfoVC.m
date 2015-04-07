@@ -58,7 +58,7 @@
     _iv_head.layer.masksToBounds = YES;
     _iv_head.userInteractionEnabled = YES;
     _lb_job.text = [NSString stringWithFormat:@"%@%@",[ShareValue sharedShareValue].regiterUser.unitName?[ShareValue sharedShareValue].regiterUser.unitName:@"",[ShareValue sharedShareValue].regiterUser.jobName?[ShareValue sharedShareValue].regiterUser.jobName:@""];
-    [_iv_head sd_setImageWithURL:[ShareFun urlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
+    [_iv_head sd_setImageWithURL:[NSURL URLWithString:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
     
     
     [_tf_sign addDoneOnKeyboardWithTarget:self action:@selector(upSign)];

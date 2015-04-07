@@ -27,4 +27,48 @@
     } class:[Task class]];
 }
 
++(void)updataSiteConfirmHttpAPI:(SiteConfirmRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
+    
+    [LK_APIUtil postHttpRequest:request apiPath:URLPATH_SITTECONFIRM Success:^(NSObject *response,NSInteger result,NSString *msg){
+        sucess(result,msg);
+    } fail:^(NSString * descript){
+        fail(descript);
+    }class:nil];
+
+}
+
++(void)updataSitePhotoHttpAPI:(SitePhotoRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
+
+    [LK_APIUtil postHttpRequest:request apiPath:URLPATH_SITEPHOTO Success:^(NSObject *response,NSInteger result,NSString *msg){
+        sucess(result,msg);
+    } fail:^(NSString * descript){
+        fail(descript);
+    }class:nil];
+
+
+}
+
++(void)updataBusiNotifyHttpAPI:(BusiNotifyRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
+    [LK_APIUtil postHttpRequest:request apiPath:URLPATH_BUSINOTIFY Success:^(NSObject *response,NSInteger result,NSString *msg){
+        sucess(result,msg);
+    } fail:^(NSString * descript){
+        fail(descript);
+    }class:nil];
+
+
+}
+
+
++(void)updataBusiNotifyCheckHttpAPI:(BusiNotifyCheckRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
+
+    [LK_APIUtil postHttpRequest:request apiPath:URLPATH_BUSINOTIFYCHECK Success:^(NSObject *response,NSInteger result,NSString *msg){
+        sucess(result,msg);
+    } fail:^(NSString * descript){
+        fail(descript);
+    }class:nil];
+
+
+}
+
+
 @end

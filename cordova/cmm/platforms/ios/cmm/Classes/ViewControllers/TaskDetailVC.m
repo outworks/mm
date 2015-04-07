@@ -13,6 +13,8 @@
 #import "Unit.h"
 #import "UIColor+External.h"
 
+#import "TaskExecutionVC.h"
+
 @interface TaskDetailVC ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -77,7 +79,10 @@
 }
 
 - (IBAction)startTask:(id)sender {
-    
+    TaskExecutionVC *t_vc = [[TaskExecutionVC alloc] init];
+    t_vc.task = _task;
+    [self.navigationController pushViewController:t_vc animated:YES];
+
 }
 
 -(void)backAction{
@@ -86,6 +91,14 @@
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    Unit *t_unit = _channels[indexPath.row];
+    TaskExecutionVC *t_vc = [[TaskExecutionVC alloc] init];
+    t_vc.unit = t_unit;
+    t_vc.taskName = _task.name;
+    t_vc.opetypeidLabel = _task.opetypeidLabel;
+    t_vc.taskId =_task.id;
+    [self.navigationController pushViewController:t_vc animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

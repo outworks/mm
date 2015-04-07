@@ -27,10 +27,11 @@
 
 #import <UIKit/UIKit.h>
 #import "SliderVC.h"
+#import <CoreLocation/CoreLocation.h>
 
 #import <Cordova/CDVViewController.h>
 
-@interface AppDelegate : NSObject <UIApplicationDelegate>{}
+@interface AppDelegate : NSObject <UIApplicationDelegate,CLLocationManagerDelegate>{}
 
 // invoke string is passed to your app on launch, this is only valid if you
 // edit cmm-Info.plist to add a protocol
@@ -39,4 +40,5 @@
 
 @property (nonatomic, strong) IBOutlet UIWindow* window;
 @property (nonatomic, strong) UINavigationController *viewController;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 @end

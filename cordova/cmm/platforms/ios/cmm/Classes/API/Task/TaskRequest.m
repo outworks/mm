@@ -32,3 +32,57 @@
 }
 
 @end
+
+
+@implementation SiteConfirmRequest
+
+-(id)init{
+    self = [super init];
+    if (self) {
+        self.userId = [ShareValue sharedShareValue].regiterUser.userId;
+    }
+    return self;
+}
+
+@end
+
+
+@implementation SitePhotoRequest
+
+-(id)init{
+    self = [super init];
+    if (self) {
+        self.userId = [ShareValue sharedShareValue].regiterUser.userId;
+    }
+    return self;
+}
+
+@end
+
+
+@implementation BusiNotifyRequest
+
+-(id)init{
+    self = [super init];
+    if (self) {
+        self.userId = [ShareValue sharedShareValue].regiterUser.userId;
+    }
+    return self;
+}
+
+@end
+
+@implementation BusiNotifyCheckRequest
+
+-(id)init{
+    self = [super init];
+    if (self) {
+        self.userId = [ShareValue sharedShareValue].regiterUser.userId;
+    }
+    return self;
+}
+
+@end
+
+
+

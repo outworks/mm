@@ -30,6 +30,11 @@
 @property(nonatomic,strong) NSString *fileBaseUrl;
 @property(nonatomic,assign) int positionTimeInterval;
 
+@property(nonatomic,assign) double latitude;
+@property(nonatomic,assign) double longitude;
+
+
+
 
 SYNTHESIZE_SINGLETON_FOR_HEADER(ShareValue)
 

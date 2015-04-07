@@ -40,3 +40,61 @@
 @property(nonatomic,strong) NSString *visitId;
 
 @end
+
+
+// 现场确认
+
+#pragma mark - 
+
+@interface SiteConfirmRequest : LK_HttpBaseRequest
+
+@property(nonatomic,strong) NSString *userId;
+@property(nonatomic,strong) NSString *visitTaskId;
+@property(nonatomic,strong) NSString *lon;
+@property(nonatomic,strong) NSString *lat;
+@property(nonatomic,strong) NSString *unitinfoId;
+
+@end
+
+
+@interface SitePhotoRequest : LK_HttpBaseRequest
+
+@property(nonatomic,strong) NSString *userId;
+@property(nonatomic,strong) NSString *visitTaskId;
+@property(nonatomic,strong) NSString *lon;
+@property(nonatomic,strong) NSString *lat;
+@property(nonatomic,strong) NSString *unitinfoId;
+@property(nonatomic,strong) NSString *filePath;
+
+
+@end
+
+@interface BusiNotifyRequest : LK_HttpBaseRequest
+
+@property(nonatomic,strong) NSString *userId;
+@property(nonatomic,strong) NSString *visitTaskId;
+@property(nonatomic,strong) NSString *unitinfoId;
+@property(nonatomic,strong) NSString *telNum;
+
+
+@end
+
+@interface BusiNotifyCheckRequest : LK_HttpBaseRequest
+
+@property(nonatomic,strong) NSString *userId;
+@property(nonatomic,strong) NSString *visitTaskId;
+@property(nonatomic,strong) NSString *unitinfoId;
+@property(nonatomic,strong) NSString *lon;
+@property(nonatomic,strong) NSString *lat;
+@property(nonatomic,strong) NSString *msgCheckCode;
+
+
+@end
+
+
+
+
+
+
+
+

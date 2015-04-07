@@ -22,6 +22,9 @@
 #define URLPATH_TASKS @"taskList"
 #define URLPATH_TASKDETAIL @"taskDetail"
 #define URLPATH_FILEUPLOAD @"MobileService?requestType=upload&userId="
-
+#define URLPATH_SITTECONFIRM @"siteConfirm"
+#define URLPATH_SITEPHOTO @"sitePhoto"
+#define URLPATH_BUSINOTIFY @"busiNotify"
+#define URLPATH_BUSINOTIFYCHECK @"busiNotifyCheck"
 
 #define HTTP_POSTMETHOD 1

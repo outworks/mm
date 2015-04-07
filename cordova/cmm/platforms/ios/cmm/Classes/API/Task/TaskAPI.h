@@ -17,4 +17,19 @@
 +(void)getDetailByHttpRequest:(TaskDetailRequest *)request Success:(void (^)(Task *task))sucess fail:(void (^)(NSString *description))fail;
 
 
+// 现场确认接口
+
++(void)updataSiteConfirmHttpAPI:(SiteConfirmRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail;
+
+// 现场拍照接口
++(void)updataSitePhotoHttpAPI:(SitePhotoRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail;
+
+//短信确认接口
+
++(void)updataBusiNotifyHttpAPI:(BusiNotifyRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail;
+
+
+//短信验证码接口
++(void)updataBusiNotifyCheckHttpAPI:(BusiNotifyCheckRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail;
+
 @end

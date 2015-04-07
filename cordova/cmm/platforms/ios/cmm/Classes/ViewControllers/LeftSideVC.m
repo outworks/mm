@@ -180,7 +180,7 @@
 
 -(void)handleUpdataImage:(NSNotification *)note{
     
-    [_imageV_userIcon sd_setImageWithURL:[ShareFun urlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
+    [_imageV_userIcon sd_setImageWithURL:[NSURL URLWithString:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
 }
 
 
