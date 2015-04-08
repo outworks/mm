@@ -66,8 +66,8 @@
         UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:t_vc];
         [ApplicationDelegate.viewController presentViewController:nav animated:YES completion:nil];
     }else{
-        TaskExecutionVC *t_vc = [[TaskExecutionVC alloc] init];
-        [ApplicationDelegate.viewController presentViewController:t_vc animated:YES completion:nil];
+//        TaskExecutionVC *t_vc = [[TaskExecutionVC alloc] init];
+//        [ApplicationDelegate.viewController presentViewController:t_vc animated:YES completion:nil];
     }
     
 

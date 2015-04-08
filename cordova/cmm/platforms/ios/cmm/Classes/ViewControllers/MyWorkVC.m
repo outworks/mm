@@ -13,6 +13,9 @@
 #import "VisitSupportVC.h"
 #import "FourPromotionVC.h"
 #import "PerformanceQuery.h"
+#import "ShareFun.h"
+#import "ShareValue.h"
+#import "UIImageView+WebCache.h"
 
 @interface MyWorkVC ()
 
@@ -43,7 +46,7 @@
         
         if (index == 0) {
             UIImageView * t_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, (self.v_nav.frame.size.height - 32)/2, 32, 32)];
-            [t_image setImage:[UIImage imageNamed:@"头像.jpg"]];
+            [t_image sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
             t_image.layer.cornerRadius = t_image.frame.size.width/2;
             t_image.layer.masksToBounds = YES;
             return t_image;

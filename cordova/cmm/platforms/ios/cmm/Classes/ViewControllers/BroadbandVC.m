@@ -12,6 +12,7 @@
 #import "KeyItem.h"
 
 #import "SaleAPI.h"
+#import "ShareValue.h"
 
 @interface BroadbandVC (){
     
@@ -46,7 +47,7 @@
     [_hud setLabelText:@"请求中"];
     [_hud show:YES];
     SaleRequest *t_request = [[SaleRequest alloc] init];
-    t_request.userId = @"11";
+    t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
     [SaleAPI getSaleQueryHttpAPI:t_request Success:^(NSArray *response, NSInteger result, NSString *msg) {
         [_hud hide:YES];
         
