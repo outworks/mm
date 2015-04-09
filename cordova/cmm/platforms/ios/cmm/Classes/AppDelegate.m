@@ -253,10 +253,21 @@
     didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation
 {
-    //在地图上加大头针
-
-    [ShareValue sharedShareValue].latitude = newLocation.coordinate.latitude; //纬度
-    [ShareValue sharedShareValue].longitude = newLocation.coordinate.longitude; // 经度
+    
+//    [ShareValue sharedShareValue].latitude = newLocation.coordinate.latitude; //纬度
+//    [ShareValue sharedShareValue].longitude = newLocation.coordinate.longitude; // 经度
+    
+    //转换 google地图、soso地图、aliyun地图、mapabc地图和amap地图所用坐标至百度坐标
+    NSDictionary* testdic = BMKConvertBaiduCoorFrom(newLocation.coordinate,BMK_COORDTYPE_COMMON);
+    //转换GPS坐标至百度坐标
+    testdic = BMKConvertBaiduCoorFrom(newLocation.coordinate,BMK_COORDTYPE_GPS);
+    //NSLog(@"x=%@,y=%@",[testdic objectForKey:@"x"],[testdic objectForKey:@"y"]);
+    CLLocationCoordinate2D location = BMKCoorDictionaryDecode(testdic);
+    [ShareValue sharedShareValue].latitude = location.latitude; //纬度
+    [ShareValue sharedShareValue].longitude = location.longitude;
+    NSLog(@"x=%lf,y=%lf",newLocation.coordinate.latitude,newLocation.coordinate.longitude);
+    
+    NSLog(@"x=%lf,y=%lf",[ShareValue sharedShareValue].latitude,[ShareValue sharedShareValue].longitude);
 
     if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive)
     {
