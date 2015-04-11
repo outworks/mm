@@ -14,6 +14,8 @@
 
 @property(nonatomic,strong) NSMutableArray *photos;
 
+@property(nonatomic,strong) NSString *waitDelPhoto;
+
 @end
 
 @implementation PhotoEditPaopaoView
@@ -84,6 +86,7 @@
         btn.contentMode = UIViewContentModeScaleAspectFit;
         [btn sd_setImageWithURL:[ShareFun fileUrlFormPath:imageurl] forState:UIControlStateNormal placeholderImage:nil];
         [self.scrollView addSubview:btn];
+        i++;
     }
     UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(x, 0, width, width)];
     [btn setImage:[UIImage imageNamed:@"icon_addpic"] forState:UIControlStateNormal];
@@ -93,8 +96,9 @@
 }
 
 -(void)delAction:(UIButton *)btn{
+    int tag = btn.tag;
+    _waitDelPhoto = [_photos objectAtIndex:tag];
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提醒" message:@"是否要删除?" delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"确定", nil];
-    alert.tag = btn.tag;
     [alert show];
 }
 
@@ -119,8 +123,7 @@
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 1) {
-        int tag = (int)alertView.tag;
-        [self.photos removeObjectAtIndex:tag];
+        [self.photos removeObject:_waitDelPhoto];
         [self reloadUIScrollView];
     }
     

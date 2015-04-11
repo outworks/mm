@@ -45,7 +45,7 @@
     [self loadDatas];
     [[UINavigationBar appearance] setBarTintColor:HEX_RGB(0x008cec)];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
-    [item setTintColor:[UIColor whiteColor ]];
+    [item setTintColor:[UIColor whiteColor]];
     self.navigationItem.leftBarButtonItem = item;
     self.title = @"任务详情";
     if([_task.isfinish isEqual:@"1"]){
@@ -117,7 +117,6 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     cell.unit = [_task.unit objectAtIndex:indexPath.row];
-//    cell. = [_list objectAtIndex:indexPath.row];
     return cell;
 }
 

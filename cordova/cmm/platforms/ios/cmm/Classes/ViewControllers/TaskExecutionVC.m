@@ -20,8 +20,9 @@
 #import "TaskAPI.h"
 #import "MBProgressHUD+Add.h"
 #import "LK_API.h"
+#import "LXActionSheet.h"
 
-@interface TaskExecutionVC ()<PhotoEditPaopaoViewDelegate>{
+@interface TaskExecutionVC ()<PhotoEditPaopaoViewDelegate,LXActionSheetDelegate>{
     BMKAnnotationView *_positionAnnotationView;
     BMKPointAnnotation * _positionAnnotation;
    
@@ -206,7 +207,7 @@
         BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
         [annotationView setPaopaoView:paopao];
 
-        
+        [annotationView setSelected:YES animated:YES];
         /*if (![pointAnnotation.unit.isFinish isEqual:@"1"]) {
             PointPaopaoView *t_paopaoView = [PointPaopaoView initCustomPaopaoView];
             t_paopaoView.unit = pointAnnotation.unit;
@@ -253,23 +254,17 @@
         
         
     }else{
-        
-        
         NSString *positionID = @"PositionID";
-        
         if (_positionAnnotationView == nil) {
             _positionAnnotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:positionID];
             UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
             img.backgroundColor = [UIColor clearColor];
             img.image = [UIImage imageNamed:@"走访地图_图标_终点.png"];
-            
             [_positionAnnotationView setImage:[img.image imageByScaleForSize:CGSizeMake(img.frame.size.width, img.frame.size.height)]];
             [_positionAnnotationView setSelected:YES animated:YES];
         }
         annotationView = _positionAnnotationView;
     }
-   
-    
     return annotationView;
     
 }
@@ -304,7 +299,31 @@
 
 #pragma mark - PhotoEditPaopaoViewDelegate
 -(void)addPhoneAction:(PhotoEditPaopaoView *)view{
-    [self takePhoto];
+    [self addAction];
+}
+
+-(void)addAction{
+    LXActionSheet *sheet = [[LXActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"立即拍照" otherButtonTitles:@"相册选择",nil];
+    sheet.tag = 12;
+    [sheet setdestructiveButtonColor:RGB(86, 170, 14) titleColor:[UIColor whiteColor] icon:[UIImage imageNamed:@"micon-camera"]];
+    [sheet setCancelButtonColor:[UIColor whiteColor] titleColor:[UIColor redColor] icon:nil];
+    [sheet setButtonIndex:1 buttonColor:[UIColor whiteColor] titleColor:[UIColor darkTextColor] icon:[UIImage imageNamed:@"micon-album"]];
+    [sheet showInView:self.view];
+}
+
+
+
+#pragma mark - LXActionSheetDelegate
+- (void)lxactionSheet:(LXActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;{
+    if (actionSheet.tag == 11) {
+        
+    }else if (actionSheet.tag == 12){
+        if (buttonIndex == 0) {
+            [self takePhoto];
+        }else if (buttonIndex == 1){
+            [self LocalPhoto];
+        }
+    }
 }
 
 -(void)photoSendAction:(PhotoEditPaopaoView *)view{
@@ -529,7 +548,7 @@
     if (photoParams.length == 0) {
        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提醒" message:@"请添加照片" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alertView show];
-        
+        return;
     }
     SitePhotoRequest *t_request = [[SitePhotoRequest alloc] init];
     t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
