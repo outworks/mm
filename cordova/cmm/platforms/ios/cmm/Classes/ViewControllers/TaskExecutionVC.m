@@ -21,6 +21,9 @@
 #import "MBProgressHUD+Add.h"
 #import "LK_API.h"
 #import "LXActionSheet.h"
+#import "NSData+Crypto.h"
+#import "TimePhotoInfo.h"
+#import "LKDBHelper.h"
 
 @interface TaskExecutionVC ()<PhotoEditPaopaoViewDelegate,LXActionSheetDelegate>{
     BMKAnnotationView *_positionAnnotationView;
@@ -34,6 +37,8 @@
     PhotoEditPaopaoView *_photoPaopaoView;
     
     UIImagePickerController *_picker;
+    
+    int _pickerSource;
     
 }
 
@@ -376,7 +381,6 @@
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [MBProgressHUD showSuccess:@"提交成功" toView:self.view];
-        
     } fail:^(NSString *description) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [MBProgressHUD showError:description toView:self.view];
@@ -420,13 +424,10 @@
         [t_paopaoView setDelegate:(id<SMSVerificationViewDelegate>)self];
         
         [view addSubview:t_paopaoView];
-        
     } fail:^(NSString *description) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [MBProgressHUD showError:description toView:self.view];
     }];
-    
-    
 
 }
 
@@ -461,7 +462,6 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [MBProgressHUD showError:description toView:self.view];
     }];
-
 
 }
 
@@ -506,6 +506,7 @@
         _picker.sourceType = sourceType;
         
         [self presentViewController:_picker animated:YES completion:nil];
+        _pickerSource = 1;
     }else
     {
         NSLog(@"模拟其中无法打开照相机,请在真机中使用");
@@ -521,14 +522,23 @@
     //设置选择后的图片可被编辑
     _picker.allowsEditing = NO;
     [self presentViewController:_picker animated:YES completion:nil];
+    _pickerSource = 2;
 }
 
 
 -(void)sendImage:(UIImage *)image{
-   MBProgressHUD * _hud = [MBProgressHUD showMessag:@"正在上传" toView:self.view];
-    [_hud setMode:MBProgressHUDModeDeterminateHorizontalBar];
     ImageFileInfo *fileInfo = [[ImageFileInfo alloc]initWithImage:image];
-    NSLog(@"chenzftest2: %f,%f",fileInfo.image.size.width,fileInfo.image.size.height);
+    NSString *md5 = [fileInfo.fileData md5];
+    if (_pickerSource == 2) {
+        int row = (int)[TimePhotoInfo rowCountWithWhereFormat:@"md5='%@' and visitTaskId='%@'",md5,_task.id];
+        if (!row == 0) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请选择原暂存图片上传" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+    }
+    MBProgressHUD * _hud = [MBProgressHUD showMessag:@"正在上传" toView:self.view];
+    [_hud setMode:MBProgressHUDModeDeterminateHorizontalBar];
     [LK_APIUtil postFileByImage:fileInfo.image progressBlock:^(NSInteger bytesWritten, long long totalBytesWritten) {
         dispatch_async(dispatch_get_main_queue(), ^{
             _hud.progress = (float)bytesWritten/totalBytesWritten;
@@ -538,9 +548,33 @@
         [_photoPaopaoView addPhotoImage:fileUrl];
     } fail:^(NSString *failDescription) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [MBProgressHUD showError:failDescription toView:self.view];
+        if (_pickerSource == 1) {
+            [MBProgressHUD showError:@"上传失败，文件已暂存相册" toView:self.view];
+            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+        }else{
+            [MBProgressHUD showError:@"上传失败" toView:self.view];
+        }
     }];
-    
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error
+  contextInfo:(void *)contextInfo
+{
+    // Was there an error?
+    if (error != NULL)
+    {
+        // Show error message...
+        
+    }
+    else  // No errors
+    {
+        ImageFileInfo *fileInfo = [[ImageFileInfo alloc]initWithImage:image];
+        TimePhotoInfo *timeInfo = [[TimePhotoInfo alloc]init];
+        timeInfo.md5 = [fileInfo.fileData md5];
+        NSLog(@"%lld",fileInfo.filesize);
+        timeInfo.visitTaskId = self.taskId;
+        [timeInfo saveToDB];
+    }
 }
 
 -(void)postAdd{
@@ -583,12 +617,25 @@
     //当选择的类型是图片
     if ([type isEqualToString:@"public.image"])
     {
-        //先把图片转成NSData
         image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-        image = [image fixOrientation];
-        NSLog(@"%f-%f",image.size.width,image.size.height);
-        image = [image imageByScaleForSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width/image.size.width*image.size.height)];
-        [self sendImage:image];
+        if (_pickerSource == 2) {
+            ImageFileInfo *fileInfo = [[ImageFileInfo alloc]initWithImage:image];
+            NSString *md5 = [fileInfo.fileData md5];
+            NSLog(@"%@",md5);
+            int row = (int)[TimePhotoInfo rowCountWithWhereFormat:@"md5='%@' and visitTaskId='%@'",md5,_task.id];
+            if (row == 0) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请选择原暂存图片上传" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                [alert show];
+            }else{
+                [self sendImage:image];
+            }
+        }else{
+            image = [image fixOrientation];
+            NSLog(@"%f-%f",image.size.width,image.size.height);
+            image = [image imageByScaleForSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width/image.size.width*image.size.height)];
+            [self sendImage:image];
+        }
+        
     }
     [picker dismissViewControllerAnimated:NO completion:^{
         

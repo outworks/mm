@@ -48,6 +48,9 @@
         [_photos addObjectsFromArray:[_unit.sitePhoto componentsSeparatedByString:@","]];
         [self reloadUIScrollView];
     }
+    if ([_unit.isFinish isEqual:@"1"]) {
+        _btn_send.enabled = NO;
+    }
 }
 
 -(id)init{
@@ -80,7 +83,10 @@
     int i = 0;
     for (NSString *imageurl in self.photos) {
         UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(x, 0, width, width)];
-        [btn addTarget:self action:@selector(delAction:) forControlEvents:UIControlEventTouchUpInside];
+        [btn setBackgroundColor:[UIColor grayColor]];
+        if (![_unit.isFinish isEqual:@"1"]) {
+             [btn addTarget:self action:@selector(delAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
         btn.tag = i;
         x += (width+10);
         btn.contentMode = UIViewContentModeScaleAspectFit;
@@ -88,11 +94,14 @@
         [self.scrollView addSubview:btn];
         i++;
     }
-    UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(x, 0, width, width)];
-    [btn setImage:[UIImage imageNamed:@"icon_addpic"] forState:UIControlStateNormal];
-    [btn addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.scrollView addSubview:btn];
-    self.scrollView.contentSize = CGSizeMake(x + width, CGRectGetHeight(self.scrollView.frame));
+    if (![_unit.isFinish isEqual:@"1"]) {
+        UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(x, 0, width, width)];
+        [btn setImage:[UIImage imageNamed:@"icon_addpic"] forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self.scrollView addSubview:btn];
+        x += width;
+    }
+    self.scrollView.contentSize = CGSizeMake(x, CGRectGetHeight(self.scrollView.frame));
 }
 
 -(void)delAction:(UIButton *)btn{

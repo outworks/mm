@@ -16,6 +16,7 @@
 #import "TaskDetailVC.h"
 #import "TaskSearchVC.h"
 #import "AppDelegate.h"
+#import "ShareValue.h"
 
 #define TASKLISTPAGESIZE 20
 
@@ -109,7 +110,6 @@
 -(void)reloadDatas{
     self.curPageNum = 0;
     self.pageSize = TASKLISTPAGESIZE;
-    [self.list removeAllObjects];
     [self loadNextPageDatas];
 }
 
@@ -120,7 +120,7 @@
 
 -(void)loadDatas{
     TaskRequest *request = [[TaskRequest alloc]init];
-    request.userId = @"1024921";
+    request.userId = [ShareValue sharedShareValue].regiterUser.userId;
     request.name = _name;
     request.typeId = _typeId;
     request.orderDirection = _timeorder;
@@ -138,6 +138,9 @@
     request.pageSize = _pageSize;
     [TaskAPI getTasksByHttpRequest:request Success:^(NSArray *tasks, BOOL isLastPage) {
         [self.tableView.header endRefreshing];
+        if (_curPageNum == 1) {
+            [self.list removeAllObjects];
+        }
         [self.list addObjectsFromArray:tasks];
         [_tableView reloadData];
         _isLastPage = isLastPage;

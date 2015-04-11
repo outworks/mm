@@ -47,6 +47,10 @@
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
     [item setTintColor:[UIColor whiteColor]];
     self.navigationItem.leftBarButtonItem = item;
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:@"描述" style:UIBarButtonItemStylePlain target:self action:@selector(descriptAction)];
+    [rightItem setTintColor:[UIColor whiteColor]];
+    self.navigationItem.leftBarButtonItem = item;
+    self.navigationItem.rightBarButtonItem = rightItem;
     self.title = @"任务详情";
     if([_task.isfinish isEqual:@"1"]){
         [_btn_beginAction setHidden:YES];
@@ -87,6 +91,13 @@
 
 -(void)backAction{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)descriptAction{
+    if (_task.describe.length) {
+      UIAlertView *alert =  [[UIAlertView alloc]initWithTitle:@"任务描述" message:_task.describe delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
 #pragma mark - UITableViewDelegate
