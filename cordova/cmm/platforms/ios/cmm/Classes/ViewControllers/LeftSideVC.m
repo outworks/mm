@@ -46,6 +46,7 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataImage:) name:NOTIFICATION_UPDATAIMAGE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataUser:) name:NOTIFICATION_UPDATAUSERINFO object:nil];
     
     [self resetUI];
     [self addHeadAction];
@@ -182,7 +183,13 @@
     [_imageV_userIcon sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl]  placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
 }
 
-
+-(void)handleUpdataUser:(NSNotification *)note{
+    
+    [_lb_userName setText:[ShareValue sharedShareValue].regiterUser.userName];
+    [_lb_regional setText:[ShareValue sharedShareValue].regiterUser.jobName];
+    [_textf_signName setText:[ShareValue sharedShareValue].regiterUser.signName];
+    [_imageV_userIcon sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl]  placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
+}
 
 
 #pragma mark - dealloc

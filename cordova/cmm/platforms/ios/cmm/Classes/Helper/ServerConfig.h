@@ -26,5 +26,9 @@
 #define URLPATH_SITEPHOTO @"sitePhoto"
 #define URLPATH_BUSINOTIFY @"busiNotify"
 #define URLPATH_BUSINOTIFYCHECK @"busiNotifyCheck"
+#define URLPATH_VISITTRACK @"visitTrack"
+#define URLPATH_TRACKQUERY @"trackQuery"
+
+
 
 #define HTTP_POSTMETHOD 1

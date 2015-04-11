@@ -17,6 +17,9 @@
 @interface LK_BasePageRespson : NSObject
 
 @property(nonatomic,assign) BOOL lastPage;
+@property(nonatomic,assign) BOOL firstPage;
+@property(nonatomic,strong) NSString *totalCount;
+@property(nonatomic,strong) NSString *lastPageNumbe;
 
 @property(nonatomic,strong) NSArray *result;
 

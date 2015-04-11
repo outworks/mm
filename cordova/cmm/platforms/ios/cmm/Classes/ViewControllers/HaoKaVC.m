@@ -46,6 +46,7 @@
     [_hud show:YES];
     SaleRequest *t_request = [[SaleRequest alloc] init];
     t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
+    t_request.saleType = @"1";
     [SaleAPI getSaleQueryHttpAPI:t_request Success:^(NSArray *response, NSInteger result, NSString *msg) {
         [_hud hide:YES];
         

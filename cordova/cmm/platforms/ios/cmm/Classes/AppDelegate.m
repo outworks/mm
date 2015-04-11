@@ -265,9 +265,9 @@
     CLLocationCoordinate2D location = BMKCoorDictionaryDecode(testdic);
     [ShareValue sharedShareValue].latitude = location.latitude; //纬度
     [ShareValue sharedShareValue].longitude = location.longitude;
-    NSLog(@"x=%lf,y=%lf",newLocation.coordinate.latitude,newLocation.coordinate.longitude);
-    
-    NSLog(@"x=%lf,y=%lf",[ShareValue sharedShareValue].latitude,[ShareValue sharedShareValue].longitude);
+//    NSLog(@"x=%lf,y=%lf",newLocation.coordinate.latitude,newLocation.coordinate.longitude);
+//    
+//    NSLog(@"x=%lf,y=%lf",[ShareValue sharedShareValue].latitude,[ShareValue sharedShareValue].longitude);
 
     if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive)
     {

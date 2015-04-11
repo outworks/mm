@@ -42,7 +42,7 @@
         _lb_doneCount.text = [data_sale.totalCount stringValue];
         _lb_wancheng.text = [NSString stringWithFormat:@"%ld%%",[data_sale.totalCount integerValue]/[data_sale.curMonthTargetCount integerValue]*100];
         [_v_progress setProgress:[data_sale.totalCount integerValue]/[data_sale.curMonthTargetCount integerValue]*100]; // set progress to 0.3 out of 1.0
-        
+        _lb_quyu.text = data_sale.regionRank;
         _lb_todayCount.text = [data_sale.curDayCount stringValue];
         
         _lb_wangdianCount.text = [NSString stringWithFormat:@"%ld/%ld",[data_sale.saleCount integerValue],[data_sale.unitCount integerValue]];;

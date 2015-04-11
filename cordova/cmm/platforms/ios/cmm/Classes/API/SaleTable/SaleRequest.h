@@ -11,5 +11,6 @@
 @interface SaleRequest : LK_HttpBaseRequest
 
 @property(nonatomic,strong)NSString *userId;
+@property(nonatomic,strong)NSString *saleType;
 
 @end

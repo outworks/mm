@@ -23,5 +23,7 @@
 @property(nonatomic,strong) NSNumber *avgSaleCount;	//	平均销量
 @property(nonatomic,strong) NSNumber *highestSaleCount;	//	最高销量
 
+@property(nonatomic,strong) NSString *regionRank; //区域排名
+
 
 @end

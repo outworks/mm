@@ -7,6 +7,7 @@
 //
 
 #import "ShareValue.h"
+#import "NoticeMacro.h"
 #import "NSUserDefaults+Helpers.h"
 
 
@@ -211,6 +212,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
         [self setPayMent:_regiterUser.payMent];
         [self setSignName:_regiterUser.signName];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_UPDATAUSERINFO object:nil];
 }
 
 -(User *)regiterUser{
