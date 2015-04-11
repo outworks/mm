@@ -7,7 +7,7 @@
 //
 
 #import "TrackTable.h"
-#import "LKDBHelper.h"
+
 
 @implementation TrackTable
 
@@ -16,5 +16,9 @@
     [self saveToDB];
 }
 
++(TrackTable *)loadMemberByPointTag:(NSInteger )pointTag{
+    TrackTable *member = [TrackTable searchSingleWithWhere:[NSString stringWithFormat:@"pointTag=%ld",pointTag] orderBy:nil];
+    return member;
+}
 
 @end

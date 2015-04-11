@@ -33,6 +33,11 @@
 #import "LoginVC.h"
 #import "BMapKit.h"
 
+#import "TrackAPI.h"
+#import "TrackTable.h"
+#import "NSDate+Helper.h"
+
+
 
 #import <Cordova/CDVPlugin.h>
 
@@ -40,6 +45,10 @@
 
 @property(nonatomic,strong)BMKMapManager* mapManager;
 @property (nonatomic, strong) NSTimer *updateTimer;
+@property(nonatomic,assign) NSInteger pointTag;
+
+@property(nonatomic,assign) double before_lat;
+@property(nonatomic,assign) double before_lon;
 
 @end
 
@@ -90,6 +99,7 @@
     
     
     [self thirdPartInit];
+    _pointTag = 0;
     [self initData];
     
     [self.window makeKeyAndVisible];
@@ -141,6 +151,16 @@
         self.window = [[[UIWindow alloc] initWithFrame:screenBounds] autorelease];
 #endif
     self.window.autoresizesSubviews = YES;
+    
+    if ([TrackTable deleteWithWhere:@"isfinish= 1"]) {
+        NSLog(@"删除已完成的点");
+    }
+    
+    NSArray *arr_tracks = [TrackTable searchWithWhere:@"isfinish= 0" orderBy:nil offset:0 count:0];
+    
+    
+    
+    
 
     // Set your app's start page by setting the <content src='foo.html' /> tag in config.xml.
     // If necessary, uncomment the line below to override it.
@@ -215,6 +235,13 @@
     [BMKMapView didForeGround];//当应用恢复前台状态时调用，回复地图的渲染和opengl相关的操作
 }
 
+- (void)applicationWillTerminate:(UIApplication *)application{
+
+
+
+
+}
+
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
     
@@ -281,7 +308,16 @@
     
     if(_updateTimer == nil){
         NSLog(@"updatetimer");
-        _updateTimer = [NSTimer scheduledTimerWithTimeInterval:60
+        
+        int time ;
+        if ([ShareValue sharedShareValue].positionTimeInterval == 0) {
+            time = 2;
+        }else{
+        
+            time = [ShareValue sharedShareValue].positionTimeInterval;
+        }
+        
+        _updateTimer = [NSTimer scheduledTimerWithTimeInterval:10
                                                         target:self
                                                       selector:@selector(UpdateLocation)
                                                       userInfo:nil
@@ -293,13 +329,69 @@
 }
 
 -(void)UpdateLocation{
-     NSLog(@"UpdateLocation");
+    [self saveTrack];
+    
     [_updateTimer invalidate];
     _updateTimer = nil;
 }
 
+-(void)saveTrack{
+    
+    TrackTable *t_trackTable = [[TrackTable alloc] init];
+    t_trackTable.lon = [ShareValue sharedShareValue].longitude;
+    t_trackTable.lat = [ShareValue sharedShareValue].latitude;
+    t_trackTable.type = @"1";
+    t_trackTable.postionWay = @"1";
+    t_trackTable.gatherTime = [NSDate stringFromDate:[NSDate date] withFormat:[NSDate timestampFormatString]];
+    t_trackTable.pointTag = _pointTag;
+    t_trackTable.isFinish = @"0";
+    
+    if (_pointTag == 0) {
+        t_trackTable.kilometersNum = @"0";
+    }else{
+        BMKMapPoint point1 = BMKMapPointForCoordinate(CLLocationCoordinate2DMake(_before_lat,_before_lon));
+        BMKMapPoint point2 = BMKMapPointForCoordinate(CLLocationCoordinate2DMake([ShareValue sharedShareValue].latitude,[ShareValue sharedShareValue].longitude));
+        CLLocationDistance distance = BMKMetersBetweenMapPoints(point1,point2);
+        t_trackTable.kilometersNum = [NSString stringWithFormat:@"%lf",distance];
+        
+    }
+    
+    [t_trackTable save];
+    _pointTag ++;
+    
+    _before_lat = [ShareValue sharedShareValue].latitude;
+    _before_lon = [ShareValue sharedShareValue].longitude;
+
+    
+    [self updateTrack:t_trackTable];
+}
 
 
+-(void)updateTrack:(TrackTable *)trackTable{
 
+    if ([ShareValue sharedShareValue].regiterUser == nil) {
+        return;
+    }
+    
+    TrackHttpRequest *t_request = [[TrackHttpRequest alloc] init];
+    t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
+    t_request.lon = [NSString stringWithFormat:@"%lf",trackTable.lon];
+    t_request.lat = [NSString stringWithFormat:@"%lf",trackTable.lat];
+    t_request.type = trackTable.type;
+    t_request.gatherTime = trackTable.gatherTime;
+    t_request.postionWay = trackTable.postionWay;
+    t_request.uploadTime = [NSDate stringFromDate:[NSDate date] withFormat:[NSDate timestampFormatString]];
+    t_request.kilometersNum = trackTable.kilometersNum;
+
+    [TrackAPI visitTrackHttpAPIWithRequest:t_request Success:^(NSInteger result, NSString *msg) {
+        trackTable.isFinish = @"1";
+        [trackTable updateToDB];
+        
+    } fail:^(NSString *description) {
+        
+        NSLog(@"这个点上传失败!");
+        
+    }];
+}
 
 @end

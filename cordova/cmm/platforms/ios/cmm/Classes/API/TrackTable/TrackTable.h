@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LKDBHelper.h"
 
 @interface TrackTable : NSObject
 
@@ -18,10 +19,11 @@
 @property(nonatomic,strong) NSString * uploadTime	; //上传时间	String	非空	50	yyyy-MM-dd HH:mm:ss
 @property(nonatomic,strong) NSString * kilometersNum	; //公里数	String	非空	50
 @property(nonatomic,assign) NSInteger pointTag;  // 点的标志位
+@property(nonatomic,strong) NSString * isFinish; // 是否上传完成;
 
 
 -(void)save;
 
-
++(TrackTable *)loadMemberByPointTag:( NSInteger )pointTag;
 
 @end
