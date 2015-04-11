@@ -26,4 +26,7 @@
 @property(nonatomic,strong) NSString *unittypeid;
 @property(nonatomic,strong) NSString *isFinish;
 
+@property(nonatomic,strong) NSString *sitePhoto;
+
+-(void)addPhotoImage:(NSString *)imageurl;
 @end

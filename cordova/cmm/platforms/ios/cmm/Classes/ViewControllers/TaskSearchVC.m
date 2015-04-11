@@ -39,14 +39,32 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *btn_endtime;
 
+@property(nonatomic,strong) NSMutableArray *typeids;
+
+@property(nonatomic,strong) NSMutableArray *states;
+
 @end
 
 @implementation TaskSearchVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.extendedLayoutIncludesOpaqueBars = YES;
-    // Do any additional setup after loading the view from its nib.
+    if (_typeId.length > 0) {
+        self.typeids = [[_typeId componentsSeparatedByString:@","]mutableCopy];
+    }else{
+        self.typeids = [[NSMutableArray alloc]init];
+    }
+    if (_state.length> 0) {
+        self.states = [[_state componentsSeparatedByString:@","]mutableCopy];
+    }else{
+        self.states = [[NSMutableArray alloc]init];
+    }
+    [self upStateBtns];
+    [self upTypeBtns];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,13 +76,42 @@
 -(IBAction)stateChooseAction:(UIButton *)sender{
     NSInteger tag = sender.tag;
     NSString *tagString = [NSString stringWithFormat:@"%ld",(long)tag];
-    self.state = tagString;
+    if ([self.states containsObject:tagString]) {
+        [self.states removeObject:tagString];
+    }else{
+        [self.states addObject:tagString];
+    }
+    self.state = [self stateString];
+}
+
+//获取状态
+-(NSString * )stateString{
+   NSArray *temp = [self.states sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+       NSString *s1 = obj1;
+       NSString *s2 = obj2;
+       return [s1 compare:s2 options:NSNumericSearch];
+    }];
+    return [temp componentsJoinedByString:@","];
+}
+
+-(NSString *)typeIdString{
+    NSArray *temp = [self.typeids sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSString *s1 = obj1;
+        NSString *s2 = obj2;
+        return [s1 compare:s2 options:NSNumericSearch];
+    }];
+    return [temp componentsJoinedByString:@","];
 }
 
 -(IBAction)typeChooseAction:(UIButton *)sender{
     NSInteger tag = sender.tag;
     NSString *tagString = [NSString stringWithFormat:@"%ld",(long)tag];
-    self.typeId = tagString;
+    if ([self.typeids containsObject:tagString]) {
+        [self.typeids removeObject:tagString];
+    }else{
+        [self.typeids addObject:tagString];
+    }
+    self.typeId = [self typeIdString];
 }
 
 - (IBAction)startTimeAction:(id)sender {
@@ -99,7 +146,6 @@
         [self.datePicker setSelectedBackgroundColor:[UIColor colorWithRed:125/255.0 green:208/255.0 blue:0/255.0 alpha:1.0]];
         [self.datePicker setCurrentDateColor:[UIColor colorWithRed:242/255.0 green:121/255.0 blue:53/255.0 alpha:1.0]];
         [self.datePicker setCurrentDateColorSelected:[UIColor yellowColor]];
-        
         [self.datePicker setDateHasItemsCallback:^BOOL(NSDate *date) {
             int tmp = (arc4random() % 30)+1;
             return (tmp % 5 == 0);
@@ -152,39 +198,29 @@
     [_tf_name setText:name];
 }
 
--(void)setTypeId:(NSString *)typeId{
-    if (![typeId isEqual:_typeId]) {
-        UIButton *oldBtn = [self btnWithTypeId:_typeId];
-        [self setBtnNormalStyle:oldBtn];
-        UIButton *newBtn = [self btnWithTypeId:typeId];
-        [self setBtnSelectedStyle:newBtn];
-    }else{
-        UIButton *oldBtn = [self btnWithTypeId:_typeId];
-        [self setBtnNormalStyle:oldBtn];
-        typeId = nil;
+-(void)upTypeBtns{
+    for (int i=1; i<4; i++) {
+        [self resetTypeBtn:i];
     }
+}
+
+-(void)upStateBtns{
+    for (int i=1; i<6; i++) {
+        [self resetStateBtn:i];
+    }
+}
+
+-(void)setTypeId:(NSString *)typeId{
+    [self upTypeBtns];
     _typeId = typeId;
 }
 
 -(void)setState:(NSString *)state{
-    if (![state isEqual: _state]) {
-        UIButton *oldBtn = [self btnWithState:_state];
-        [self setBtnNormalStyle:oldBtn];
-        UIButton *newBtn = [self btnWithState:state];
-        [self setBtnSelectedStyle:newBtn];
-    }else{
-        UIButton *oldBtn = [self btnWithState:_state];
-        [self setBtnNormalStyle:oldBtn];
-        state = nil;
-    }
+    [self upStateBtns];
     _state = state;
 }
 
--(UIButton *)btnWithTypeId:(NSString *)typeId{
-    int tag = 0;
-    if (typeId) {
-        tag = [typeId intValue];
-    }
+-(UIButton *)btnWithTypeTag:(int)tag{
     UIButton *btn;
     switch (tag) {
         case 1:
@@ -202,11 +238,7 @@
     return btn;
 }
 
--(UIButton *)btnWithState:(NSString *)state{
-    int tag = 0;
-    if (state) {
-        tag = [state intValue];
-    }
+-(UIButton *)btnWithStateTage:(int)tag{
     UIButton *btn;
     switch (tag) {
         case 0:
@@ -231,6 +263,24 @@
             break;
     }
     return btn;
+}
+
+-(void)resetStateBtn:(int)tag{
+    UIButton *btn = [self btnWithStateTage:tag];
+    if ([_states containsObject:[NSString stringWithFormat:@"%d",tag]]) {
+        [self setBtnSelectedStyle:btn];
+    }else{
+        [self setBtnNormalStyle:btn];
+    }
+}
+
+-(void)resetTypeBtn:(int)tag{
+    UIButton *btn = [self btnWithTypeTag:tag];
+    if ([_typeids containsObject:[NSString stringWithFormat:@"%d",tag]]) {
+        [self setBtnSelectedStyle:btn];
+    }else{
+        [self setBtnNormalStyle:btn];
+    }
 }
 
 -(void)setBtnNormalStyle:(UIButton *)btn{

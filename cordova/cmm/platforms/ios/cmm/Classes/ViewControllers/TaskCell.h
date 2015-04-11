@@ -14,6 +14,4 @@
 
 @property(nonatomic,strong)Task *task;
 
-
-
 @end

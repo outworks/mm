@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F1066" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TaskSearchVC">
             <connections>
-                <outlet property="btn_all" destination="FvT-Zh-v1d" id="136-gJ-1Js"/>
                 <outlet property="btn_begining" destination="ZGK-aX-zkl" id="YKR-Xm-kCo"/>
                 <outlet property="btn_business" destination="0Gs-DS-kkh" id="wMt-G5-f1R"/>
                 <outlet property="btn_endtime" destination="NjB-DV-XWi" id="cJj-2b-1JB"/>
@@ -78,42 +77,6 @@
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FvT-Zh-v1d">
-                            <rect key="frame" x="90" y="60" width="62" height="30"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <inset key="titleEdgeInsets" minX="2" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="全部" image="订单_表单_复选框_选中">
-                                <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="stateChooseAction:" destination="-1" eventType="touchUpInside" id="PzK-Nn-xQ8"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="An4-qr-DhI">
-                            <rect key="frame" x="154" y="60" width="63" height="30"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <inset key="titleEdgeInsets" minX="2" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="未启动" image="订单_表单_复选框_未选中">
-                                <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="stateChooseAction:" destination="-1" eventType="touchUpInside" id="n0b-h9-9IT"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZGK-aX-zkl">
-                            <rect key="frame" x="223" y="60" width="63" height="30"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <inset key="titleEdgeInsets" minX="2" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="进行中" image="订单_表单_复选框_未选中">
-                                <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="stateChooseAction:" destination="-1" eventType="touchUpInside" id="OKB-Zt-8DA"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tiX-x8-Xtz">
                             <rect key="frame" x="90" y="93" width="62" height="30"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -240,7 +203,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" tag="5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KZT-Cp-3ml">
-                            <rect key="frame" x="223" y="93" width="63" height="30"/>
+                            <rect key="frame" x="224" y="93" width="63" height="30"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <inset key="titleEdgeInsets" minX="2" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="中止" image="订单_表单_复选框_未选中">
@@ -249,6 +212,30 @@
                             </state>
                             <connections>
                                 <action selector="stateChooseAction:" destination="-1" eventType="touchUpInside" id="DdN-C3-bPT"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="An4-qr-DhI">
+                            <rect key="frame" x="90" y="60" width="63" height="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <inset key="titleEdgeInsets" minX="2" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="未启动" image="订单_表单_复选框_未选中">
+                                <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="stateChooseAction:" destination="-1" eventType="touchUpInside" id="n0b-h9-9IT"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZGK-aX-zkl">
+                            <rect key="frame" x="154" y="60" width="63" height="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <inset key="titleEdgeInsets" minX="2" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="进行中" image="订单_表单_复选框_未选中">
+                                <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="stateChooseAction:" destination="-1" eventType="touchUpInside" id="OKB-Zt-8DA"/>
                             </connections>
                         </button>
                     </subviews>
@@ -275,7 +262,6 @@
         <image name="btn_blue" width="166" height="50"/>
         <image name="btn_white" width="169" height="53"/>
         <image name="订单_表单_复选框_未选中" width="12" height="12"/>
-        <image name="订单_表单_复选框_选中" width="12" height="12"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

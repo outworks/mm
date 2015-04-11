@@ -10,6 +10,7 @@
 #import "UIImage+External.h"
 #import "PointPaopaoView.h"
 #import "SMSSendPaopaoView.h"
+#import "PhotoEditPaopaoView.h"
 #import "SMSVerificationView.h"
 #import "UnitFinishView.h"
 
@@ -20,7 +21,7 @@
 #import "MBProgressHUD+Add.h"
 #import "LK_API.h"
 
-@interface TaskExecutionVC (){
+@interface TaskExecutionVC ()<PhotoEditPaopaoViewDelegate>{
     BMKAnnotationView *_positionAnnotationView;
     BMKPointAnnotation * _positionAnnotation;
    
@@ -29,6 +30,9 @@
     
     
     SMSSendPaopaoView *_sendPaopaoView; // 删除发送页面的用处
+    PhotoEditPaopaoView *_photoPaopaoView;
+    
+    UIImagePickerController *_picker;
     
 }
 
@@ -36,6 +40,8 @@
 @property(nonatomic,strong)UIImage *headImage;
 
 @property(nonatomic,strong)UnitPointAnnotation * unitPonit;
+
+
 
 @end
 
@@ -275,15 +281,35 @@
     _temporary_taskid = view.taskId;
     _temporary_unitid = view.unit.id;
     //[self takePhoto];
-    
-    HCatImageUpadataVC *t_vc = [[HCatImageUpadataVC alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:t_vc];
-    [self.navigationController presentViewController:nav animated:YES completion:nil];
-    
-    
-    
+    PhotoEditPaopaoView *t_paopaoView = [PhotoEditPaopaoView initCustomPaopaoView];
+    _photoPaopaoView = t_paopaoView;
+    t_paopaoView.unit = view.unit;
+    t_paopaoView.taskName = view.taskName;
+    t_paopaoView.taskId = view.taskId;
+    t_paopaoView.lb_task.text = view.taskName;
+    t_paopaoView.lb_wangdian.text = view.unit.unitname;
+    t_paopaoView.tx_lbname.text = view.unit.bossname;
+    [t_paopaoView setDelegate:self];
+    t_paopaoView.frame = view.frame;
+    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    backView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    backView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeSmsView:)];
+    gestureRecognizer.numberOfTapsRequired = 1;
+    [backView addGestureRecognizer:gestureRecognizer];
+    t_paopaoView.center = CGPointMake(CGRectGetWidth(backView.frame)/2, CGRectGetHeight(backView.frame)/2);
+    [backView addSubview:t_paopaoView];
+    [self.view addSubview:backView];
 }
 
+#pragma mark - PhotoEditPaopaoViewDelegate
+-(void)addPhoneAction:(PhotoEditPaopaoView *)view{
+    [self takePhoto];
+}
+
+-(void)photoSendAction:(PhotoEditPaopaoView *)view{
+    [self postAdd];
+}
 
 -(void)SMSConfirmationAction:(PointPaopaoView *)view{
     
@@ -292,7 +318,6 @@
     t_paopaoView.unit = view.unit;
     t_paopaoView.taskName = view.taskName;
     t_paopaoView.taskId = view.taskId;
-    
     t_paopaoView.lb_task.text = view.taskName;
     t_paopaoView.tx_userName.text = view.unit.bossname;
     t_paopaoView.lb_wangdian.text = view.unit.unitname;
@@ -446,5 +471,118 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+
+
+//开始拍照
+-(void)takePhoto
+{
+    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+    {
+        _picker = [[UIImagePickerController alloc] init];
+        [_picker setDelegate:(id<UINavigationControllerDelegate,UIImagePickerControllerDelegate>)self];
+        //设置拍照后的图片可被编辑
+        _picker.allowsEditing = NO;
+        _picker.sourceType = sourceType;
+        
+        [self presentViewController:_picker animated:YES completion:nil];
+    }else
+    {
+        NSLog(@"模拟其中无法打开照相机,请在真机中使用");
+    }
+}
+
+//打开本地相册
+-(void)LocalPhoto
+{
+    _picker = [[UIImagePickerController alloc] init];
+    _picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [_picker setDelegate:(id<UINavigationControllerDelegate,UIImagePickerControllerDelegate>)self];
+    //设置选择后的图片可被编辑
+    _picker.allowsEditing = NO;
+    [self presentViewController:_picker animated:YES completion:nil];
+}
+
+
+-(void)sendImage:(UIImage *)image{
+   MBProgressHUD * _hud = [MBProgressHUD showMessag:@"正在上传" toView:self.view];
+    [_hud setMode:MBProgressHUDModeDeterminateHorizontalBar];
+    ImageFileInfo *fileInfo = [[ImageFileInfo alloc]initWithImage:image];
+    NSLog(@"chenzftest2: %f,%f",fileInfo.image.size.width,fileInfo.image.size.height);
+    [LK_APIUtil postFileByImage:fileInfo.image progressBlock:^(NSInteger bytesWritten, long long totalBytesWritten) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _hud.progress = (float)bytesWritten/totalBytesWritten;
+        });
+    } Success:^(NSString *fileUrl) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [_photoPaopaoView addPhotoImage:fileUrl];
+    } fail:^(NSString *failDescription) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [MBProgressHUD showError:failDescription toView:self.view];
+    }];
+    
+}
+
+-(void)postAdd{
+    NSString *photoParams = _photoPaopaoView.photoParams;
+    if (photoParams.length == 0) {
+       UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提醒" message:@"请添加照片" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alertView show];
+        
+    }
+    SitePhotoRequest *t_request = [[SitePhotoRequest alloc] init];
+    t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
+    t_request.visitTaskId = _temporary_taskid;
+    t_request.lon = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].longitude];
+    t_request.lat = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].latitude];
+    t_request.unitinfoId = _temporary_unitid;
+    t_request.filePath = photoParams;
+    [MBProgressHUD showMessag:@"正在提交" toView:self.view];
+    [TaskAPI updataSitePhotoHttpAPI:t_request Success:^(NSInteger result, NSString *msg) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [MBProgressHUD showSuccess:@"提交成功" toView:self.view];
+        self.unit.sitePhoto = photoParams;
+        [_photoPaopaoView.superview removeFromSuperview];
+    } fail:^(NSString *description) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [MBProgressHUD showError:description toView:self.view];
+    }];
+    
+}
+
+
+
+#pragma mark - UIImagePickerControllerDelegate
+
+-(void)imagePickerController:(UIImagePickerController*)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+
+{
+    NSString *type = [info objectForKey:UIImagePickerControllerMediaType];
+    
+    UIImage* image = nil;
+    //当选择的类型是图片
+    if ([type isEqualToString:@"public.image"])
+    {
+        //先把图片转成NSData
+        image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+        image = [image fixOrientation];
+        NSLog(@"%f-%f",image.size.width,image.size.height);
+        image = [image imageByScaleForSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width/image.size.width*image.size.height)];
+        [self sendImage:image];
+    }
+    [picker dismissViewControllerAnimated:NO completion:^{
+        
+    }];
+    _picker = nil;
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    NSLog(@"您取消了选择图片");
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    _picker = nil;
+}
+
 
 @end

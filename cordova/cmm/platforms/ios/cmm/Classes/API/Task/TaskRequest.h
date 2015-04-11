@@ -37,7 +37,7 @@
 
 @property(nonatomic,strong) NSString *userId;
 
-@property(nonatomic,strong) NSString *visitId;
+@property(nonatomic,strong) NSString *visitTaskId;
 
 @end
 

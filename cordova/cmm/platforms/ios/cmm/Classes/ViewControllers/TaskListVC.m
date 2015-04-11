@@ -204,19 +204,18 @@
         self.searchVC = [[TaskSearchVC alloc]init];
         self.searchVC.delegate = self;
     }
-    
-    CGRect rect = self.searchVC.view.frame;
-    CGRect realRect = CGRectMake(CGRectGetWidth(rect), 0,CGRectGetWidth(rect),CGRectGetHeight(rect));
-    self.searchVC.view.frame= realRect;
-    self.searchVC.view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
 //    vc.view.backgroundColor = [UIColor clearColor];
-    [ApplicationDelegate.window addSubview:self.searchVC.view];
     self.searchVC.name = _name;
     self.searchVC.state = _state;
     self.searchVC.startTime = _startTime;
     self.searchVC.endTime = _endTime;
     self.searchVC.typeId = _typeId;
     __weak TaskSearchVC *weakVc = self.searchVC;
+    CGRect rect = self.searchVC.view.frame;
+    CGRect realRect = CGRectMake(CGRectGetWidth(rect), 0,CGRectGetWidth(rect),CGRectGetHeight(rect));
+    self.searchVC.view.frame= realRect;
+    self.searchVC.view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    [ApplicationDelegate.window addSubview:self.searchVC.view];
     [UIView animateWithDuration:0.5 animations:^{
         CGRect resultRect = CGRectInset(rect, 0, 0);
         weakVc.view.frame =resultRect;
@@ -266,6 +265,9 @@
 
 #pragma mark - LXActionSheetDelegate
 - (void)lxactionSheet:(LXActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 6) {
+        return;
+    }
     self.state = [NSString stringWithFormat:@"%d",(int)buttonIndex];
     [self.tableView.header  beginRefreshing];
 }

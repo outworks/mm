@@ -33,6 +33,7 @@
 
 @end
 
+
 @implementation TaskDetailVC
 
 - (void)viewDidLoad {
@@ -61,12 +62,12 @@
 -(void)loadDatas{
     [MBProgressHUD showMessag:@"正在加载..." toView:self.view];
     TaskDetailRequest *request = [[TaskDetailRequest alloc]init];
-    request.visitId = self.task.id;
+    request.visitTaskId = self.task.id;
     [TaskAPI getDetailByHttpRequest:request Success:^(Task *task) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         _lb_title.text = task.name;
         _lb_state.text = task.stateString;
-        _lb_time.text = [NSString stringWithFormat:@"%@ ~ %@",task.stateString,task.endtimeString];
+        _lb_time.text = [NSString stringWithFormat:@"%@ ~ %@",task.starttimeString,task.endtimeString];
         _lb_type.text = task.typeidLabel;
         self.task = task;
         self.channels = task.unit;
@@ -82,7 +83,6 @@
     TaskExecutionVC *t_vc = [[TaskExecutionVC alloc] init];
     t_vc.task = _task;
     [self.navigationController pushViewController:t_vc animated:YES];
-
 }
 
 -(void)backAction{
@@ -91,7 +91,6 @@
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     Unit *t_unit = _channels[indexPath.row];
     TaskExecutionVC *t_vc = [[TaskExecutionVC alloc] init];
     t_vc.unit = t_unit;

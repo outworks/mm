@@ -23,7 +23,7 @@
     [LK_APIUtil postHttpRequest:request apiPath:URLPATH_TASKDETAIL Success:^(NSObject *response, NSInteger result, NSString *msg) {
         sucess((Task *)response);
     } fail:^(NSString *description) {
-        
+        fail(description);
     } class:[Task class]];
 }
 

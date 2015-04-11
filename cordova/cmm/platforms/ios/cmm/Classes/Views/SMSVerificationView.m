@@ -19,8 +19,6 @@
 
 - (IBAction)verificationAction:(id)sender {
     
-    
-    
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(VerificationAction:)]) {
         [self.delegate VerificationAction:self
          ];
