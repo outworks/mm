@@ -13,6 +13,7 @@
 #import "PhotoEditPaopaoView.h"
 #import "SMSVerificationView.h"
 #import "UnitFinishView.h"
+#import <AssetsLibrary/AssetsLibrary.h>
 
 #import "HCatImageUpadataVC.h"
 
@@ -528,15 +529,6 @@
 
 -(void)sendImage:(UIImage *)image{
     ImageFileInfo *fileInfo = [[ImageFileInfo alloc]initWithImage:image];
-    NSString *md5 = [fileInfo.fileData md5];
-    if (_pickerSource == 2) {
-        int row = (int)[TimePhotoInfo rowCountWithWhereFormat:@"md5='%@' and visitTaskId='%@'",md5,_task.id];
-        if (!row == 0) {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请选择原暂存图片上传" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-            [alert show];
-            return;
-        }
-    }
     MBProgressHUD * _hud = [MBProgressHUD showMessag:@"正在上传" toView:self.view];
     [_hud setMode:MBProgressHUDModeDeterminateHorizontalBar];
     [LK_APIUtil postFileByImage:fileInfo.image progressBlock:^(NSInteger bytesWritten, long long totalBytesWritten) {
@@ -550,32 +542,22 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         if (_pickerSource == 1) {
             [MBProgressHUD showError:@"上传失败，文件已暂存相册" toView:self.view];
-            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+            [library writeImageToSavedPhotosAlbum:[image CGImage]
+                                      orientation:(ALAssetOrientation)[image imageOrientation]  completionBlock:^(NSURL *assetURL, NSError *error) {
+                                          TimePhotoInfo *timeInfo = [[TimePhotoInfo alloc]init];
+                                          timeInfo.url = assetURL.relativeString;
+                                          NSLog(@"%@",assetURL.relativeString);
+                                          timeInfo.visitTaskId = _taskId;
+                                          [timeInfo saveToDB];
+
+                                      }];
         }else{
             [MBProgressHUD showError:@"上传失败" toView:self.view];
         }
     }];
 }
 
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error
-  contextInfo:(void *)contextInfo
-{
-    // Was there an error?
-    if (error != NULL)
-    {
-        // Show error message...
-        
-    }
-    else  // No errors
-    {
-        ImageFileInfo *fileInfo = [[ImageFileInfo alloc]initWithImage:image];
-        TimePhotoInfo *timeInfo = [[TimePhotoInfo alloc]init];
-        timeInfo.md5 = [fileInfo.fileData md5];
-        NSLog(@"%lld",fileInfo.filesize);
-        timeInfo.visitTaskId = self.taskId;
-        [timeInfo saveToDB];
-    }
-}
 
 -(void)postAdd{
     NSString *photoParams = _photoPaopaoView.photoParams;
@@ -618,11 +600,10 @@
     if ([type isEqualToString:@"public.image"])
     {
         image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-        if (_pickerSource == 2) {
-            ImageFileInfo *fileInfo = [[ImageFileInfo alloc]initWithImage:image];
-            NSString *md5 = [fileInfo.fileData md5];
-            NSLog(@"%@",md5);
-            int row = (int)[TimePhotoInfo rowCountWithWhereFormat:@"md5='%@' and visitTaskId='%@'",md5,_task.id];
+        if (picker.sourceType == UIImagePickerControllerSourceTypePhotoLibrary) {
+            NSURL *assetURL = [info objectForKey:UIImagePickerControllerReferenceURL];
+            NSLog(@"%@",assetURL.relativeString);
+            int row = (int)[TimePhotoInfo rowCountWithWhereFormat:@"url='%@' and visitTaskId='%@'",assetURL.relativeString,_taskId];
             if (row == 0) {
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请选择原暂存图片上传" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
                 [alert show];

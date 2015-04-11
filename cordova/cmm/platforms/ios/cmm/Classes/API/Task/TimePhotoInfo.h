@@ -10,7 +10,7 @@
 
 @interface TimePhotoInfo : NSObject
 
-@property(nonatomic,strong) NSString *md5;
+@property(nonatomic,strong) NSString *url;
 @property(nonatomic,strong) NSString *time;
 @property(nonatomic,strong) NSString *lat;
 @property(nonatomic,strong) NSString *lng;
