@@ -8,12 +8,13 @@
 
 #import "TrackAPI.h"
 #import "LK_API.h"
-#import "Track.h"
+#import "VisitTrack.h"
+#import "Unit.h"
 
 @implementation TrackAPI
 
 
-+(void) visitTrackHttpAPIWithRequest:(TrackHttpRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
++(void) visitTrackHttpAPIWithRequest:(VisitMapHttpRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
     
     [LK_APIUtil postHttpRequest:request apiPath:URLPATH_VISITTRACK Success:^(NSObject *response,NSInteger result,NSString *msg){
         sucess(result,msg);
@@ -30,11 +31,26 @@
         sucess(response.data.result,response.data.lastPage);
     } fail:^(NSString *description) {
         fail(description);
-    } class:([Track class])];
+    } class:([VisitTrack class])];
 
 }
 
++(void) visitMapHttpAPIWithRequest:(TrackQueryHttpRequest *)request Success:(void (^)(NSArray *result))sucess fail:(void (^)(NSString *description))fail{
 
+    [LK_APIUtil postHttpRequest:request apiPath:URLPATH_VISITMAP Success:^(NSObject *response, NSInteger result, NSString *msg) {
+        sucess((NSArray *)response);
+    } fail:^(NSString *description) {
+        fail(description);
+    } class:([Unit class])];
+}
 
++(void) trackListHttpAPIWithRequest:(TrackListHttpRequest *)request Success:(void (^)(TrackListHttpResponse *response,NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
+
+    [LK_APIUtil postHttpRequest:request apiPath:URLPATH_TRACKLIST Success:^(NSObject *response, NSInteger result, NSString *msg) {
+        sucess((TrackListHttpResponse *)response,result,msg);
+    } fail:^(NSString *description) {
+        fail(description);
+    } class:([TrackListHttpResponse class])];
+}
 
 @end

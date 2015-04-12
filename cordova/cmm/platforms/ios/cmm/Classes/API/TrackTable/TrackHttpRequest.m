@@ -16,3 +16,11 @@
 @implementation TrackQueryHttpRequest
 
 @end
+
+@implementation VisitMapHttpRequest
+
+@end
+
+@implementation TrackListHttpRequest
+
+@end

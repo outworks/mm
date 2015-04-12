@@ -7,7 +7,21 @@
 //
 
 #import "TrackHttpResponse.h"
+#import "Track.h"
+#import "Unit.h"
 
-@implementation TrackHttpResponse
+@implementation TrackQueryHttpResponse
+
+@end
+
+@implementation TrackListHttpResponse
+
++(Class)__trackClass{
+    return [Track class];
+}
+
++(Class)__menuClass{
+    return [Unit class];
+}
 
 @end

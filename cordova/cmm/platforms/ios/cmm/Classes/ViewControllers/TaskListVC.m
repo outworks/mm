@@ -30,6 +30,8 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *btn_timeState;
 
+
+
 @property(nonatomic,strong) NSString *timeorder;
 
 @property(nonatomic,assign) int curPageNum;

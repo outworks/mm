@@ -34,3 +34,26 @@
 @property(nonatomic,strong) NSString * orderDirection;	//	排序（时间正反序）	String	可空		默认ASC:升序 DESC 降序
 
 @end
+
+// 走访地图
+
+@interface VisitMapHttpRequest : LK_HttpBaseRequest
+
+@property(nonatomic,strong) NSString * userId; //	用户名	String	非空
+@property(nonatomic,strong) NSString * lon; //	经度	String
+@property(nonatomic,strong) NSString * lat; //	纬度	String
+
+@end
+
+// 走访地图
+
+@interface TrackListHttpRequest : LK_HttpBaseRequest
+
+@property(nonatomic,strong) NSString * userId; //	用户名	String	非空
+@property(nonatomic,strong) NSString * correctDate; //	经度	String
+
+@end
+
+
+
+

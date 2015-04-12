@@ -10,7 +10,7 @@
 #import "UtilsMacro.h"
 #import "HomeVC.h" // 首页
 #import "MyWorkVC.h" // 我的工作
-#import "VisitMapVC.h" // 走访地图
+#import "VisitsMapVC.h" //走访地图
 #import "MailListVC.h" // 通讯录
 
 @interface MainVC ()
@@ -51,7 +51,7 @@ static MainVC *main;
     
     HomeVC *homeVC = [[HomeVC alloc] init];
     MyWorkVC *myWorkVC = [[MyWorkVC alloc] initWithNibName:@"MyWorkVC" bundle:nil];
-    VisitMapVC *visitMapVC = [[VisitMapVC alloc] init];
+    VisitsMapVC *visitMapVC = [[VisitsMapVC alloc] initWithNibName:@"VisitsMapVC" bundle:nil];
     MailListVC *mailListVC = [[MailListVC alloc] init];
     
     /*

@@ -45,14 +45,14 @@
     
     if (bgImage) {
         UIImageView *t_imageV = [[UIImageView alloc] initWithFrame:_v_nav.bounds];
-        t_imageV.backgroundColor = [UIColor clearColor];
+        t_imageV.backgroundColor = UIColorFromRGB(0x008cec);
         [t_imageV setImage:bgImage];
         [_v_nav addSubview:t_imageV];
     }
     
     if (t_title != nil)
     {
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
         [titleLabel setCenter:CGPointMake(ScreenWidth/2, CGRectGetHeight(_v_nav.frame) -CGRectGetHeight(titleLabel.frame)/2)];
         [titleLabel setText:t_title];
         [titleLabel setTextAlignment:NSTextAlignmentCenter];

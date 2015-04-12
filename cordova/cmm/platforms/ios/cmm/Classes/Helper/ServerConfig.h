@@ -28,6 +28,8 @@
 #define URLPATH_BUSINOTIFYCHECK @"busiNotifyCheck"
 #define URLPATH_VISITTRACK @"visitTrack"
 #define URLPATH_TRACKQUERY @"trackQuery"
+#define URLPATH_VISITMAP @"visitMap"
+#define URLPATH_TRACKLIST @"trackList"
 
 
 

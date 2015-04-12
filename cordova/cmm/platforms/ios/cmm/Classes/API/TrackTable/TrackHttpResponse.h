@@ -11,3 +11,10 @@
 @interface TrackQueryHttpResponse : LK_HttpBasePageResponse
 
 @end
+
+@interface TrackListHttpResponse : LK_HttpBaseResponse
+
+@property(nonatomic,strong)NSArray *track;
+@property(nonatomic,strong)NSArray *unit;
+
+@end

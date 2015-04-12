@@ -11,15 +11,43 @@
 @interface Unit : NSObject
 
 @property(nonatomic,strong) NSString *addr;
+@property(nonatomic,strong) NSString * addtime;
+@property(nonatomic,strong) NSString * addtimeString;
+@property(nonatomic,strong) NSString * adduserid;
+@property(nonatomic,strong) NSString * areaid;
+
 @property(nonatomic,strong) NSString *bossname;
 @property(nonatomic,strong) NSString *bossphonenum;
 @property(nonatomic,strong) NSString *boutiquetype;
+@property(nonatomic,strong) NSString *certifyornot;
+
+@property(nonatomic,strong) NSString * cooperationmode;
+@property(nonatomic,strong) NSString * countyid;
+@property(nonatomic,strong) NSString * districtid;
+
 @property(nonatomic,strong) NSString *gpslat;
 @property(nonatomic,strong) NSString *gpslon;
 @property(nonatomic,strong) NSString *id;
+@property(nonatomic,strong) NSString * imageflag;
+@property(nonatomic,strong) NSString * isTask;
+@property(nonatomic,strong) NSString * isexclusive;
 @property(nonatomic,strong) NSString *lat;
 @property(nonatomic,strong) NSString *lon;
 @property(nonatomic,strong) NSString *marketingmanagerid;
+
+@property(nonatomic,strong) NSString * modtime;
+@property(nonatomic,strong) NSString * modtimeString;
+@property(nonatomic,strong) NSString * moduserid;
+@property(nonatomic,strong) NSString * monavgsale;
+@property(nonatomic,strong) NSString * monterminalsale;
+@property(nonatomic,strong) NSString * monthlyrent;
+@property(nonatomic,strong) NSString * note;
+@property(nonatomic,strong) NSString * obtainway;
+@property(nonatomic,strong) NSString * status;
+@property(nonatomic,strong) NSString * storecount;
+@property(nonatomic,strong) NSArray * task;
+@property(nonatomic,strong) NSString * telecomsOperator;
+
 @property(nonatomic,strong) NSString *unitgradeid;
 @property(nonatomic,strong) NSString *unitname;
 @property(nonatomic,strong) NSString *unitnum;

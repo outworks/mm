@@ -8,6 +8,7 @@
 
 #import "SliderVC.h"
 
+
 typedef NS_ENUM(NSInteger, MoveDirection){
     MoveDirectionLeft = 0,
     MoveDirectionRight
@@ -124,6 +125,7 @@ typedef NS_ENUM(NSInteger, MoveDirection){
     _tapGestureRec.enabled = NO;
     
     _panGestureRec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveViewWithGesture:)];
+    _panGestureRec.delegate = self;
     [_mainView addGestureRecognizer:_panGestureRec];
     
 }
@@ -461,7 +463,10 @@ typedef NS_ENUM(NSInteger, MoveDirection){
     
     //判断不可点击区域
     
+    NSLog(@"%@",NSStringFromClass([touch.view class]));
     if ([NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {
+        return NO;
+    }else if([NSStringFromClass([touch.view class]) isEqualToString:@"TapDetectingView"]){
         return NO;
     }
     return  YES;
