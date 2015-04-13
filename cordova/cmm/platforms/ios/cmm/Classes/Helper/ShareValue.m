@@ -72,10 +72,12 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
 -(void)setPositionTimeInterval:(int)positionTimeInterval{
     [[NSUserDefaults standardUserDefaults]setInteger:positionTimeInterval forKey:SET_POSTIONTIMEINTERVAL];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICaTION_UPDATATTIMEINTTERVAL object:nil];
 }
 
 -(int)positionTimeInterval{
     return (int)[[NSUserDefaults standardUserDefaults]integerForKey:SET_POSTIONTIMEINTERVAL];
+    
 }
 
 -(NSString *)loginUserName{
