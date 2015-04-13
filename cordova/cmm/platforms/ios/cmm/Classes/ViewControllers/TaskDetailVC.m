@@ -42,7 +42,6 @@
     _lb_state.text = _task.stateString;
     _lb_time.text = [NSString stringWithFormat:@"%@ ~ %@",_task.starttimeString,_task.endtimeString];
     _lb_type.text = _task.typeidLabel;
-    [self loadDatas];
     [[UINavigationBar appearance] setBarTintColor:HEX_RGB(0x008cec)];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
     [item setTintColor:[UIColor whiteColor]];
@@ -55,6 +54,11 @@
     if([_task.isfinish isEqual:@"1"]){
         [_btn_beginAction setHidden:YES];
     }
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+     [self loadDatas];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -74,6 +78,9 @@
         _lb_time.text = [NSString stringWithFormat:@"%@ ~ %@",task.starttimeString,task.endtimeString];
         _lb_type.text = task.typeidLabel;
         self.task = task;
+        if([_task.isfinish isEqual:@"1"]){
+            [_btn_beginAction setHidden:YES];
+        }
         self.channels = task.unit;
         [self.tableView reloadData];
     } fail:^(NSString *description) {

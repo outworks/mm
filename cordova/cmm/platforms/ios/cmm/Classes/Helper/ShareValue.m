@@ -182,6 +182,16 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
     return [NSUserDefaults retrieveObjectForKey:SET_SIGNNAME];
 }
 
+-(void)removeobserver{
+    [_regiterUser removeObserver:self forKeyPath:@"userId"];
+    [_regiterUser removeObserver:self forKeyPath:@"userName"];
+    [_regiterUser removeObserver:self forKeyPath:@"signImgUrl"];
+    [_regiterUser removeObserver:self forKeyPath:@"jobId"];
+    [_regiterUser removeObserver:self forKeyPath:@"unitId"];
+    [_regiterUser removeObserver:self forKeyPath:@"payMent"];
+    [_regiterUser removeObserver:self forKeyPath:@"signName"];
+}
+
 -(void)addObserver{
     [_regiterUser addObserver:self forKeyPath:@"userId" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
     [_regiterUser addObserver:self forKeyPath:@"userName" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
@@ -195,8 +205,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
 
 
 -(void)setRegiterUser:(User *)bindUser{
+//    if (_regiterUser) {
+//        [self removeobserver];
+//    }
     _regiterUser = bindUser;
-    [self addObserver];
+//     [self addObserver];
     if (_regiterUser == nil) {
         [self setUserId:nil];
         [self setUserName:nil];

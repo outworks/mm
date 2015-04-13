@@ -100,7 +100,6 @@
             = response.smUser;
             [ShareValue sharedShareValue].password = _textF_password.text;
             self.sliderVC = [SliderVC shareSliderVC];
-            
             LeftSideVC *leftVC = [[LeftSideVC alloc] initWithNibName:@"LeftSideVC" bundle:nil];
             MainVC *mainVC = [[MainVC alloc] init];
             [self.sliderVC closeSideBar];
