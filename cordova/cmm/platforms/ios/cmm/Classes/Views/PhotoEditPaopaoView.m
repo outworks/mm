@@ -45,7 +45,9 @@
         if (!_photos) {
             _photos = [[NSMutableArray alloc]init];
         }
-        [_photos addObjectsFromArray:[_unit.sitePhoto componentsSeparatedByString:@","]];
+        if (_unit.sitePhoto.length>0) {
+            [_photos addObjectsFromArray:[_unit.sitePhoto componentsSeparatedByString:@","]];
+        }
         [self reloadUIScrollView];
     }
     if ([_unit.isFinish isEqual:@"1"]) {

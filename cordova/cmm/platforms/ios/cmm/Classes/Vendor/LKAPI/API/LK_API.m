@@ -52,23 +52,27 @@
             
             if (dict) {
                 LK_HttpBaseResponse *response = [dict objectByClass:[LK_HttpBaseResponse class]];
-                if ([dict objectForKey:@"data"]) {
-                    if([[dict objectForKey:@"data"] isKindOfClass:[NSArray class]]){
-                        NSMutableArray *array = [NSMutableArray array];
-                        NSArray *data = [dict objectForKey:@"data"];
-                        for (NSDictionary *dict1 in data) {
-                            NSObject *result = [dict1 objectByClass:responseClass];
-                            [array addObject:result];
+                if (response) {
+                    if ([dict objectForKey:@"data"]) {
+                        if([[dict objectForKey:@"data"] isKindOfClass:[NSArray class]]){
+                            NSMutableArray *array = [NSMutableArray array];
+                            NSArray *data = [dict objectForKey:@"data"];
+                            for (NSDictionary *dict1 in data) {
+                                NSObject *result = [dict1 objectByClass:responseClass];
+                                [array addObject:result];
+                            }
+                            response.data = array;
+                        }else if([[dict objectForKey:@"data"] isKindOfClass:[NSDictionary class]]){
+                            NSDictionary *dict2 = [dict objectForKey:@"data"];
+                            NSLog(@"%@",dict2);
+                            NSObject *result = [dict2 objectByClass:responseClass];
+                            response.data = result;
                         }
-                        response.data = array;
-                    }else if([[dict objectForKey:@"data"] isKindOfClass:[NSDictionary class]]){
-                        NSDictionary *dict2 = [dict objectForKey:@"data"];
-                        NSLog(@"%@",dict2);
-                        NSObject *result = [dict2 objectByClass:responseClass];
-                        response.data = result;
                     }
+                    sucess(response.data,response.result,response.msg);
+                }else{
+                    fail(@"服务器异常");
                 }
-                sucess(response.data,response.result,response.msg);
             }else{
                 fail(@"服务器异常");
             }
