@@ -193,7 +193,7 @@
  *
  */
 - (IBAction)chooseState:(id)sender {
-    LXActionSheet *sheet = [[LXActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"全部" otherButtonTitles:@"未启动",@"进行中",@"已完成",@"超时完成",@"中止",nil];
+    LXActionSheet *sheet = [[LXActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"全部" otherButtonTitles:@"进行中",@"已完成",@"超时完成",@"中止",nil];
     [sheet setdestructiveButtonColor:RGB(86, 170, 14) titleColor:[UIColor whiteColor] icon:nil];
     [sheet setCancelButtonColor:[UIColor whiteColor] titleColor:[UIColor redColor] icon:nil];
     [sheet showInView:self.navigationController.view];
@@ -273,7 +273,7 @@
     if (buttonIndex == 6) {
         return;
     }
-    self.state = [NSString stringWithFormat:@"%d",(int)buttonIndex];
+    self.state = [NSString stringWithFormat:@"%d",(int)buttonIndex+1];
     [self.tableView.header  beginRefreshing];
 }
 

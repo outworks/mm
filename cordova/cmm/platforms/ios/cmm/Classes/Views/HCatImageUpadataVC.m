@@ -197,7 +197,7 @@
     
     SitePhotoRequest *t_request = [[SitePhotoRequest alloc] init];
     
-    t_request.userId = @"12";
+    t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
     t_request.visitTaskId = _temporary_taskid;
     t_request.lon = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].longitude];
     t_request.lat = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].latitude];

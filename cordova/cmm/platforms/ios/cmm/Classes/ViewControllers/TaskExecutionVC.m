@@ -445,7 +445,7 @@
     MBProgressHUD *hud = [MBProgressHUD showMessag:@"确认中..." toView:self.view];
     [hud show:YES];
     SiteConfirmRequest *t_request = [[SiteConfirmRequest alloc] init];
-    t_request.userId = @"12";
+    t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
     t_request.visitTaskId = view.taskId;
     t_request.lon = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].longitude];
     t_request.lat = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].latitude];
@@ -478,7 +478,7 @@
     [hud show:YES];
     
     BusiNotifyRequest *t_request = [[BusiNotifyRequest alloc] init];
-    t_request.userId = @"12";
+    t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
     t_request.visitTaskId = view.taskId;
     t_request.unitinfoId = view.unit.id;
     t_request.telNum = view.tx_phone.text;
@@ -519,7 +519,7 @@
     [hud show:YES];
     
     BusiNotifyCheckRequest *t_request = [[BusiNotifyCheckRequest alloc] init];
-    t_request.userId = @"12";
+    t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
     t_request.visitTaskId = view.taskId;
     t_request.unitinfoId = view.unit.id;
     t_request.lon = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].longitude];
