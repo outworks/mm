@@ -65,7 +65,6 @@
         self.userInteractionEnabled = YES;
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedCancel)];
         [self addGestureRecognizer:tapGesture];
-    
         if (delegate) {
             self.delegate = delegate;
         }
@@ -88,6 +87,28 @@
     }
     return self;
 }
+
+-(id)initWithTitle:(NSString *)title delegate:(id<LXActionSheetDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle  otherButtonTitles:(NSArray *)otherButtonTitles{
+    self = [super init];
+    if (self) {
+        _buttonArray = [[NSMutableArray alloc]init];
+        //初始化背景视图，添加手势
+        self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+        self.backgroundColor = WINDOW_COLOR;
+        self.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedCancel)];
+        [self addGestureRecognizer:tapGesture];
+        if (delegate) {
+            self.delegate = delegate;
+        }
+        NSMutableArray *otherButtonTitlesArray = [NSMutableArray array];
+        [otherButtonTitlesArray addObjectsFromArray:otherButtonTitles];
+        [self creatButtonsWithTitle:title cancelButtonTitle:cancelButtonTitle destructionButtonTitle:nil otherButtonTitles:otherButtonTitlesArray];
+        
+    }
+    return self;
+}
+
 
 - (void)showInView:(UIView *)view
 {

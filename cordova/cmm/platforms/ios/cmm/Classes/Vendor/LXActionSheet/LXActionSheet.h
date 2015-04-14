@@ -11,6 +11,9 @@
 @protocol LXActionSheetDelegate;
 @interface LXActionSheet : UIView
 - (id)initWithTitle:(NSString *)title delegate:(id<LXActionSheetDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
+
+-(id)initWithTitle:(NSString *)title delegate:(id<LXActionSheetDelegate>)delegate cancelButtonTitle:(NSString *)cancelButtonTitle  otherButtonTitles:(NSArray *)otherButtonTitles;
+
 - (void)showInView:(UIView *)view;
 
 -(void)setCancelButtonColor:(UIColor *)buttonColor titleColor:(UIColor *)titleColor  icon:(UIImage *)image;

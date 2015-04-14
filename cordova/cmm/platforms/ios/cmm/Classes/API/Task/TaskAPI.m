@@ -66,9 +66,16 @@
     } fail:^(NSString * descript){
         fail(descript);
     }class:nil];
-
-
 }
 
+
+//查询某网点的任务列表
++(void)getUnitTasksByRequest:(UnitTasksRequest *)request Success:(void (^)(NSArray *tasks))sucess fail:(void (^)(NSString *description))fail{
+    [LK_APIUtil postHttpRequest:request apiPath:URLPATH_UNITTASKS Success:^(NSObject *response,NSInteger result,NSString *msg){
+        sucess((NSArray *)response);
+    } fail:^(NSString * descript){
+        fail(descript);
+    }class:[Task class]];
+}
 
 @end

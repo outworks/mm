@@ -32,4 +32,8 @@
 //短信验证码接口
 +(void)updataBusiNotifyCheckHttpAPI:(BusiNotifyCheckRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail;
 
+//查询某网点的任务列表
++(void)getUnitTasksByRequest:(UnitTasksRequest *)request Success:(void (^)(NSArray *tasks))sucess fail:(void (^)(NSString *description))fail;
+
+
 @end

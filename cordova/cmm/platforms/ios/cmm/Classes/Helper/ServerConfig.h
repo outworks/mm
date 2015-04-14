@@ -30,7 +30,7 @@
 #define URLPATH_TRACKQUERY @"trackQuery"
 #define URLPATH_VISITMAP @"visitMap"
 #define URLPATH_TRACKLIST @"trackList"
-
+#define URLPATH_UNITTASKS @"unFinishTask"
 
 
 #define HTTP_POSTMETHOD 1

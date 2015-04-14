@@ -40,11 +40,13 @@
     UIImagePickerController *_picker;
     
     int _pickerSource;
+    NSMutableArray *_showTasks;
     
 }
 
 @property(nonatomic,strong)NSMutableArray *annotationArrays;
 @property(nonatomic,strong)UIImage *headImage;
+@property(nonatomic,strong) NSArray *taskArray;
 
 @property(nonatomic,strong)UnitPointAnnotation * unitPonit;
 
@@ -64,6 +66,11 @@
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
     [item setTintColor:[UIColor whiteColor ]];
     self.navigationItem.leftBarButtonItem = item;
+    self.title = @"任务执行";
+    
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:@"更多任务" style:UIBarButtonItemStylePlain target:self action:@selector(moreAction)];
+    [rightItem setTintColor:[UIColor whiteColor ]];
+    self.navigationItem.rightBarButtonItem = rightItem;
     self.title = @"任务执行";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataLocationPoint:) name:NOTIFICATION_UPDATALOCATIONPOINT object:nil];
@@ -89,8 +96,23 @@
 
 #pragma mark - private methods 
 
+-(void)reloadAnnotation{
+    if (_annotationArrays) {
+        [_mapView removeAnnotations:_annotationArrays];
+        [_annotationArrays removeAllObjects];
+        _annotationArrays = nil;
+    }
+    if (_unitPonit) {
+        [_mapView removeAnnotation:_unitPonit];
+        _unitPonit = nil;
+    }
+    [self setUnitPoint];
+}
+
 -(void)setUnitPoint{
+    
     if (_task != nil) {
+        
         if (_annotationArrays != nil) {
             return;
         }
@@ -161,7 +183,52 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+-(void)moreAction{
+    [MBProgressHUD showMessag:@"加载中..." toView:self.view];
+    UnitTasksRequest *request = [[UnitTasksRequest alloc]init];
+    request.unitinfoId = _unit.id;
+    [TaskAPI getUnitTasksByRequest:request Success:^(NSArray *tasks) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        BOOL flag = NO;
+        if (tasks.count == 1) {
+            Task *tasktemp = tasks.firstObject;
+            if ([tasktemp.id isEqual:_taskId]) {
+                flag = YES;
+            }
+        }else if(tasks.count == 0){
+            flag = YES;
+        }
+        if (flag) {
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"没有更多的任务" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+            [alertView show];
+        }else{
+            self.taskArray = tasks;
+            [self showTaskChoose];
+        }
+    } fail:^(NSString *description) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [MBProgressHUD showError:description toView:self.view];
+    }];
+}
 
+-(void)showTaskChoose{
+    if (!_showTasks) {
+        _showTasks = [[NSMutableArray alloc]init];
+    }else{
+        [_showTasks removeAllObjects];
+    }
+    NSMutableArray *array = [NSMutableArray array];
+    for (Task *task in self.taskArray) {
+        if ([task.id isEqual:_taskId]) {
+            continue;
+        }
+        [_showTasks addObject:task];
+        [array addObject:task.name];
+    }
+    LXActionSheet *sheet = [[LXActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:array];
+    sheet.tag = 33;
+    [sheet showInView:self.navigationController.view];
+}
 
 #pragma mark - BMKMapViewDelegate
 
@@ -321,8 +388,14 @@
 
 #pragma mark - LXActionSheetDelegate
 - (void)lxactionSheet:(LXActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;{
-    if (actionSheet.tag == 11) {
-        
+    if (actionSheet.tag == 33) {
+        if (buttonIndex < _showTasks.count) {
+            Task *tempTask = [_showTasks objectAtIndex:buttonIndex];
+            self.taskId = tempTask.id;
+            self.taskName = tempTask.name;
+            self.opetypeid = tempTask.opetypeid;
+            [self reloadAnnotation];
+        }
     }else if (actionSheet.tag == 12){
         if (buttonIndex == 0) {
             [self takePhoto];
