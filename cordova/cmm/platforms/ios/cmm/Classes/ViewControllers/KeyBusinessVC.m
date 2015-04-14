@@ -56,12 +56,13 @@
             for (int i = 0 ; i < [response count]; i++) {
                 
                 SaleResponse *res = response[i];
-//                UILabel *t_lb = [[UILabel alloc] initWithFrame:CGRectMake((CGRectGetWidth(_sc_title.frame)/2)*i, 0, CGRectGetWidth(_sc_title.frame)/2, CGRectGetHeight(_sc_title.frame))];
-//                t_lb.backgroundColor = [UIColor blueColor];
-//                [t_lb setTextAlignment:NSTextAlignmentCenter];
-//                [t_lb setFont:[UIFont systemFontOfSize:12]];
-//                t_lb.text = @"4G销量";
-//                [_sc_title addSubview:t_lb];
+                
+                UILabel *t_lb = [[UILabel alloc] initWithFrame:CGRectMake((CGRectGetWidth(_sc_title.frame)/2)*i, 0, CGRectGetWidth(_sc_title.frame)/2, CGRectGetHeight(_sc_title.frame))];
+                t_lb.backgroundColor = [UIColor clearColor];
+                [t_lb setTextAlignment:NSTextAlignmentCenter];
+                [t_lb setFont:[UIFont systemFontOfSize:12]];
+                t_lb.text = res.busiTypeLabel;
+                [_sc_title addSubview:t_lb];
                 
                 KeyItem *t_item = [KeyItem initCustomView];
                 [t_item setNeedsDisplay];
@@ -69,7 +70,7 @@
                 t_item.frame = CGRectMake(i*ScreenWidth, 0, ScreenWidth, CGRectGetHeight(t_item.frame));
                 [weakSelf.scrollView addSubview:t_item];
             }
-            
+            /*
             for (int i = 0 ; i < 3; i++) {
                 
                 UILabel *t_lb = [[UILabel alloc] initWithFrame:CGRectMake((CGRectGetWidth(_sc_title.frame)/2)*i, 0, CGRectGetWidth(_sc_title.frame)/2, CGRectGetHeight(_sc_title.frame))];
@@ -81,9 +82,10 @@
                 t_lb.text = @"4G销量";
                 [_sc_title addSubview:t_lb];
             }
+             */
             
-            weakSelf.scrollView.contentSize = CGSizeMake(3*ScreenWidth, CGRectGetHeight(weakSelf.scrollView.frame));
-            weakSelf.sc_title.contentSize = CGSizeMake(3*CGRectGetWidth(weakSelf.sc_title.frame), CGRectGetHeight(weakSelf.sc_title.frame));
+            weakSelf.scrollView.contentSize = CGSizeMake([response count]*ScreenWidth, CGRectGetHeight(weakSelf.scrollView.frame));
+            weakSelf.sc_title.contentSize = CGSizeMake([response count]*CGRectGetWidth(weakSelf.sc_title.frame), CGRectGetHeight(weakSelf.sc_title.frame));
             
             [self setSCTitleColor:0];
         }

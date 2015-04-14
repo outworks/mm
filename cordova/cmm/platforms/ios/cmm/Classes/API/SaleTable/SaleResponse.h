@@ -22,6 +22,9 @@
 @property(nonatomic,strong) NSNumber *unitCount;	//	有销量
 @property(nonatomic,strong) NSNumber *avgSaleCount;	//	平均销量
 @property(nonatomic,strong) NSNumber *highestSaleCount;	//	最高销量
+@property(nonatomic,strong) NSString * busiType;	//	业务类型
+@property(nonatomic,strong) NSString *busiTypeLabel;	//	业务类型名称
+@property(nonatomic,strong) NSNumber *curMonthFinishRitio;	//	本月完成率
 
 @property(nonatomic,strong) NSString *regionRank; //区域排名
 
