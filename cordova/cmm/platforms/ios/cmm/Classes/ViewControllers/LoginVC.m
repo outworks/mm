@@ -99,12 +99,13 @@
             [ShareValue sharedShareValue].regiterUser
             = response.smUser;
             [ShareValue sharedShareValue].password = _textF_password.text;
-            self.sliderVC = [SliderVC shareSliderVC];
-            LeftSideVC *leftVC = [[LeftSideVC alloc] initWithNibName:@"LeftSideVC" bundle:nil];
-            MainVC *mainVC = [[MainVC alloc] init];
-            [self.sliderVC closeSideBar];
+            [[SliderVC shareSliderVC] resetShareSliderVC];
+           self.sliderVC = [SliderVC shareSliderVC];
+           LeftSideVC *leftVC = [[LeftSideVC alloc] initWithNibName:@"LeftSideVC" bundle:nil];
+           MainVC *mainVC = [[MainVC alloc] init];
+           [self.sliderVC closeSideBar];
             self.sliderVC.leftVC = leftVC;
-            self.sliderVC.mainVC = mainVC;
+           self.sliderVC.mainVC = mainVC;
             
             [self.navigationController pushViewController:self.sliderVC animated:YES];
         }else{

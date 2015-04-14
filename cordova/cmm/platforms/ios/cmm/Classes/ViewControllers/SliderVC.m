@@ -45,17 +45,29 @@ typedef NS_ENUM(NSInteger, MoveDirection){
 }
 
 #pragma mark - instancetype
+static SliderVC *sharedSVC = nil;
 
 +(SliderVC *)shareSliderVC{
     
-    static SliderVC *sharedSVC;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    //static SliderVC *sharedSVC;
+    
+    if (sharedSVC == nil) {
         sharedSVC = [[self alloc] init];
-    });
+    }
+    
+
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//            });
     
     return sharedSVC;
 }
+
+-(void)resetShareSliderVC{
+    sharedSVC = nil;
+
+}
+
 
 #pragma mark - initDefault
 

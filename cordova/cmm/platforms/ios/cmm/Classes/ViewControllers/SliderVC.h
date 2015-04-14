@@ -45,6 +45,7 @@
 
 
 +(SliderVC *)shareSliderVC;
+-(void)resetShareSliderVC;
 
 -(void)showContentControllerWithModel:(NSString *)className;
 -(void)showLeftViewController;
