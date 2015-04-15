@@ -10,6 +10,8 @@
 #import "YLSwipeLockView.h"
 #import "LeftSideVC.h"
 #import "MainVC.h"
+#import "Menu.h"
+#import "ShareValue.h"
 
 
 @interface SwipePasswordVC ()<YLSwipeLockViewDelegate>
@@ -77,6 +79,10 @@
         
         NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
         [userDefault setObject:password forKey:@"gesturePassword"];
+        
+        NSMutableArray *t_arr = [Menu searchWithWhere:[NSString stringWithFormat:@"level=1"] orderBy:@"menuId" offset:0 count:0];
+        Menu * t_menu = t_arr[0];
+        [ShareValue sharedShareValue].selectedMenuId = t_menu.menuId;
         
         self.sliderVC = [SliderVC shareSliderVC];
         

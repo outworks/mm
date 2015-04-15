@@ -30,6 +30,8 @@
 @property(nonatomic,strong) NSString *fileBaseUrl;
 @property(nonatomic,assign) int positionTimeInterval;
 
+@property(nonatomic,strong) NSString *selectedMenuId;
+
 @property(nonatomic,assign) double latitude;
 @property(nonatomic,assign) double longitude;
 

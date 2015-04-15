@@ -12,6 +12,11 @@
 #import "AppDelegate.h"
 #import "ShareFun.h"
 #import "UIImageView+WebCache.h"
+#import "AppDelegate.h"
+#import "LXActionSheet.h"
+
+
+#import "Menu.h"
 
 @interface LeftSideVC ()
 
@@ -21,6 +26,9 @@
 @property (strong,nonatomic)NSArray *arr_data;
 
 @property (weak, nonatomic) IBOutlet UITextField *textf_signName;
+
+@property (nonatomic,strong) NSMutableArray *arr_menus;
+
 
 
 
@@ -44,6 +52,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    _arr_menus = [Menu searchWithWhere:[NSString stringWithFormat:@"level=1"] orderBy:@"menuId" offset:0 count:0];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataImage:) name:NOTIFICATION_UPDATAIMAGE object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataUser:) name:NOTIFICATION_UPDATAUSERINFO object:nil];
@@ -78,6 +89,10 @@
     [_imageV_userIcon sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl]  placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
     _imageV_bg_info.layer.cornerRadius = 3;
     _imageV_bg_info.layer.masksToBounds = YES;
+    
+    Menu *t_menu = [Menu searchSingleWithWhere:[NSString stringWithFormat:@"menuId=%@",[ShareValue sharedShareValue].selectedMenuId] orderBy:nil];
+    
+    _lb_menu.text = t_menu.menuName;
     
     self.arr_data = @[@[@"我的收藏", @"首页_图标_我的收藏.png"],
                       @[@"通用设置", @"首页_图标_通用设置.png"],
@@ -119,9 +134,13 @@
 
 - (IBAction)workplayChangeAction:(id)sender {
     
-    NSLog(@"工作台切换");
-    
-    
+
+    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:@"菜单切换" delegate:(id<UIActionSheetDelegate>)self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:nil, nil];
+    for(Menu *t_menu in _arr_menus) {
+        [sheet addButtonWithTitle:t_menu.menuName];
+    }
+    [sheet showInView:ApplicationDelegate.viewController.view];
+
 }
 
 
@@ -175,6 +194,20 @@
     
     
 }
+
+#pragma mark - UIActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if (buttonIndex == 0) {
+        return;
+    }else{
+        Menu *t_menu = _arr_menus[buttonIndex-1];
+        [[NSNotificationCenter defaultCenter]  postNotificationName:NOTIFICATION_UPDATAMENU object:t_menu];
+        
+    }
+    
+}
+
 
 #pragma mark - Notification methods
 

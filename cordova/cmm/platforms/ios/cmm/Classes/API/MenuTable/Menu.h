@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LKDBHelper.h"
 
 @interface Menu : NSObject
 
@@ -25,5 +26,6 @@
 @property(nonatomic,strong) NSString * filePath;	//	WEB插件下载地址
 @property(nonatomic,strong) NSString * menuUrl;	//	第三方URL
 
+-(void)save;
 
 @end

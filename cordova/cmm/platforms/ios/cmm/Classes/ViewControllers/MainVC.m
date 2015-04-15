@@ -15,7 +15,6 @@
 
 @interface MainVC ()
 
-@property(strong,nonatomic)UITabBarController *vc_tab;
 
 @end
 

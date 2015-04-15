@@ -55,6 +55,7 @@
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
         [titleLabel setCenter:CGPointMake(ScreenWidth/2, CGRectGetHeight(_v_nav.frame) -CGRectGetHeight(titleLabel.frame)/2)];
         [titleLabel setText:t_title];
+        [titleLabel setTag:150];
         [titleLabel setTextAlignment:NSTextAlignmentCenter];
         [titleLabel setTextColor:[UIColor whiteColor]];
         [titleLabel setFont:[UIFont boldSystemFontOfSize:17]];

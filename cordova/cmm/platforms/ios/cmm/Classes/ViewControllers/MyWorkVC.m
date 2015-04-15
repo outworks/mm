@@ -9,13 +9,14 @@
 #import "MyWorkVC.h"
 #import "CommonTabBar.h"
 
-#import "BasicWorkVC.h"
-#import "VisitSupportVC.h"
-#import "FourPromotionVC.h"
-#import "PerformanceQuery.h"
 #import "ShareFun.h"
 #import "ShareValue.h"
 #import "UIImageView+WebCache.h"
+
+#import "Menu.h"
+#import "ShareValue.h"
+
+#import "MyWorkContentVC.h"
 
 @interface MyWorkVC ()
 
@@ -25,11 +26,11 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 
-
-@property (nonatomic,strong) BasicWorkVC *v_basicWork;
-@property (nonatomic,strong) VisitSupportVC *v_visitSupport;
-@property (nonatomic,strong) FourPromotionVC *v_fourPromotion;
-@property (nonatomic,strong) PerformanceQuery *v_performanceQuery;
+@property (nonatomic,strong) NSString *str_menu_1;
+@property (nonatomic,strong) NSString *menuid_1;
+@property (nonatomic,strong) NSMutableArray *arr_menus_2;
+@property (nonatomic,strong) NSMutableArray *arr_contens;
+@property (nonatomic,strong) MyWorkContentVC *selectedContentVC;
 
 
 @end
@@ -42,7 +43,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self createNavWithTitle:@"销售经理工作台" withbgImage:nil createMenuItem:^UIView *(int index) {
+    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(updateMenu:) name:NOTIFICATION_UPDATAMENU object:nil];
+    
+    Menu *t_menu = [Menu searchSingleWithWhere:[NSString stringWithFormat:@"menuId=%@",[ShareValue sharedShareValue].selectedMenuId] orderBy:nil];
+    _str_menu_1 = t_menu.menuName;
+    _menuid_1 = t_menu.menuId;
+    _arr_menus_2 = [NSMutableArray array];
+    _arr_contens = [NSMutableArray array];
+    
+    [self createNavWithTitle:_str_menu_1 withbgImage:nil createMenuItem:^UIView *(int index) {
         
         if (index == 0) {
             UIImageView * t_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, (self.v_nav.frame.size.height - 32)/2, 32, 32)];
@@ -56,8 +65,27 @@
         
     }];
     
+    CGRect frame = _scrollView.frame;
+    frame.size.height = _scrollView.frame.size.height - 49;
+    _scrollView.frame = frame;
     
-    NSArray *t_arr = @[@{@"Title":@"基础工作"},@{@"Title":@"走访支撑"},@{@"Title":@"四进促销"},@{@"Title":@"业绩查询"}];
+    
+    [self reloadView];
+    
+}
+
+-(void)reloadView{
+
+    _arr_menus_2 = [Menu searchWithWhere:[NSString stringWithFormat:@"parentId=%@ and level=2",_menuid_1] orderBy:@"menuId" offset:0 count:0];
+    NSMutableArray *t_arr_menu = [NSMutableArray array];
+    if ([_arr_menus_2 count] != 0) {
+        for (Menu *t_menu in _arr_menus_2) {
+            NSMutableDictionary *t_dic = [[NSMutableDictionary alloc] init];
+            [t_dic setValue:t_menu.menuName forKey:@"Title"];
+            [t_arr_menu addObject:t_dic];
+        }
+    }
+    NSArray *t_arr = t_arr_menu;
     _tabBar = [[CommonTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.v_nav.frame), ScreenWidth, 35) buttonItems:t_arr CommonTabBarType:CommonTabBarTypeTitleOnly isAnimation:YES];
     _tabBar.delegate = (id<CommonTabBarDelegate>)self;
     
@@ -74,40 +102,53 @@
     [_tabBar setSelectedIndex:0];
     
     [_scrollView setContentSize:CGSizeMake([t_arr count]*_scrollView.frame.size.width, _scrollView.frame.size.height)];
-    
-    
 }
 
 #pragma mark - private methods
 
--(void)buildBasicWorkVC{
-    if (_v_basicWork == nil) {
-         _v_basicWork = [[BasicWorkVC alloc] initWithNibName:@"BasicWorkVC" bundle:nil];
-        _v_basicWork.view.frame = CGRectMake(0, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
-        [_scrollView addSubview:_v_basicWork.view];
+-(void)buildContentVC:(NSMutableArray *)arr with:(Menu *)menu withIndex:(NSInteger)index{
+    
+    if ([_arr_contens count] == 0) {
+        NSMutableDictionary *t_dic = [NSMutableDictionary dictionary];
+        MyWorkContentVC *t_vc = [[MyWorkContentVC alloc] init];
+        t_vc.view.frame =CGRectMake(index*_scrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+        t_vc.arr_item = arr;
+        t_vc.menu_p = menu;
+        _selectedContentVC = t_vc;
+        [t_dic setObject:t_vc forKey:@"vc"];
+        [t_dic setObject:[NSNumber numberWithInteger:index] forKey:@"index"];
+        [_arr_contens addObject:t_dic];
+        [_scrollView addSubview:t_vc.view];
+        
+        return;
     }
-}
-
--(void)buildVisitSupportVC{
-    _v_visitSupport = [[VisitSupportVC alloc] initWithNibName:@"VisitSupportVC" bundle:nil];
-    _v_visitSupport.view.frame = CGRectMake(_scrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
-    [_scrollView addSubview:_v_visitSupport.view];
+    
+    for (int i = 0 ; i < [_arr_contens count]; i++) {
+        
+        NSMutableDictionary *t_dic = _arr_contens[i];
+        NSNumber *dic_index = [t_dic objectForKey:@"index"];
+        if ([dic_index integerValue] == index) {
+            MyWorkContentVC *t_vc = [t_dic objectForKey:@"vc"];
+            _selectedContentVC = t_vc;
+            
+            return;
+        }
+        
+        
+    }
+    
+    NSMutableDictionary *t_dic = [NSMutableDictionary dictionary];
+    MyWorkContentVC *t_vc = [[MyWorkContentVC alloc] init];
+    t_vc.view.frame =CGRectMake(index*_scrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+    t_vc.arr_item = arr;
+    t_vc.menu_p = menu;
+    _selectedContentVC = t_vc;
+    [t_dic setObject:t_vc forKey:@"vc"];
+    [t_dic setObject:[NSNumber numberWithInteger:index] forKey:@"index"];
+    [_arr_contens addObject:t_dic];
+    [_scrollView addSubview:t_vc.view];
     
 }
-
--(void)buildFourPromotionVC{
-    
-    _v_fourPromotion = [[FourPromotionVC alloc] initWithNibName:@"FourPromotionVC" bundle:nil];
-    _v_fourPromotion.view.frame = CGRectMake(2*_scrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
-    [_scrollView addSubview:_v_fourPromotion.view];
-}
--(void)buildPerformanceQuery{
-    _v_performanceQuery = [[PerformanceQuery alloc] initWithNibName:@"PerformanceQuery" bundle:nil];
-    _v_performanceQuery.view.frame = CGRectMake(3*_scrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
-    [_scrollView addSubview:_v_performanceQuery.view];
-
-}
-
 
 
 #pragma mark - commonTabBarDelegate
@@ -120,16 +161,11 @@
         double delayInSeconds = 0.5;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            if (index == 0) {
-                [self buildBasicWorkVC];
-            }else if (index == 1) {
-                [self buildVisitSupportVC];
-            }else if(index == 2){
-                [self buildFourPromotionVC];
-            }else if(index == 3){
-                [self buildPerformanceQuery];
-                
-            }
+            
+            Menu *t_menu = _arr_menus_2[index];
+            NSMutableArray *t_arr = [Menu searchWithWhere:[NSString stringWithFormat:@"parentId=%@ and level=3",t_menu.menuId] orderBy:@"menuId" offset:0 count:0];
+            [self buildContentVC:t_arr with:t_menu withIndex:index];
+           
         });
     });
     
@@ -137,6 +173,7 @@
 }
 
 #pragma mark -ScrollView
+
 
 -(void) scrollViewDidScroll:(UIScrollView *) scrollView{
     
@@ -156,7 +193,19 @@
     
 }
 
+#pragma mark - NSNotification
 
+-(void)updateMenu:(NSNotification *)note{
+    
+    [_tabBar removeFromSuperview];
+    for (UIView *t_view in [_scrollView subviews]) {
+        [t_view removeFromSuperview];
+    }
+    [_arr_contens removeAllObjects];
+    
+    [self reloadView];
+
+}
 
 #pragma mark - dealloc
 

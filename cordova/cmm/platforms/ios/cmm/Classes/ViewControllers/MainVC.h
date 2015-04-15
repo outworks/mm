@@ -10,4 +10,6 @@
 
 @interface MainVC : BasicVC
 
+@property(strong,nonatomic)UITabBarController *vc_tab;
+
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "SliderVC.h"
+#import "MainVC.h"
 
 
 typedef NS_ENUM(NSInteger, MoveDirection){
@@ -474,7 +475,7 @@ static SliderVC *sharedSVC = nil;
 {
     
     //判断不可点击区域
-    
+
     NSLog(@"%@",NSStringFromClass([touch.view class]));
     if ([NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {
         return NO;

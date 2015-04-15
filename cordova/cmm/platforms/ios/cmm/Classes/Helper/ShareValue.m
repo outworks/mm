@@ -25,6 +25,7 @@
 #define SET_SIGNNAME @"SET_SIGNNAME"
 #define SET_FILEBASEURL @"SET_FILEBASEURL"
 #define SET_POSTIONTIMEINTERVAL @"SET_POSTIONTIMEINTERVAL"
+#define SET_SELECTEDMENUID @"SET_SELECTEDMENUID"
 
 @implementation ShareValue
 
@@ -57,6 +58,16 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
 -(BOOL)isLoginOut{
     return [[NSUserDefaults standardUserDefaults]boolForKey:SET_LOGINOUT];
 
+}
+
+-(void)setSelectedMenuId:(NSString *)selectedMenuId{
+
+    [[NSUserDefaults standardUserDefaults]setValue:selectedMenuId forKey:SET_SELECTEDMENUID];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(NSString *)selectedMenuId{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:SET_SELECTEDMENUID];
 }
 
 

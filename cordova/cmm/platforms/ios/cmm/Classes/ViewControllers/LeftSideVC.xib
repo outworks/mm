@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="imageV_bg_info" destination="9Na-xs-CVV" id="w3f-kF-2HG"/>
                 <outlet property="imageV_userIcon" destination="hkv-bE-S1N" id="9TD-nG-2DL"/>
+                <outlet property="lb_menu" destination="91o-x5-T2R" id="Nab-qS-JU8"/>
                 <outlet property="lb_regional" destination="j76-7n-eo9" id="nX5-TW-R6y"/>
                 <outlet property="lb_userName" destination="yUU-Un-mdr" id="JZO-e6-e18"/>
                 <outlet property="tableView" destination="LmC-9N-8Vb" id="1lk-oy-YAT"/>
@@ -73,7 +74,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="营销经理工作台" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="91o-x5-T2R">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="91o-x5-T2R">
                                     <rect key="frame" x="6" y="3" width="93" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>

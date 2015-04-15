@@ -72,14 +72,20 @@
         t_request.username = [ShareValue sharedShareValue].loginUserName;
         t_request.pass = [ShareValue sharedShareValue].password;
         
-        
+        _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [_hud setLabelText:@"登录中"];
+        [_hud show:YES];
         
         [UserAPI getUserTableHttpAPI:t_request Success:^(UserResponse *response, NSInteger result, NSString *msg) {
             NSLog(@"更新成功！！！！！！！！！");
-            
+            [_hud hide:YES];
             [ShareValue sharedShareValue].regiterUser
             = response.smUser;
-           
+            
+            
+            NSMutableArray *t_arr = [Menu searchWithWhere:[NSString stringWithFormat:@"level=1"] orderBy:@"menuId" offset:0 count:0];
+            Menu * t_menu = t_arr[0];
+            [ShareValue sharedShareValue].selectedMenuId = t_menu.menuId;
             
         } fail:^(NSString *description) {
             [_hud hide:NO];
@@ -87,16 +93,11 @@
             
         }];
         
-        
         LeftSideVC *leftVC = [[LeftSideVC alloc] initWithNibName:@"LeftSideVC" bundle:nil];
-        
         MainVC *mainVC = [[MainVC alloc] init];
-        
         self.sliderVC.leftVC = leftVC;
         self.sliderVC.mainVC = mainVC;
-        
         [self.navigationController pushViewController:self.sliderVC animated:YES];
-        
         
         return YLSwipeLockViewStateNormal;
     }else{

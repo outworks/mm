@@ -18,6 +18,9 @@
         [LK_APIUtil postHttpRequest:request apiPath:URLPATH_GETUSER Success:^(NSObject *response,NSInteger result,NSString *msg){
             UserResponse *userResponse = (UserResponse *)response;
             [ShareValue sharedShareValue].positionTimeInterval = userResponse.config.positionTimeInterval;
+            for (Menu *t_menu in userResponse.menu) {
+                [t_menu save];
+            }
             [ShareValue sharedShareValue].fileBaseUrl = userResponse.config.serverUrl;
             sucess((UserResponse *)response,result,msg);
         } fail:^(NSString * descript){
