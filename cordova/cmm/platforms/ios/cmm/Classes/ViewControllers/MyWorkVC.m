@@ -196,11 +196,18 @@
 #pragma mark - NSNotification
 
 -(void)updateMenu:(NSNotification *)note{
+    Menu *t_menu = [note object];
     
     [_tabBar removeFromSuperview];
     for (UIView *t_view in [_scrollView subviews]) {
         [t_view removeFromSuperview];
     }
+    
+    //导航栏title
+    
+    UILabel *t_lable = (UILabel *)[self.view viewWithTag:150];
+    t_lable.text = t_menu.menuName;
+    
     [_arr_contens removeAllObjects];
     
     [self reloadView];
