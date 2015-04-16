@@ -10,11 +10,21 @@
 #import "UIColor+External.h"
 #import "TrackAPI.h"
 #import "ShareValue.h"
+#import "UnitPointAnnotation.h"
+#import "UIImage+External.h"
+#import "Track.h"
+#import "TrackPolyLine.h"
 
-@interface VisitReturnVC ()
+@interface VisitReturnVC (){
+
+    BMKPolyline* _polyline;
+}
 
 @property(nonatomic,strong)NSMutableArray *arr_tracks;
 @property(nonatomic,strong)NSMutableArray *arr_units;
+
+@property(nonatomic,strong)NSMutableArray *annotationArrays; // 网店在地图上的点
+@property(nonatomic,strong)NSMutableArray *arr_polyline; //地图上的线
 
 @end
 
@@ -36,6 +46,7 @@
     
     _arr_tracks = [NSMutableArray array];
     _arr_units = [NSMutableArray array];
+    _annotationArrays = [NSMutableArray array];
     
     [self loadTrackList];
     
@@ -70,16 +81,103 @@
             [_arr_units addObjectsFromArray:response.unit];
         }
         
+        [self drawPoint];
         
     } fail:^(NSString *description) {
         
     }];
+}
+
+-(void)drawPoint{
+
+    //设置路径
     
+
+    int count =(int)[_arr_tracks count];
+    CLLocationCoordinate2D *coors = malloc(count * sizeof(CLLocationCoordinate2D));
+    
+    for (int i = 0 ; i < [_arr_tracks count]; i++) {
+        Track *t_track = [_arr_tracks objectAtIndex:i];
+        coors[i].longitude = [t_track.lon doubleValue];
+        coors[i].latitude =  [t_track.lat doubleValue];
+    }
+    _polyline = [BMKPolyline polylineWithCoordinates:coors count:count];
+    [_mapView addOverlay:_polyline];
+    
+
+
+    
+    //设置网店的坐标点
+
+    for(NSInteger i = 0 ; i < [_arr_units count]; i++){
+        Unit *t_unit = _arr_units[i];
+        UnitPointAnnotation *pointAnnotation = [[UnitPointAnnotation alloc]init];
+        CLLocationCoordinate2D coor;
+        coor.latitude = [t_unit.lat doubleValue];
+        coor.longitude = [t_unit.lon doubleValue];
+        pointAnnotation.coordinate = coor;
+        pointAnnotation.unit = t_unit;
+        [_annotationArrays addObject:pointAnnotation];
+        
+    }
+    [_mapView addAnnotations:_annotationArrays];
+
 
 
 }
 
-#pragma mark - buttonAction 
+
+
+#pragma mark - BMKMapViewDelegate
+
+//根据overlay生成对应的View
+- (BMKOverlayView *)mapView:(BMKMapView *)mapView viewForOverlay:(id <BMKOverlay>)overlay
+{
+    if ([overlay isKindOfClass:[BMKPolyline class]])
+    {
+        BMKPolylineView* polylineView = [[BMKPolylineView alloc] initWithOverlay:overlay] ;
+        polylineView.strokeColor = [[UIColor colorWithRed:0.219 green:0.395 blue:0.940 alpha:1.000] colorWithAlphaComponent:0.5];
+        polylineView.lineWidth = 4.0;
+        return polylineView;
+    }
+    
+    return nil;
+}
+
+
+
+// 根据 anntation 生成对应的 View
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
+{
+    
+    
+    BMKAnnotationView *annotationView =[mapView viewForAnnotation:annotation];
+    
+    if (annotationView==nil && [annotation isKindOfClass:[UnitPointAnnotation class]])
+    {
+        UnitPointAnnotation* pointAnnotation = (UnitPointAnnotation*)annotation;
+        NSString *AnnotationViewID = [NSString stringWithFormat:@"iAnnotation-%@",pointAnnotation.unit.id];
+        NSLog(@"AnnotationViewID:%@",AnnotationViewID);
+        NSLog(@"x----------%f,y--------------%f",pointAnnotation.coordinate.latitude,pointAnnotation.coordinate.longitude);
+        annotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+        annotationView.tag = [pointAnnotation.unit.id integerValue];
+        UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
+        img.backgroundColor = [UIColor clearColor];
+        img.image = [UIImage imageNamed:@"走访地图_图标_坐标.png"];
+        [annotationView setImage:[img.image imageByScaleForSize:CGSizeMake(img.frame.size.width, img.frame.size.height)]];
+        
+        // 泡泡视图
+        
+    }
+    
+    return annotationView;
+    
+}
+
+
+
+
+#pragma mark - buttonAction
 
 -(void)backAction{
     [self.navigationController popViewControllerAnimated:YES];

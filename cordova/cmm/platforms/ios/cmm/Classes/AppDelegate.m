@@ -556,9 +556,15 @@
 
     [TrackAPI visitTrackHttpAPIWithRequest:t_request Success:^(NSInteger result, NSString *msg) {
         trackTable.isFinish = @"1";
+        trackTable.type = @"1";
         [trackTable updateToDB];
         
     } fail:^(NSString *description) {
+        
+        trackTable.isFinish = @"0";
+        trackTable.type = @"2";
+        [trackTable updateToDB];
+        
         
         NSLog(@"这个点上传失败!");
         

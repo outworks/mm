@@ -16,7 +16,15 @@
 #import "VisitLocusVC.h"
 #import "AppDelegate.h"
 
+#import "VisitReturnVC.h"
+
 @interface VisitsMapVC (){
+    
+    //定位坐标&&定位圆弧
+    BMKAnnotationView *_positionAnnotationView;
+    BMKPointAnnotation * _positionAnnotation;
+    BMKCircle* _positionCircle;
+    BMKCircleView* _positionCircleView;
     
     MBProgressHUD * _hud;
 }
@@ -42,23 +50,15 @@
         return nil;
         
     }];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataLocationPoint:) name:NOTIFICATION_UPDATALOCATIONPOINT object:nil];
+   [self loadVisitMap];
     
-    
-    CLLocationCoordinate2D coor;
-    //    coor.latitude = [ShareValue sharedShareValue].latitude;
-    //    coor.longitude = [ShareValue sharedShareValue].longitude;
-    coor.latitude = 26.070754;
-    coor.longitude = 119.306218;
-    [_mapView setCenterCoordinate:coor];
-    [_mapView setZoomLevel:13];
-    
-    
-    [self loadVisitMap];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [_mapView viewWillAppear];
     _mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
+    [self setLocationPoint];
     
 }
 
@@ -69,6 +69,7 @@
 
 #pragma mark - private methods
 
+
 -(void)loadVisitMap{
     
     _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -76,8 +77,8 @@
     [_hud show:YES];
     VisitMapHttpRequest *t_request = [[VisitMapHttpRequest alloc] init];
     t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
-    t_request.lon = @"119.306218";
-    t_request.lat = @"26.070754";
+    t_request.lon = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].longitude];
+    t_request.lat = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].latitude];
     [TrackAPI visitMapHttpAPIWithRequest:t_request Success:^(NSArray *result) {
         [_hud hide:YES];
         if ([result count] > 0) {
@@ -113,6 +114,35 @@
     }
 }
 
+
+-(void)setLocationPoint{
+    
+    CLLocationCoordinate2D coor_t;
+    coor_t.latitude = [ShareValue sharedShareValue].latitude;
+    coor_t.longitude = [ShareValue sharedShareValue].longitude;
+    [_mapView setCenterCoordinate:coor_t];
+    [_mapView setZoomLevel:16.5];
+    
+    if (_positionAnnotation == nil) {
+        _positionAnnotation = [[BMKPointAnnotation alloc]init];
+        CLLocationCoordinate2D coor;
+        coor.latitude = [ShareValue sharedShareValue].latitude;
+        coor.longitude = [ShareValue sharedShareValue].longitude;
+        _positionAnnotation.coordinate = coor;
+        _positionAnnotation.title = @"你所在的位置";
+        [_mapView addAnnotation:_positionAnnotation];
+    }
+    
+    if (_positionCircle == nil) {
+        CLLocationCoordinate2D coor_circle;
+        coor_circle.latitude = [ShareValue sharedShareValue].latitude;
+        coor_circle.longitude = [ShareValue sharedShareValue].longitude;
+        _positionCircle = [BMKCircle circleWithCenterCoordinate:coor_circle radius:500];
+        [_mapView addOverlay:_positionCircle];
+    }
+    
+}
+
 #pragma mark - buttonAction 
 
 - (IBAction)guijiAction:(id)sender {
@@ -120,9 +150,6 @@
     VisitLocusVC * t_vc =  [[VisitLocusVC alloc] init];
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:t_vc];
     [ApplicationDelegate.viewController presentViewController:nav animated:YES completion:nil];
-    
-    
-    
 }
 
 #pragma mark - BMKMapViewDelegate
@@ -147,8 +174,49 @@
         img.image = [UIImage imageNamed:@"走访地图_图标_坐标.png"];
         [annotationView setImage:[img.image imageByScaleForSize:CGSizeMake(img.frame.size.width, img.frame.size.height)]];
         
+    }else{
+        
+        NSString *positionID = @"PositionID";
+        if (_positionAnnotationView == nil) {
+            _positionAnnotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:positionID];
+            UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
+            img.backgroundColor = [UIColor clearColor];
+            img.image = [UIImage imageNamed:@"location_fixed.png"];
+            [_positionAnnotationView setImage:[img.image imageByScaleForSize:CGSizeMake(img.frame.size.width, img.frame.size.height)]];
+            //[_positionAnnotationView setSelected:YES animated:YES];
+        }
+        annotationView = _positionAnnotationView;
     }
+    
     return annotationView;
+    
+}
+
+//根据overlay生成对应的View
+- (BMKOverlayView *)mapView:(BMKMapView *)mapView viewForOverlay:(id <BMKOverlay>)overlay
+{
+    if ([overlay isKindOfClass:[BMKCircle class]])
+    {
+        _positionCircleView = [[BMKCircleView alloc] initWithOverlay:overlay];
+        _positionCircleView.fillColor = [UIColorFromRGB(0x008cec) colorWithAlphaComponent:0.3];
+        _positionCircleView.strokeColor = [UIColorFromRGB(0xffffff) colorWithAlphaComponent:0.3];
+        _positionCircleView.lineWidth = 1.0;
+    
+        return _positionCircleView;
+    }
+    
+    return nil;
+}
+
+
+#pragma mark - Notification methods
+
+-(void)handleUpdataLocationPoint:(NSNotification *)note{
+    
+    _positionAnnotation = nil;
+    [_mapView removeOverlay:_positionCircle];
+    _positionCircle = nil;
+    [self setLocationPoint];
     
 }
 

@@ -11,6 +11,7 @@
 #import "Menu.h"
 #import "UIImageView+WebCache.h"
 #import "AppDelegate.h"
+#import "ShareFun.h"
 
 #import "TaskListVC.h"
 
@@ -54,7 +55,7 @@
     if (self.arr_item != nil && [self.arr_item count] != 0) {
         Menu *t_menu = _arr_item[indexPath.row];
         cell.lb_content.text = t_menu.menuName;
-        [cell.imageV_icon sd_setImageWithURL:[NSURL URLWithString:t_menu.menuIcon] placeholderImage:[UIImage imageNamed:@"工作台_图标_移动网点认证.png"]];
+        [cell.imageV_icon sd_setImageWithURL:[ShareFun fileUrlFormPath:t_menu.menuIcon] placeholderImage:[UIImage imageNamed:@"工作台_图标_移动网点认证.png"]];
     }
     
     return cell;
