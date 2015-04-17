@@ -17,14 +17,14 @@
 
 @interface VisitReturnVC (){
 
-    BMKPolyline* _polyline;
 }
 
 @property(nonatomic,strong)NSMutableArray *arr_tracks;
 @property(nonatomic,strong)NSMutableArray *arr_units;
 
 @property(nonatomic,strong)NSMutableArray *annotationArrays; // 网店在地图上的点
-@property(nonatomic,strong)NSMutableArray *arr_polyline; //地图上的线
+@property(nonatomic,strong)NSMutableArray *arr_polyline_normal; //地图上的正常点的线
+@property(nonatomic,strong)NSMutableArray *arr_polyline_offline; //地图上的离线点的线
 
 @end
 
@@ -47,6 +47,8 @@
     _arr_tracks = [NSMutableArray array];
     _arr_units = [NSMutableArray array];
     _annotationArrays = [NSMutableArray array];
+    _arr_polyline_normal = [NSMutableArray array];
+    _arr_polyline_offline = [NSMutableArray array];
     
     [self loadTrackList];
     
@@ -91,18 +93,36 @@
 -(void)drawPoint{
 
     //设置路径
-    
+    CLLocationCoordinate2D coor_t;
+    Track *t_track = [_arr_tracks objectAtIndex:0];
+    coor_t.latitude = [t_track.lat doubleValue];
+    coor_t.longitude = [t_track.lon doubleValue];
+    [_mapView setCenterCoordinate:coor_t];
+    [_mapView setZoomLevel:16.5];
 
-    int count =(int)[_arr_tracks count];
-    CLLocationCoordinate2D *coors = malloc(count * sizeof(CLLocationCoordinate2D));
-    
     for (int i = 0 ; i < [_arr_tracks count]; i++) {
-        Track *t_track = [_arr_tracks objectAtIndex:i];
-        coors[i].longitude = [t_track.lon doubleValue];
-        coors[i].latitude =  [t_track.lat doubleValue];
+        Track *t_track_i = [_arr_tracks objectAtIndex:i];
+        int j = i+1;
+        if (j == [_arr_tracks count]) {
+            
+        }else{
+            Track *t_track_j = [_arr_tracks objectAtIndex:i+1];
+            CLLocationCoordinate2D coors[2] = {0};
+            coors[0].latitude = [t_track_i.lat doubleValue];;
+            coors[0].longitude = [t_track_i.lon doubleValue];
+            coors[1].latitude = [t_track_j.lat doubleValue];
+            coors[1].longitude = [t_track_j.lon doubleValue];
+            BMKPolyline *t_polyline = [BMKPolyline polylineWithCoordinates:coors count:2];
+            if ([t_track_j.type isEqualToString:@"1"]) {
+                [_arr_polyline_normal addObject:t_polyline];
+            }else{
+                [_arr_polyline_offline addObject:t_polyline];
+            }
+            
+        }
     }
-    _polyline = [BMKPolyline polylineWithCoordinates:coors count:count];
-    [_mapView addOverlay:_polyline];
+    [_mapView addOverlays:_arr_polyline_normal];
+    [_mapView addOverlays:_arr_polyline_offline];
     
 
 
@@ -135,9 +155,11 @@
 {
     if ([overlay isKindOfClass:[BMKPolyline class]])
     {
+        
         BMKPolylineView* polylineView = [[BMKPolylineView alloc] initWithOverlay:overlay] ;
         polylineView.strokeColor = [[UIColor colorWithRed:0.219 green:0.395 blue:0.940 alpha:1.000] colorWithAlphaComponent:0.5];
-        polylineView.lineWidth = 4.0;
+       
+        polylineView.lineWidth = 3.0;
         return polylineView;
     }
     

@@ -13,4 +13,6 @@
 
 @property(nonatomic,strong)Track *track;
 
++ (TrackPolyLine *)polylineWithCoordinates:(CLLocationCoordinate2D *)coords count:(NSUInteger)count;
+
 @end
