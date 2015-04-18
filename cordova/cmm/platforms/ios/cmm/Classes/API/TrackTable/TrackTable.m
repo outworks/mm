@@ -7,13 +7,25 @@
 //
 
 #import "TrackTable.h"
-
+#import "NSDate+Helper.h"
+#import "ShareValue.h"
+#import "Reachability.h"
 
 @implementation TrackTable
 
--(void)save{
+-(id)init{
+    self = [super init];
+    if (self) {
+        _gatherTime = [[NSDate date]stringWithFormat:@"yyyy-MM-dd HH:mm:ss"];
+        _userid = [ShareValue sharedShareValue].regiterUser.userId;
+        _type = 1;
+        _postionWay = [Reachability reachabilityWithHostName:@"www.baidu.com"].isReachableViaWiFi?2:1;
+    }
+    return self;
+}
 
-    [self saveToDB];
+-(void)save{
+    [self updateToDB];
 }
 
 +(TrackTable *)loadMemberByPointTag:(NSInteger )pointTag{

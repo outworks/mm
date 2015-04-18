@@ -36,7 +36,7 @@
 #import "TrackAPI.h"
 #import "TrackTable.h"
 #import "NSDate+Helper.h"
-
+#import "TrackHelper.h"
 
 
 #import <Cordova/CDVPlugin.h>
@@ -104,13 +104,9 @@
         SwipeLoginVC *swipeLoginVC = [[SwipeLoginVC alloc] init];
         [self.viewController pushViewController:swipeLoginVC animated:NO];
     }
-    
-    [self  initForUnreadedPoint];
-    
     [self thirdPartInit];
     _pointTag = 0;
     [self initData];
-    
     [self.window makeKeyAndVisible];
     
 }
@@ -147,168 +143,131 @@
 
 #pragma mark - 初始化准备上传未读点
 
--(void)initForUnreadedPoint{
-
-    self.notifications = [[NSMutableArray alloc] init];
-    self.notificationLock = [[NSLock alloc] init];
-    
-    self.notificationThread = [NSThread currentThread];
-    self.notificationPort = [[NSMachPort alloc] init];
-    self.notificationPort.delegate = (id<NSMachPortDelegate>)self;
-    
-    // 往当前线程的run loop添加端口源
-    // 当Mach消息到达而接收线程的run loop没有运行时，则内核会保存这条消息，直到下一次进入run loop
-    [[NSRunLoop currentRunLoop] addPort:self.notificationPort
-                                forMode:(__bridge NSString *)kCFRunLoopCommonModes];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processNotification:) name:@"processNotification" object:nil];
-    
-    if(_updateUnreadPointTimer == nil){
-        NSLog(@"updateUnreadPointTimer");
-        
-        int time ;
-        if ([ShareValue sharedShareValue].positionTimeInterval == 0) {
-            time = 1;
-        }else{
-            
-            time = [ShareValue sharedShareValue].positionTimeInterval;
-        }
-        
-        _updateUnreadPointTimer = [NSTimer scheduledTimerWithTimeInterval:time*2
-                                                        target:self
-                                                      selector:@selector(UpdateUnReadedLocation)
-                                                      userInfo:nil
-                                                       repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:_updateUnreadPointTimer forMode:NSRunLoopCommonModes];
-        
-    }
-    
-}
+//-(void)initForUnreadedPoint{
+//
+//    self.notifications = [[NSMutableArray alloc] init];
+//    self.notificationLock = [[NSLock alloc] init];
+//    
+//    self.notificationThread = [NSThread currentThread];
+//    self.notificationPort = [[NSMachPort alloc] init];
+//    self.notificationPort.delegate = (id<NSMachPortDelegate>)self;
+//    
+//    // 往当前线程的run loop添加端口源
+//    // 当Mach消息到达而接收线程的run loop没有运行时，则内核会保存这条消息，直到下一次进入run loop
+//    [[NSRunLoop currentRunLoop] addPort:self.notificationPort
+//                                forMode:(__bridge NSString *)kCFRunLoopCommonModes];
+//    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processNotification:) name:@"processNotification" object:nil];
+//    
+//    if(_updateUnreadPointTimer == nil){
+//        NSLog(@"updateUnreadPointTimer");
+//        
+//        int time ;
+//        if ([ShareValue sharedShareValue].positionTimeInterval == 0) {
+//            time = 1;
+//        }else{
+//            
+//            time = [ShareValue sharedShareValue].positionTimeInterval;
+//        }
+//        
+//        _updateUnreadPointTimer = [NSTimer scheduledTimerWithTimeInterval:time*2
+//                                                        target:self
+//                                                      selector:@selector(UpdateUnReadedLocation)
+//                                                      userInfo:nil
+//                                                       repeats:YES];
+//        [[NSRunLoop currentRunLoop] addTimer:_updateUnreadPointTimer forMode:NSRunLoopCommonModes];
+//        
+//    }
+//    
+//}
 
 #pragma mark - 用户子线程可以发通知到主线程中。
-
-- (void)handleMachMessage:(void *)msg {
-    
-    [self.notificationLock lock];
-    
-    while ([self.notifications count]) {
-        NSNotification *notification = [self.notifications objectAtIndex:0];
-        [self.notifications removeObjectAtIndex:0];
-        [self.notificationLock unlock];
-        [self processNotification:notification];
-        [self.notificationLock lock];
-    };
-    
-    [self.notificationLock unlock];
-}
+//
+//- (void)handleMachMessage:(void *)msg {
+//    
+//    [self.notificationLock lock];
+//    
+//    while ([self.notifications count]) {
+//        NSNotification *notification = [self.notifications objectAtIndex:0];
+//        [self.notifications removeObjectAtIndex:0];
+//        [self.notificationLock unlock];
+//        [self processNotification:notification];
+//        [self.notificationLock lock];
+//    };
+//    
+//    [self.notificationLock unlock];
+//}
 
 #pragma mark - 未读的点上传不管是失败还是成功通知继续上传
-
-- (void)processNotification:(NSNotification *)notification {
-    
-    if ([NSThread currentThread] != _notificationThread) {
-        // Forward the notification to the correct thread.
-        [self.notificationLock lock];
-        [self.notifications addObject:notification];
-        [self.notificationLock unlock];
-        [self.notificationPort sendBeforeDate:[NSDate date]
-                                   components:nil
-                                         from:nil
-                                     reserved:0];
-    }
-    else {
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            if ([ShareValue sharedShareValue].regiterUser == nil) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
-                return;
-            }
-            
-            NSArray *arr_tracks = [TrackTable searchWithWhere:@"isfinish= 0" orderBy:nil offset:0 count:0];
-            
-            if (arr_tracks.count == 0) {
-                NSLog(@"上传结束");
-                return;
-            }
-            
-            TrackTable *trackTable = arr_tracks.lastObject;
-            
-            TrackHttpRequest *t_request = [[TrackHttpRequest alloc] init];
-            t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
-            t_request.lon = [NSString stringWithFormat:@"%lf",trackTable.lon];
-            t_request.lat = [NSString stringWithFormat:@"%lf",trackTable.lat];
-            t_request.type = trackTable.type;
-            t_request.gatherTime = trackTable.gatherTime;
-            t_request.postionWay = trackTable.postionWay;
-            t_request.uploadTime = [NSDate stringFromDate:[NSDate date] withFormat:[NSDate timestampFormatString]];
-            t_request.kilometersNum = trackTable.kilometersNum;
-            
-            [TrackAPI visitTrackHttpAPIWithRequest:t_request Success:^(NSInteger result, NSString *msg) {
-                trackTable.isFinish = @"1";
-                [trackTable updateToDB];
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
-                
-            } fail:^(NSString *description) {
-                
-                NSLog(@"这个点上传失败!");
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
-            }];
-            
-            
-            
-            
-        });
-      
-    }
-}
-
-#pragma mark - 上传未读的点 
-
--(void)UpdateUnReadedLocation{
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        if ([ShareValue sharedShareValue].regiterUser == nil) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
-            return;
-        }
-        
-        NSArray *arr_tracks = [TrackTable searchWithWhere:@"isfinish= 0" orderBy:nil offset:0 count:0];
-        
-        if (arr_tracks.count == 0) {
-            NSLog(@"上传结束");
-            return;
-        }
-        
-        TrackTable *trackTable = arr_tracks.lastObject;
-        
-        TrackHttpRequest *t_request = [[TrackHttpRequest alloc] init];
-        t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
-        t_request.lon = [NSString stringWithFormat:@"%lf",trackTable.lon];
-        t_request.lat = [NSString stringWithFormat:@"%lf",trackTable.lat];
-        t_request.type = trackTable.type;
-        t_request.gatherTime = trackTable.gatherTime;
-        t_request.postionWay = trackTable.postionWay;
-        t_request.uploadTime = [NSDate stringFromDate:[NSDate date] withFormat:[NSDate timestampFormatString]];
-        t_request.kilometersNum = trackTable.kilometersNum;
-        
-        [TrackAPI visitTrackHttpAPIWithRequest:t_request Success:^(NSInteger result, NSString *msg) {
-            trackTable.isFinish = @"1";
-            [trackTable updateToDB];
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
-            
-        } fail:^(NSString *description) {
-            
-            NSLog(@"这个点上传失败!");
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
-        }];
-        
-    });
-
-}
+//
+//- (void)processNotification:(NSNotification *)notification {
+//    
+//    if ([NSThread currentThread] != _notificationThread) {
+//        // Forward the notification to the correct thread.
+//        [self.notificationLock lock];
+//        [self.notifications addObject:notification];
+//        [self.notificationLock unlock];
+//        [self.notificationPort sendBeforeDate:[NSDate date]
+//                                   components:nil
+//                                         from:nil
+//                                     reserved:0];
+//    }
+//    else {
+//        
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//            
+//            if ([ShareValue sharedShareValue].regiterUser == nil) {
+//                [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
+//                return;
+//            }
+//            
+//            NSArray *arr_tracks = [TrackTable searchWithWhere:@"isfinish= 0" orderBy:nil offset:0 count:0];
+//            
+//            if (arr_tracks.count == 0) {
+//                NSLog(@"上传结束");
+//                return;
+//            }
+//            
+//            TrackTable *trackTable = arr_tracks.lastObject;
+//            
+//            [[TrackHelper  sharedTrackHelper] updateTrackTable:trackTable success:^{
+//                 [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
+//            } fail:^{
+//                 [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
+//            }];
+//            
+//        });
+//      
+//    }
+//}
+//
+//#pragma mark - 上传未读的点
+//
+//-(void)UpdateUnReadedLocation{
+//
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        
+//        if ([ShareValue sharedShareValue].regiterUser == nil) {
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
+//            return;
+//        }
+//        
+//        NSArray *arr_tracks = [TrackTable searchWithWhere:@"isfinish= 0" orderBy:nil offset:0 count:0];
+//        
+//        if (arr_tracks.count == 0) {
+//            NSLog(@"上传结束");
+//            return;
+//        }
+//        
+//        TrackTable *trackTable = arr_tracks.lastObject;
+//        [[TrackHelper  sharedTrackHelper] updateTrackTable:trackTable success:^{
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
+//        } fail:^{
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"processNotification" object:nil userInfo:nil];
+//        }];
+//    });
+//
+//}
 #pragma mark UIApplicationDelegate implementation
 
 /**
@@ -324,11 +283,6 @@
         self.window = [[[UIWindow alloc] initWithFrame:screenBounds] autorelease];
 #endif
     self.window.autoresizesSubviews = YES;
-    
-    if ([TrackTable deleteWithWhere:@"isfinish= 1"]) {
-        NSLog(@"删除已完成的点");
-    }
-    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(updateTimeIntterval:) name:NOTIFICaTION_UPDATATTIMEINTTERVAL object:nil];
     
     // Set your app's start page by setting the <content src='foo.html' /> tag in config.xml.
     // If necessary, uncomment the line below to override it.
@@ -460,6 +414,7 @@
     CLLocationCoordinate2D location = BMKCoorDictionaryDecode(testdic);
     [ShareValue sharedShareValue].latitude = location.latitude; //纬度
     [ShareValue sharedShareValue].longitude = location.longitude;
+    [[TrackHelper sharedTrackHelper] updateLocation:location];
 //    NSLog(@"x=%lf,y=%lf",newLocation.coordinate.latitude,newLocation.coordinate.longitude);
 //    
 //    NSLog(@"x=%lf,y=%lf",[ShareValue sharedShareValue].latitude,[ShareValue sharedShareValue].longitude);
@@ -467,7 +422,6 @@
     if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive)
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_UPDATALOCATIONPOINT object:nil];
-        
     }
     else
     {
@@ -499,105 +453,37 @@
     
 }
 
--(void)UpdateLocation{
-    [self saveTrack];
-    
-    [_updateTimer invalidate];
-    _updateTimer = nil;
-}
-
--(void)saveTrack{
-    
-    TrackTable *t_trackTable = [[TrackTable alloc] init];
-    t_trackTable.lon = [ShareValue sharedShareValue].longitude;
-    t_trackTable.lat = [ShareValue sharedShareValue].latitude;
-    t_trackTable.type = @"1";
-    t_trackTable.postionWay = @"1";
-    t_trackTable.gatherTime = [NSDate stringFromDate:[NSDate date] withFormat:[NSDate timestampFormatString]];
-    t_trackTable.pointTag = _pointTag;
-    t_trackTable.isFinish = @"0";
-    
-    if (_pointTag == 0) {
-        t_trackTable.kilometersNum = @"0";
-    }else{
-        BMKMapPoint point1 = BMKMapPointForCoordinate(CLLocationCoordinate2DMake(_before_lat,_before_lon));
-        BMKMapPoint point2 = BMKMapPointForCoordinate(CLLocationCoordinate2DMake([ShareValue sharedShareValue].latitude,[ShareValue sharedShareValue].longitude));
-        CLLocationDistance distance = BMKMetersBetweenMapPoints(point1,point2);
-        t_trackTable.kilometersNum = [NSString stringWithFormat:@"%lf",distance];
-        
-    }
-    
-    [t_trackTable save];
-    _pointTag ++;
-    
-    _before_lat = [ShareValue sharedShareValue].latitude;
-    _before_lon = [ShareValue sharedShareValue].longitude;
-
-    
-    [self updateTrack:t_trackTable];
-}
-
-
--(void)updateTrack:(TrackTable *)trackTable{
-
-    if ([ShareValue sharedShareValue].regiterUser == nil) {
-        return;
-    }
-    
-    TrackHttpRequest *t_request = [[TrackHttpRequest alloc] init];
-    t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
-    t_request.lon = [NSString stringWithFormat:@"%lf",trackTable.lon];
-    t_request.lat = [NSString stringWithFormat:@"%lf",trackTable.lat];
-    t_request.type = trackTable.type;
-    t_request.gatherTime = trackTable.gatherTime;
-    t_request.postionWay = trackTable.postionWay;
-    t_request.uploadTime = [NSDate stringFromDate:[NSDate date] withFormat:[NSDate timestampFormatString]];
-    t_request.kilometersNum = trackTable.kilometersNum;
-
-    [TrackAPI visitTrackHttpAPIWithRequest:t_request Success:^(NSInteger result, NSString *msg) {
-        trackTable.isFinish = @"1";
-        trackTable.type = @"1";
-        [trackTable updateToDB];
-        
-    } fail:^(NSString *description) {
-        
-        trackTable.isFinish = @"0";
-        trackTable.type = @"2";
-        [trackTable updateToDB];
-        
-        
-        NSLog(@"这个点上传失败!");
-        
-    }];
-}
-
+//-(void)UpdateLocation{
+//    [_updateTimer invalidate];
+//    _updateTimer = nil;
+//}
 
 #pragma mark - Notification methods
-
--(void)updateTimeIntterval:(NSNotification *)note{
-    
-    [_updateUnreadPointTimer invalidate];
-    _updateUnreadPointTimer = nil;
-    if(_updateUnreadPointTimer == nil){
-        
-        NSLog(@"updateUnreadPointTimer------update");
-        
-        int time ;
-        if ([ShareValue sharedShareValue].positionTimeInterval == 0) {
-            time = 1;
-        }else{
-            
-            time = [ShareValue sharedShareValue].positionTimeInterval;
-        }
-        
-        _updateUnreadPointTimer = [NSTimer scheduledTimerWithTimeInterval:time*60
-                                                                   target:self
-                                                                 selector:@selector(UpdateUnReadedLocation)
-                                                                 userInfo:nil
-                                                                  repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:_updateUnreadPointTimer forMode:NSRunLoopCommonModes];
-        
-    }
-}
+//
+//-(void)updateTimeIntterval:(NSNotification *)note{
+//    
+//    [_updateUnreadPointTimer invalidate];
+//    _updateUnreadPointTimer = nil;
+//    if(_updateUnreadPointTimer == nil){
+//        
+//        NSLog(@"updateUnreadPointTimer------update");
+//        
+//        int time ;
+//        if ([ShareValue sharedShareValue].positionTimeInterval == 0) {
+//            time = 1;
+//        }else{
+//            
+//            time = [ShareValue sharedShareValue].positionTimeInterval;
+//        }
+//        
+//        _updateUnreadPointTimer = [NSTimer scheduledTimerWithTimeInterval:time*60
+//                                                                   target:self
+//                                                                 selector:@selector(UpdateUnReadedLocation)
+//                                                                 userInfo:nil
+//                                                                  repeats:YES];
+//        [[NSRunLoop currentRunLoop] addTimer:_updateUnreadPointTimer forMode:NSRunLoopCommonModes];
+//        
+//    }
+//}
 
 @end
