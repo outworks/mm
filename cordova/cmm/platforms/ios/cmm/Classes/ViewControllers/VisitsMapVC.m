@@ -36,6 +36,9 @@
 @property(nonatomic,strong)NSMutableArray *arr_units;
 @property(nonatomic,strong)NSMutableArray *annotationArrays;
 
+@property (weak, nonatomic) IBOutlet UIButton *btn_unitList;
+
+
 @end
 
 @implementation VisitsMapVC
@@ -56,6 +59,7 @@
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataLocationPoint:) name:NOTIFICATION_UPDATALOCATIONPOINT object:nil];
    [self loadVisitMap];
+    [self.view bringSubviewToFront:_btn_unitList];
 }
 
 -(void)viewWillAppear:(BOOL)animated {

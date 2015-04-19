@@ -158,6 +158,7 @@
         BMKPolyline *line = overlay;
         
         BMKPolylineView* polylineView = [[BMKPolylineView alloc] initWithOverlay:overlay] ;
+        
         if ([_normalPointLines containsObject:line]) {
             polylineView.strokeColor = [[UIColor colorWithRed:0.219 green:0.395 blue:0.940 alpha:1.000] colorWithAlphaComponent:0.5];
         }else{
