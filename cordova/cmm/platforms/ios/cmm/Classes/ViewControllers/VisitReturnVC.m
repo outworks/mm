@@ -98,31 +98,26 @@
     [_mapView setCenterCoordinate:coor_t];
     [_mapView setZoomLevel:16.5];
     
-    NSMutableArray *tempArray = nil;
+    
     for (int i = 0 ; i < [_arr_tracks count]; i++) {
         Track *t_track_i = [_arr_tracks objectAtIndex:i];
-        if (t_track_i.isOutInterval == 1) {
-            if (tempArray != nil) {
-                CLLocationCoordinate2D coors[] = {0};
-                for (int j=0;i<tempArray.count;j++) {
-                    Track *_track = [tempArray objectAtIndex:j];
-                    coors[j].latitude = _track.lat;
-                    coors[j].longitude = _track.lon;
-                }
-                BMKPolyline* polyline = [BMKPolyline polylineWithCoordinates:coors count:tempArray.count];
-                [self.normalPointLines addObject:polyline];
-                Track *lastTrack = [_arr_tracks objectAtIndex:i-1];
-                CLLocationCoordinate2D offlinecoors[2] = {0};
-                offlinecoors[0].latitude = lastTrack.lat;
-                offlinecoors[0].longitude = lastTrack.lon;
-                offlinecoors[1].latitude = t_track_i.lat;
-                offlinecoors[1].longitude = t_track_i.lon;
-                BMKPolyline* offlinePolyline = [BMKPolyline polylineWithCoordinates:offlinecoors count:2];
+        int j = i+1;
+        if (j == _arr_tracks.count) {
+            
+        }else{
+            Track *t_track_j = [_arr_tracks objectAtIndex:j];
+            CLLocationCoordinate2D offlinecoors[2] = {0};
+            offlinecoors[0].latitude = t_track_i.lat;
+            offlinecoors[0].longitude = t_track_i.lon;
+            offlinecoors[1].latitude = t_track_j.lat;
+            offlinecoors[1].longitude = t_track_j.lon;
+            BMKPolyline* offlinePolyline = [BMKPolyline polylineWithCoordinates:offlinecoors count:2];
+            if (t_track_j.isOutInterval == 1) {
                 [self.offlinePointLines addObject:offlinePolyline];
+            }else{
+                [self.normalPointLines addObject:offlinePolyline];
             }
-            tempArray = [NSMutableArray array];
         }
-        [tempArray addObject:t_track_i];
     }
     [_mapView addOverlays:_offlinePointLines];
     [_mapView addOverlays:_normalPointLines];

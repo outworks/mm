@@ -10,6 +10,9 @@
 #import "UnitCell.h"
 #import "TaskExecutionVC.h"
 
+#import "MBProgressHUD+Add.h"
+#import "UIColor+External.h"
+
 @interface UnitListVC ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -20,12 +23,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.navigationBarHidden = NO;
+    self.navigationController.navigationBar.backgroundColor = HEX_RGB(0x008cec);
+    self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],UITextAttributeTextColor,[UIFont systemFontOfSize:18],UITextAttributeFont, nil];
+    [[UINavigationBar appearance] setBarTintColor:HEX_RGB(0x008cec)];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
+    [item setTintColor:[UIColor whiteColor ]];
+    self.navigationItem.leftBarButtonItem = item;
+    self.navigationController.navigationBar.translucent = NO;
+    self.title = @"任务列表";
+    
     // Do any additional setup after loading the view from its nib.
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)backAction{
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 /*

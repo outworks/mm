@@ -49,7 +49,6 @@
             NSString *responseString = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
             NSLog(@"%@",responseString);
             NSDictionary *dict = [responseString objectFromJSONString];
-            
             if (dict) {
                 LK_HttpBaseResponse *response = [dict objectByClass:[LK_HttpBaseResponse class]];
                 if (response) {

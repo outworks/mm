@@ -15,7 +15,7 @@
     _lb_contact.text = [NSString stringWithFormat:@"%@(%@)",unit.bossname,unit.bossphonenum];
     _lb_name.text = unit.unitname;
     _lb_telecom.text = [self telecomName];
-    if (unit.isTask) {
+    if ([unit.isTask isEqual:@"1"]) {
         self.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     }else{
         self.accessoryType = UITableViewCellAccessoryNone;

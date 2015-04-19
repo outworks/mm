@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BasicVC.h"
 
-@interface UnitListVC : UIViewController
+@interface UnitListVC : BasicVC
 
 @property(nonatomic,strong) NSArray *units;
 

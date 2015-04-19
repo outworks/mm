@@ -27,6 +27,8 @@
 
 @property(nonatomic,assign) BOOL isLocked;
 
+@property(nonatomic,assign) CLLocationCoordinate2D lastSaveLocation;
+
 @end
 
 @implementation TrackHelper
@@ -39,9 +41,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
         [TrackTable deleteWithWhere:nil];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            self.updateTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *6 target:self selector:@selector(saveAndUploadRequest) userInfo:nil repeats:YES];
-            self.updateUnreadPointTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *2 target:self selector:@selector(updateUnreadData) userInfo:nil repeats:YES];
-
+            self.updateTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *60 target:self selector:@selector(saveAndUploadRequest) userInfo:nil repeats:YES];
+            self.updateUnreadPointTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *20 target:self selector:@selector(updateUnreadData) userInfo:nil repeats:YES];
         });
     }
     return self;
@@ -125,7 +126,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
     TrackTable *trackTable = [[TrackTable alloc]init];
     trackTable.lon = _oldLocation.longitude;
     trackTable.lat = _oldLocation.latitude;
+    if (_lastSaveLocation.latitude > 0) {
+        BMKMapPoint point1 = BMKMapPointForCoordinate(_oldLocation);
+        BMKMapPoint point2 = BMKMapPointForCoordinate(_lastSaveLocation);
+        _distance += BMKMetersBetweenMapPoints(point1,point2);
+    }
     trackTable.distance = _distance;
+    _lastSaveLocation = _oldLocation;
     [trackTable save];
     _distance = 0;
     [self updateTrackTable:trackTable success:^{

@@ -60,13 +60,7 @@
 }
 
 -(NSNumber *)asNumber;{
-    NSString *regEx = @"^-?\\d+.?\\d?";
-    NSPredicate * pred      = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regEx];
-    BOOL isMatch            = [pred evaluateWithObject:self];
-    if (isMatch) {
-        return [NSNumber numberWithDouble:[self doubleValue]];
-    }
-    return nil;
+    return [NSNumber numberWithDouble:[self doubleValue]];
 }
 
 -(int)asInteger;{
