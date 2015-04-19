@@ -23,6 +23,7 @@
 #import "KeyBusinessVC.h"
 #import "TerminalVC.h"
 #import "BroadbandVC.h"
+#import "TrackHelper.h"
 
 @interface HomeVC ()
 
@@ -55,8 +56,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
+    [[TrackHelper sharedTrackHelper] saveAndUploadRequest];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataImage:) name:NOTIFICATION_UPDATAIMAGE object:nil];
      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataUser:) name:NOTIFICATION_UPDATAUSERINFO object:nil];
     
@@ -189,13 +189,11 @@
 #pragma mark - Notification methods 
 
 -(void)handleUpdataImage:(NSNotification *)note{
-
     [_imageV_userIcon sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl]  placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
 }
 
 
 -(void)handleUpdataUser:(NSNotification *)note{
-    
     [_lb_userName setText:[ShareValue sharedShareValue].regiterUser.userName];
     [_lb_jop setText:[ShareValue sharedShareValue].regiterUser.jobName];
     [_imageV_userIcon sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl]  placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];

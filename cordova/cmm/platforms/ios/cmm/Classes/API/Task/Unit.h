@@ -57,4 +57,5 @@
 @property(nonatomic,strong) NSString *sitePhoto;
 
 -(void)addPhotoImage:(NSString *)imageurl;
+
 @end

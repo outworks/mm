@@ -47,11 +47,11 @@
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
-    
-    self.isSelected = YES;
+
     _textF_password.text = nil;
     if ([ShareValue sharedShareValue].isRember == YES) {
         _textF_password.text = [ShareValue sharedShareValue].password;
+        self.isSelected = YES;
     }
     
     _textF_userName.text = [ShareValue sharedShareValue].loginUserName;

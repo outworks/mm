@@ -17,8 +17,12 @@
 #import "AppDelegate.h"
 
 #import "VisitReturnVC.h"
+#import "UnitPaopaoView.h"
+#import "UnitTaskPaopaoView.h"
+#import "TaskExecutionVC.h"
+#import "UnitListVC.h"
 
-@interface VisitsMapVC (){
+@interface VisitsMapVC ()<UnitTaskPaopaoViewDelegate>{
     
     //定位坐标&&定位圆弧
     BMKAnnotationView *_positionAnnotationView;
@@ -52,7 +56,6 @@
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataLocationPoint:) name:NOTIFICATION_UPDATALOCATIONPOINT object:nil];
    [self loadVisitMap];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -152,6 +155,13 @@
     [ApplicationDelegate.viewController presentViewController:nav animated:YES completion:nil];
 }
 
+-(IBAction)listMode:(id)sender{
+    UnitListVC *vc = [[ UnitListVC alloc]init];
+    vc.units = _arr_units;
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
+    [ApplicationDelegate.viewController presentViewController:nav animated:YES completion:nil];
+}
+
 #pragma mark - BMKMapViewDelegate
 
 // 根据 anntation 生成对应的 View
@@ -168,14 +178,31 @@
         NSLog(@"AnnotationViewID:%@",AnnotationViewID);
         NSLog(@"x----------%f,y--------------%f",pointAnnotation.coordinate.latitude,pointAnnotation.coordinate.longitude);
         annotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
-        annotationView.tag = [pointAnnotation.unit.id integerValue];
+        annotationView.tag = [_annotationArrays indexOfObject:pointAnnotation];
         UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
         img.backgroundColor = [UIColor clearColor];
-        img.image = [UIImage imageNamed:@"走访地图_图标_坐标.png"];
+        if ([pointAnnotation.unit.isTask isEqual:@"1"]) {
+            img.image = [UIImage imageNamed:@"走访地图_图标_坐标!.png"];
+        }else{
+            img.image = [UIImage imageNamed:@"走访地图_图标_坐标.png"];
+        }
         [annotationView setImage:[img.image imageByScaleForSize:CGSizeMake(img.frame.size.width, img.frame.size.height)]];
+        if ([pointAnnotation.unit.isTask isEqual:@"1"]) {
+            UnitTaskPaopaoView *t_paopaoView = [UnitTaskPaopaoView initCustomPaopaoView];
+            t_paopaoView.unit = pointAnnotation.unit;
+            t_paopaoView.delegate = self;
+            BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
+            [annotationView setPaopaoView:paopao];
+        }else{
+            UnitPaopaoView *t_paopaoView = [UnitPaopaoView initCustomPaopaoView];
+            t_paopaoView.unit = pointAnnotation.unit;
+            
+            BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
+            [annotationView setPaopaoView:paopao];
+        }
+        
         
     }else{
-        
         NSString *positionID = @"PositionID";
         if (_positionAnnotationView == nil) {
             _positionAnnotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:positionID];
@@ -190,6 +217,19 @@
     
     return annotationView;
     
+}
+
+#pragma mark - UnitTaskPaopaoViewDelegate
+-(void)beginTask:(UnitTaskPaopaoView *)unitTaskPaopaoView{
+    TaskExecutionVC *vc = [[TaskExecutionVC alloc]init];
+    vc.unit = unitTaskPaopaoView.unit;
+    NSArray *tasks = unitTaskPaopaoView.unit.task;
+    Task *task = [tasks firstObject];
+    vc.taskId = task.id;
+    vc.taskName = task.name;
+    vc.opetypeid = task.opetypeid;
+    UINavigationController *t_nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    [ApplicationDelegate.viewController presentViewController:t_nav animated:YES completion:nil];
 }
 
 //根据overlay生成对应的View
@@ -208,6 +248,25 @@
     return nil;
 }
 
+/**
+ *当选中一个annotation views时，调用此接口
+ *@param mapView 地图View
+ *@param views 选中的annotation views
+ */
+- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view{
+    if (view !=_positionAnnotationView) {
+        
+    }
+}
+
+/**
+ *当取消选中一个annotation views时，调用此接口
+ *@param mapView 地图View
+ *@param views 取消选中的annotation views
+ */
+- (void)mapView:(BMKMapView *)mapView didDeselectAnnotationView:(BMKAnnotationView *)view{
+    
+}
 
 #pragma mark - Notification methods
 

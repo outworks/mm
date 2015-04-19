@@ -272,7 +272,7 @@
             }
         }
         t_paopaoView.lb_task.text = pointAnnotation.taskName;
-        t_paopaoView.lb_contact.text = pointAnnotation.unit.bossname;
+        t_paopaoView.lb_contact.text = [NSString stringWithFormat:@"%@(%@)",pointAnnotation.unit.bossname,pointAnnotation.unit.bossphonenum];
         t_paopaoView.lb_wangdian.text = pointAnnotation.unit.unitname;
         
         [t_paopaoView setDelegate:(id<PointPaopaoViewDelegate>)self];
@@ -390,11 +390,21 @@
 - (void)lxactionSheet:(LXActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;{
     if (actionSheet.tag == 33) {
         if (buttonIndex < _showTasks.count) {
+            [MBProgressHUD showMessag:@"正在加载..." toView:self.view];
             Task *tempTask = [_showTasks objectAtIndex:buttonIndex];
-            self.taskId = tempTask.id;
-            self.taskName = tempTask.name;
-            self.opetypeid = tempTask.opetypeid;
-            [self reloadAnnotation];
+            TaskDetailRequest *request = [[TaskDetailRequest alloc]init];
+            request.visitTaskId = tempTask.id;
+            request.unitinfoId = self.unit.id;
+            [TaskAPI getDetailByHttpRequest:request Success:^(Task *task) {
+                self.taskId = task.id;
+                self.taskName = task.name;
+                self.opetypeid = task.opetypeid;
+                self.unit = [task.unit objectAtIndex:0];
+                [self reloadAnnotation];
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            } fail:^(NSString *description) {
+                [MBProgressHUD showError:@"加载失败" toView:self.view];
+            }];
         }
     }else if (actionSheet.tag == 12){
         if (buttonIndex == 0) {

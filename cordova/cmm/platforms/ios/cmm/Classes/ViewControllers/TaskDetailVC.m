@@ -109,6 +109,9 @@
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if ([_task.state isEqual:@"5"]) {
+        return;
+    }
     Unit *t_unit = _channels[indexPath.row];
     TaskExecutionVC *t_vc = [[TaskExecutionVC alloc] init];
     t_vc.unit = t_unit;

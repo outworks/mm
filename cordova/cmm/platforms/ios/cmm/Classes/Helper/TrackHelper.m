@@ -25,6 +25,8 @@
 
 @property(nonatomic,assign) int updateIndex;
 
+@property(nonatomic,assign) BOOL isLocked;
+
 @end
 
 @implementation TrackHelper
@@ -34,6 +36,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
 -(id)init{
     self = [super init];
     if (self) {
+        [TrackTable deleteWithWhere:nil];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             self.updateTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *6 target:self selector:@selector(saveAndUploadRequest) userInfo:nil repeats:YES];
@@ -44,7 +47,21 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
     return self;
 }
 
+-(BOOL)canStart{
+    
+    if ([ShareValue sharedShareValue].regiterUser && [ShareValue sharedShareValue].positionTimeInterval>0) {
+        return YES;
+    }
+    return NO;
+}
+
 -(void)updateUnreadData{
+    if (![self canStart]) {
+        return;
+    }
+    if (self.isLocked) {
+        return;
+    }
    NSArray *array =  [TrackTable searchWithWhere:[NSString stringWithFormat:@"isFinish=0"] orderBy:nil offset:0 count:100];
    if (array.count==0) {
         return;
@@ -85,6 +102,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
 }
 
 -(void)saveLocation:(CLLocationCoordinate2D) location{
+    if (![self canStart]) {
+        return;
+    }
     if (location.longitude>0) {
         [self updateLocation:location];
         [self saveAndUploadRequest];
@@ -92,18 +112,26 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
 }
 
 -(void)saveAndUploadRequest{
+    if (![self canStart]) {
+        return;
+    }
     if (_oldLocation.longitude==0) {
         return;
     }
+    if (self.isLocked) {
+        return;
+    }
+    self.isLocked = YES;
     TrackTable *trackTable = [[TrackTable alloc]init];
     trackTable.lon = _oldLocation.longitude;
     trackTable.lat = _oldLocation.latitude;
     trackTable.distance = _distance;
     [trackTable save];
+    _distance = 0;
     [self updateTrackTable:trackTable success:^{
-        
+        self.isLocked = NO;
     } fail:^{
-        
+        self.isLocked = NO;
     }];
 }
 

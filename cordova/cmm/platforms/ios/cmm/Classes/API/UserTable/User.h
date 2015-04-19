@@ -25,5 +25,7 @@
 @property(nonatomic,strong) NSString * payMent;	//	我的薪酬
 @property(nonatomic,strong) NSString * signName;	//	个性签名
 
+@property(nonatomic,assign) int isManager;//1为营销经理
+
 
 @end

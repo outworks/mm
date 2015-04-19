@@ -39,6 +39,8 @@
 
 @property(nonatomic,strong) NSString *visitTaskId;
 
+@property(nonatomic,strong) NSString *unitinfoId;//网点id
+
 @end
 
 

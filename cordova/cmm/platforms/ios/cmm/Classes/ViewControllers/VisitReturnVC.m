@@ -22,9 +22,9 @@
 @property(nonatomic,strong)NSMutableArray *arr_tracks;
 @property(nonatomic,strong)NSMutableArray *arr_units;
 
-@property(nonatomic,strong)NSMutableArray *annotationArrays; // 网店在地图上的点
-@property(nonatomic,strong)NSMutableArray *arr_polyline_normal; //地图上的正常点的线
-@property(nonatomic,strong)NSMutableArray *arr_polyline_offline; //地图上的离线点的线
+@property(nonatomic,strong) NSMutableArray *normalPointLines; // 网店在地图上的点
+@property(nonatomic,strong) NSMutableArray *offlinePointLines;
+@property(nonatomic,strong) NSMutableArray *annotationArrays;
 
 @end
 
@@ -44,14 +44,12 @@
     self.navigationController.navigationBar.translucent = NO;
     self.title = @"走访回访";
     
-    _arr_tracks = [NSMutableArray array];
-    _arr_units = [NSMutableArray array];
-    _annotationArrays = [NSMutableArray array];
-    _arr_polyline_normal = [NSMutableArray array];
-    _arr_polyline_offline = [NSMutableArray array];
-    
+    self.arr_tracks = [NSMutableArray array];
+    self.arr_units = [NSMutableArray array];
+    self.normalPointLines = [NSMutableArray array];
+    self.offlinePointLines = [NSMutableArray array];
+    self.annotationArrays = [NSMutableArray array];
     [self loadTrackList];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -95,37 +93,39 @@
     //设置路径
     CLLocationCoordinate2D coor_t;
     Track *t_track = [_arr_tracks objectAtIndex:0];
-    coor_t.latitude = [t_track.lat doubleValue];
-    coor_t.longitude = [t_track.lon doubleValue];
+    coor_t.latitude = t_track.lat;
+    coor_t.longitude = t_track.lon;
     [_mapView setCenterCoordinate:coor_t];
     [_mapView setZoomLevel:16.5];
-
+    
+    NSMutableArray *tempArray = nil;
     for (int i = 0 ; i < [_arr_tracks count]; i++) {
         Track *t_track_i = [_arr_tracks objectAtIndex:i];
-        int j = i+1;
-        if (j == [_arr_tracks count]) {
-            
-        }else{
-            Track *t_track_j = [_arr_tracks objectAtIndex:i+1];
-            CLLocationCoordinate2D coors[2] = {0};
-            coors[0].latitude = [t_track_i.lat doubleValue];;
-            coors[0].longitude = [t_track_i.lon doubleValue];
-            coors[1].latitude = [t_track_j.lat doubleValue];
-            coors[1].longitude = [t_track_j.lon doubleValue];
-            BMKPolyline *t_polyline = [BMKPolyline polylineWithCoordinates:coors count:2];
-            if ([t_track_j.type isEqualToString:@"1"]) {
-                [_arr_polyline_normal addObject:t_polyline];
-            }else{
-                [_arr_polyline_offline addObject:t_polyline];
+        if (t_track_i.isOutInterval == 1) {
+            if (tempArray != nil) {
+                CLLocationCoordinate2D coors[] = {0};
+                for (int j=0;i<tempArray.count;j++) {
+                    Track *_track = [tempArray objectAtIndex:j];
+                    coors[j].latitude = _track.lat;
+                    coors[j].longitude = _track.lon;
+                }
+                BMKPolyline* polyline = [BMKPolyline polylineWithCoordinates:coors count:tempArray.count];
+                [self.normalPointLines addObject:polyline];
+                Track *lastTrack = [_arr_tracks objectAtIndex:i-1];
+                CLLocationCoordinate2D offlinecoors[2] = {0};
+                offlinecoors[0].latitude = lastTrack.lat;
+                offlinecoors[0].longitude = lastTrack.lon;
+                offlinecoors[1].latitude = t_track_i.lat;
+                offlinecoors[1].longitude = t_track_i.lon;
+                BMKPolyline* offlinePolyline = [BMKPolyline polylineWithCoordinates:offlinecoors count:2];
+                [self.offlinePointLines addObject:offlinePolyline];
             }
-            
+            tempArray = [NSMutableArray array];
         }
+        [tempArray addObject:t_track_i];
     }
-    [_mapView addOverlays:_arr_polyline_normal];
-    [_mapView addOverlays:_arr_polyline_offline];
-    
-
-
+    [_mapView addOverlays:_offlinePointLines];
+    [_mapView addOverlays:_normalPointLines];
     
     //设置网店的坐标点
 
@@ -155,10 +155,14 @@
 {
     if ([overlay isKindOfClass:[BMKPolyline class]])
     {
+        BMKPolyline *line = overlay;
         
         BMKPolylineView* polylineView = [[BMKPolylineView alloc] initWithOverlay:overlay] ;
-        polylineView.strokeColor = [[UIColor colorWithRed:0.219 green:0.395 blue:0.940 alpha:1.000] colorWithAlphaComponent:0.5];
-       
+        if ([_normalPointLines containsObject:line]) {
+            polylineView.strokeColor = [[UIColor colorWithRed:0.219 green:0.395 blue:0.940 alpha:1.000] colorWithAlphaComponent:0.5];
+        }else{
+            polylineView.strokeColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
+        }
         polylineView.lineWidth = 3.0;
         return polylineView;
     }
