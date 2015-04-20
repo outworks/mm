@@ -91,6 +91,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
 }
 
 -(void)updateLocation:(CLLocationCoordinate2D) location{
+    if (![TrackHelper isNormalLocation:location]) {
+        return;
+    }
     if (_oldLocation.latitude > 0) {
         _oldLocation = location;
     }else {
