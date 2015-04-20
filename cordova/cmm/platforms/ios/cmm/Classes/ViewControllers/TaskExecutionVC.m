@@ -151,7 +151,6 @@
         pointAnnotation.taskId = _taskId;
         [_mapView addAnnotation:pointAnnotation];
         
-
         coor.latitude = [_unit.lat doubleValue];
         coor.longitude = [_unit.lon doubleValue];
         [_mapView setCenterCoordinate:coor];

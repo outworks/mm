@@ -14,6 +14,7 @@
 #import "UIImage+External.h"
 #import "Track.h"
 #import "TrackPolyLine.h"
+#import "TrackHelper.h"
 
 @interface VisitReturnVC (){
 
@@ -21,6 +22,7 @@
 
 @property(nonatomic,strong)NSMutableArray *arr_tracks;
 @property(nonatomic,strong)NSMutableArray *arr_units;
+@property(nonatomic,strong)NSMutableArray *arr_temp_tracks;
 
 @property(nonatomic,strong) NSMutableArray *normalPointLines; // 网店在地图上的点
 @property(nonatomic,strong) NSMutableArray *offlinePointLines;
@@ -46,10 +48,17 @@
     
     self.arr_tracks = [NSMutableArray array];
     self.arr_units = [NSMutableArray array];
+    self.arr_temp_tracks = [NSMutableArray array];
     self.normalPointLines = [NSMutableArray array];
     self.offlinePointLines = [NSMutableArray array];
     self.annotationArrays = [NSMutableArray array];
     [self loadTrackList];
+    
+    CLLocationCoordinate2D coor_t;
+    coor_t.latitude = 26.105555;
+    coor_t.longitude = 119.288234;
+    [_mapView setCenterCoordinate:coor_t];
+    [_mapView setZoomLevel:14];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -74,7 +83,7 @@
     request.userId = [ShareValue sharedShareValue].regiterUser.userId;
     [TrackAPI trackListHttpAPIWithRequest:request Success:^(TrackListHttpResponse *response,NSInteger result,NSString *msg) {
         if ([response.track count] != 0) {
-            [_arr_tracks addObjectsFromArray:response.track];
+            [_arr_temp_tracks addObjectsFromArray:response.track];
         }
         
         if ([response.unit count] != 0) {
@@ -91,12 +100,22 @@
 -(void)drawPoint{
 
     //设置路径
-    CLLocationCoordinate2D coor_t;
-    Track *t_track = [_arr_tracks objectAtIndex:0];
-    coor_t.latitude = t_track.lat;
-    coor_t.longitude = t_track.lon;
-    [_mapView setCenterCoordinate:coor_t];
-    [_mapView setZoomLevel:16.5];
+//    CLLocationCoordinate2D coor_t;
+//    Track *t_track = [_arr_tracks objectAtIndex:0];
+//    coor_t.latitude = t_track.lat;
+//    coor_t.longitude = t_track.lon;
+//    [_mapView setCenterCoordinate:coor_t];
+//    [_mapView setZoomLevel:16.5];
+    
+    for (int i = 0 ; i < [_arr_temp_tracks count]; i++) {
+        Track *t_track_i = [_arr_temp_tracks objectAtIndex:i];
+        CLLocationCoordinate2D offlinecoors;
+        offlinecoors.latitude = t_track_i.lat;
+        offlinecoors.longitude = t_track_i.lon;
+        if ([TrackHelper isNormalLocation:offlinecoors]) {
+            [_arr_tracks addObject:t_track_i];
+        }
+    }
     
     
     for (int i = 0 ; i < [_arr_tracks count]; i++) {

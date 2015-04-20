@@ -26,4 +26,6 @@ SYNTHESIZE_SINGLETON_FOR_HEADER(TrackHelper)
 
 +(BOOL)isNormalLocation:(CLLocationCoordinate2D) location;
 
+
+
 @end

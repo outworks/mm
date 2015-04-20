@@ -58,6 +58,14 @@
         
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataLocationPoint:) name:NOTIFICATION_UPDATALOCATIONPOINT object:nil];
+    CLLocationCoordinate2D coor_t;
+    coor_t.latitude = 26.105555;
+    coor_t.longitude = 119.288234;
+    [_mapView setCenterCoordinate:coor_t];
+    [_mapView setZoomLevel:14];
+    
+    
+
    [self loadVisitMap];
     [self.view bringSubviewToFront:_btn_unitList];
 }
@@ -124,11 +132,11 @@
 
 -(void)setLocationPoint{
     
-    CLLocationCoordinate2D coor_t;
-    coor_t.latitude = [ShareValue sharedShareValue].latitude;
-    coor_t.longitude = [ShareValue sharedShareValue].longitude;
-    [_mapView setCenterCoordinate:coor_t];
-    [_mapView setZoomLevel:16.5];
+//    CLLocationCoordinate2D coor_t;
+//    coor_t.latitude = [ShareValue sharedShareValue].latitude;
+//    coor_t.longitude = [ShareValue sharedShareValue].longitude;
+//    [_mapView setCenterCoordinate:coor_t];
+//    [_mapView setZoomLevel:16.5];
     
     if (_positionAnnotation == nil) {
         _positionAnnotation = [[BMKPointAnnotation alloc]init];
