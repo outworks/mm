@@ -161,4 +161,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
     }];
 }
 
++(BOOL)isNormalLocation:(CLLocationCoordinate2D) location{
+    if (location.latitude > 26.0 && location.latitude < 27.0) {
+        if (location.longitude >118.0 && location.longitude <120.0) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 @end
