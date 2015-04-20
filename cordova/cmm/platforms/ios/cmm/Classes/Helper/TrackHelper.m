@@ -41,8 +41,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
         [TrackTable deleteWithWhere:nil];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            self.updateTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *60 target:self selector:@selector(saveAndUploadRequest) userInfo:nil repeats:YES];
-            self.updateUnreadPointTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *20 target:self selector:@selector(updateUnreadData) userInfo:nil repeats:YES];
+            self.updateTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *10 target:self selector:@selector(saveAndUploadRequest) userInfo:nil repeats:YES];
+            self.updateUnreadPointTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *5 target:self selector:@selector(updateUnreadData) userInfo:nil repeats:YES];
         });
     }
     return self;
@@ -92,9 +92,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
 
 -(void)updateLocation:(CLLocationCoordinate2D) location{
     if (_oldLocation.latitude > 0) {
-        BMKMapPoint point1 = BMKMapPointForCoordinate(_oldLocation);
-        BMKMapPoint point2 = BMKMapPointForCoordinate(location);
-        _distance += BMKMetersBetweenMapPoints(point1,point2);
         _oldLocation = location;
     }else {
         _oldLocation = location;
@@ -152,6 +149,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
     t_request.postionWay = trackTable.postionWay;
     t_request.userId = trackTable.userid;
     t_request.uploadTime = [[NSDate date]stringWithFormat:@"yyyy-MM-dd HH:mm:ss"];
+    t_request.kilometersNum = trackTable.distance;
     [TrackAPI visitTrackHttpAPIWithRequest:t_request Success:^(NSInteger result, NSString *msg) {
         trackTable.isFinish = 1;
         [trackTable save];

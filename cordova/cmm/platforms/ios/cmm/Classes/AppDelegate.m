@@ -130,7 +130,7 @@
         self.locationManager = [[CLLocationManager alloc] init];
         _locationManager.delegate = self;
         _locationManager.desiredAccuracy = kCLLocationAccuracyBest; //控制定位精度,越高耗电量越大。
-        _locationManager.distanceFilter = 100; //控制定位服务更新频率。单位是“米”
+        _locationManager.distanceFilter = 10; //控制定位服务更新频率。单位是“米”
         [_locationManager startUpdatingLocation];
         
         if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
