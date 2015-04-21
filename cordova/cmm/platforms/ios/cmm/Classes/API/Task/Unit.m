@@ -10,4 +10,9 @@
 
 @implementation Unit
 
+-(void)addPhotoImage:(NSString *)imageurl{
+
+
+}
+
 @end

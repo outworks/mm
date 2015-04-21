@@ -13,7 +13,7 @@
 #pragma mark -
 
 + (UnitTaskPaopaoView *)initCustomPaopaoView{
-    NSArray* nibView =  [[NSBundle mainBundle] loadNibNamed:@"UnitPaopaoView" owner:self options:nil];
+    NSArray* nibView =  [[NSBundle mainBundle] loadNibNamed:@"UnitTaskPaopaoView" owner:self options:nil];
     
     return [nibView objectAtIndex:0];
 }
