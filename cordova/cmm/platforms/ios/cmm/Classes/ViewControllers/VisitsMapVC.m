@@ -92,8 +92,8 @@
     [_hud show:YES];
     VisitMapHttpRequest *t_request = [[VisitMapHttpRequest alloc] init];
     t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
-    t_request.lon = @"119.25964";//[NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].longitude];
-    t_request.lat = @"26.110125";//[NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].latitude];
+    t_request.lon = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].longitude];
+    t_request.lat = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].latitude];
     [TrackAPI visitMapHttpAPIWithRequest:t_request Success:^(NSArray *result) {
         [_hud hide:YES];
         if ([result count] > 0) {

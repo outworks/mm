@@ -66,8 +66,7 @@
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(backAction)];
     [item setTintColor:[UIColor whiteColor ]];
     self.navigationItem.leftBarButtonItem = item;
-    self.title = @"任务执行";
-    
+    self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],UITextAttributeTextColor,[UIFont systemFontOfSize:18],UITextAttributeFont, nil];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:@"更多任务" style:UIBarButtonItemStylePlain target:self action:@selector(moreAction)];
     [rightItem setTintColor:[UIColor whiteColor ]];
     self.navigationItem.rightBarButtonItem = rightItem;
@@ -179,7 +178,12 @@
 #pragma mark - buttonAction
 
 -(void)backAction{
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.navigationController.navigationController) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }else {
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    }
+    
 }
 
 -(void)moreAction{

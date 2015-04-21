@@ -41,8 +41,8 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
         [TrackTable deleteWithWhere:nil];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            self.updateTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *10 target:self selector:@selector(saveAndUploadRequest) userInfo:nil repeats:YES];
-            self.updateUnreadPointTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *5 target:self selector:@selector(updateUnreadData) userInfo:nil repeats:YES];
+            self.updateTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *60 target:self selector:@selector(saveAndUploadRequest) userInfo:nil repeats:YES];
+            self.updateUnreadPointTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval *20 target:self selector:@selector(updateUnreadData) userInfo:nil repeats:YES];
         });
     }
     return self;
