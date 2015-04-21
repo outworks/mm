@@ -234,6 +234,7 @@
 
 #pragma mark - UnitTaskPaopaoViewDelegate
 -(void)beginTask:(UnitTaskPaopaoView *)unitTaskPaopaoView{
+    
     TaskExecutionVC *vc = [[TaskExecutionVC alloc]init];
     vc.unit = unitTaskPaopaoView.unit;
     NSArray *tasks = unitTaskPaopaoView.unit.task;

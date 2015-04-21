@@ -7,8 +7,13 @@
 //
 
 #import "Unit.h"
+#import "Task.h"
 
 @implementation Unit
+
++(Class)__taskClass{
+    return [Task class];
+}
 
 -(void)addPhotoImage:(NSString *)imageurl{
 
