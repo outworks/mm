@@ -59,10 +59,10 @@
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataLocationPoint:) name:NOTIFICATION_UPDATALOCATIONPOINT object:nil];
     CLLocationCoordinate2D coor_t;
-    coor_t.latitude = 26.105555;
-    coor_t.longitude = 119.288234;
+    coor_t.latitude = 26.110125;
+    coor_t.longitude = 119.25964;
     [_mapView setCenterCoordinate:coor_t];
-    [_mapView setZoomLevel:14];
+    [_mapView setZoomLevel:15];
     
     
 
@@ -92,8 +92,8 @@
     [_hud show:YES];
     VisitMapHttpRequest *t_request = [[VisitMapHttpRequest alloc] init];
     t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
-    t_request.lon = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].longitude];
-    t_request.lat = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].latitude];
+    t_request.lon = @"119.25964";//[NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].longitude];
+    t_request.lat = @"26.110125";//[NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].latitude];
     [TrackAPI visitMapHttpAPIWithRequest:t_request Success:^(NSArray *result) {
         [_hud hide:YES];
         if ([result count] > 0) {
@@ -194,7 +194,8 @@
         UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
         img.backgroundColor = [UIColor clearColor];
         if ([pointAnnotation.unit.isTask isEqual:@"1"]) {
-            img.image = [UIImage imageNamed:@"走访地图_图标_坐标!.png"];
+            img.image = [UIImage imageNamed:@"走访地图_图标_坐标未完成.png"];
+            
         }else{
             img.image = [UIImage imageNamed:@"走访地图_图标_坐标.png"];
         }
