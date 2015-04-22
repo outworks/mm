@@ -113,10 +113,14 @@
             
             [self.navigationController pushViewController:self.sliderVC animated:YES];
         }else{
+            
             [ShareValue sharedShareValue].password = _textF_password.text;
             [ShareValue sharedShareValue].loginUserName = _textF_userName.text;
             [ShareValue sharedShareValue].regiterUser
             = response.smUser;
+            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+            [userDefault setObject:nil forKey:@"gesturePassword"];
+            
             SwipePasswordVC *t_vc = [[SwipePasswordVC alloc] init];
             [self.navigationController pushViewController:t_vc animated:YES];
         }
