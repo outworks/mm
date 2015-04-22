@@ -14,6 +14,8 @@
 #import "MBProgressHUD+Add.h"
 #import "MBProgressHUD.h"
 #import "VisitReturnVC.h"
+#import "VisitSearchVC.h"
+#import "AppDelegate.h"
 
 
 #define TASKLISTPAGESIZE 20
@@ -37,7 +39,7 @@
 
 
 @property(nonatomic,strong) NSMutableArray *list;
-
+@property(nonatomic,strong) VisitSearchVC *searchVC;
 @end
 
 @implementation VisitLocusVC
@@ -156,6 +158,26 @@
     [self.tableView.header  beginRefreshing];
 }
 
+- (IBAction)showRequire:(id)sender {
+    if (!self.searchVC) {
+        self.searchVC = [[VisitSearchVC alloc]init];
+        self.searchVC.delegate = (id<VisitSearchVCDelegate>)self;
+    }
+    self.searchVC.startTime = _startTime;
+    self.searchVC.endTime = _endTime;
+    __weak VisitSearchVC *weakVc = self.searchVC;
+    CGRect rect = self.searchVC.view.frame;
+    CGRect realRect = CGRectMake(CGRectGetWidth(rect), 0,CGRectGetWidth(rect),CGRectGetHeight(rect));
+    self.searchVC.view.frame= realRect;
+    self.searchVC.view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    [ApplicationDelegate.window addSubview:self.searchVC.view];
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect resultRect = CGRectInset(rect, 0, 0);
+        weakVc.view.frame =resultRect;
+    }];
+    
+}
+
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -187,6 +209,26 @@
     }
     cell.track = [_list objectAtIndex:indexPath.row];
     return cell;
+}
+
+
+#pragma mark - TaskSearchVCDelegate
+-(void)VisitSearchVCBack:(VisitSearchVC *)vc{
+    self.searchVC.delegate = nil;
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect resultRect = CGRectMake(CGRectGetWidth(self.view.frame), 0, CGRectGetWidth(self.searchVC.view.frame), CGRectGetHeight(self.searchVC.view.frame));
+        self.searchVC.view.frame =resultRect;
+    } completion:^(BOOL finished) {
+        [self.searchVC.view removeFromSuperview];
+        self.searchVC = nil;
+    }];
+}
+
+-(void)searchstartTime:(NSString *)startTime endTime:(NSString *)endTime;{
+    self.startTime = startTime;
+    self.endTime = endTime;
+    [self.tableView.header  beginRefreshing];
+    [self VisitSearchVCBack:nil];
 }
 
 #pragma mark - dealloc

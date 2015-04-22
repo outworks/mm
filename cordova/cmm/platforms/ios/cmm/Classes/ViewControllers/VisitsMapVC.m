@@ -65,8 +65,6 @@
     [_mapView setZoomLevel:15];
     
     
-
-   [self loadVisitMap];
     [self.view bringSubviewToFront:_btn_unitList];
 }
 
@@ -86,6 +84,9 @@
 
 
 -(void)loadVisitMap{
+    
+    [_arr_units removeAllObjects];
+    [_mapView removeAnnotations:_annotationArrays];
     
     _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [_hud setLabelText:@"请求中.."];
@@ -132,11 +133,11 @@
 
 -(void)setLocationPoint{
     
-//    CLLocationCoordinate2D coor_t;
-//    coor_t.latitude = [ShareValue sharedShareValue].latitude;
-//    coor_t.longitude = [ShareValue sharedShareValue].longitude;
-//    [_mapView setCenterCoordinate:coor_t];
-//    [_mapView setZoomLevel:16.5];
+    CLLocationCoordinate2D coor_t;
+    coor_t.latitude = [ShareValue sharedShareValue].latitude;
+    coor_t.longitude = [ShareValue sharedShareValue].longitude;
+    [_mapView setCenterCoordinate:coor_t];
+    [_mapView setZoomLevel:16.5];
     
     if (_positionAnnotation == nil) {
         _positionAnnotation = [[BMKPointAnnotation alloc]init];
@@ -285,7 +286,9 @@
 #pragma mark - Notification methods
 
 -(void)handleUpdataLocationPoint:(NSNotification *)note{
-    
+    if (_mapView.delegate == nil) {
+        return;
+    }
     _positionAnnotation = nil;
     [_mapView removeOverlay:_positionCircle];
     _positionCircle = nil;

@@ -12,5 +12,6 @@
 @interface VisitsMapVC : BasicVC<BMKMapViewDelegate>{
     IBOutlet BMKMapView* _mapView;
 }
+-(void)loadVisitMap;
 
 @end

@@ -46,6 +46,7 @@ static MainVC *main;
     [_vc_tab.tabBar setBackgroundColor:UIColorFromRGB(0xefefe)];
     [_vc_tab.view setFrame:self.view.frame];
     [_vc_tab.tabBar setTranslucent:NO];
+    [_vc_tab setDelegate:(id<UITabBarControllerDelegate>)self];
     [self.view addSubview:_vc_tab.view];
     
     HomeVC *homeVC = [[HomeVC alloc] init];
@@ -96,6 +97,18 @@ static MainVC *main;
      }];
     _vc_tab.viewControllers = arr_t;
     
+}
+
+
+#pragma mark - UITabBarController
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
+    
+    
+    if ([viewController isKindOfClass:[VisitsMapVC class]]) {
+        [(VisitsMapVC *)viewController loadVisitMap];
+    }
+
 }
 
 
