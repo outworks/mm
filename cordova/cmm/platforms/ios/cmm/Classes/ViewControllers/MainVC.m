@@ -105,9 +105,9 @@ static MainVC *main;
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
     
     
-    if ([viewController isKindOfClass:[VisitsMapVC class]]) {
-        [(VisitsMapVC *)viewController loadVisitMap];
-    }
+//    if ([viewController isKindOfClass:[VisitsMapVC class]]) {
+//        [(VisitsMapVC *)viewController loadVisitMap];
+//    }
 
 }
 

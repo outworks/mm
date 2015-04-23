@@ -14,4 +14,5 @@
 @property(nonatomic,strong) NSString * startTime; //	开始时间	String			yyyy-MM-dd HH:mm:ss
 @property(nonatomic,strong) NSString * endTime; //	结束时间	String			yyyy-MM-dd HH:mm:ss
 @property(nonatomic,strong) NSString * kilometersNum; //	公里数	String
+@property(nonatomic,strong) NSString * interval;//走访时间（耗时）
 @end

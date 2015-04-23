@@ -16,6 +16,7 @@
 #import "VisitReturnVC.h"
 #import "VisitSearchVC.h"
 #import "AppDelegate.h"
+#import "NSDate+Helper.h"
 
 
 #define TASKLISTPAGESIZE 20
@@ -82,7 +83,10 @@
         }
     }];
     self.tableView.footer.hidden = YES;
-    
+    NSDate *theDate = [[NSDate date] initWithTimeIntervalSinceNow: -24*60*60*4 ];
+    _startTime = [NSDate stringFromDate:theDate withFormat:@"yyyy-MM-dd"];
+    _endTime = [NSDate stringFromDate:[NSDate date] withFormat:@"yyyy-MM-dd"];
+    _timeorder = @"DESC";
     
     
 }

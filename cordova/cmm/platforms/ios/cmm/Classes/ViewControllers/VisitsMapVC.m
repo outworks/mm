@@ -58,11 +58,19 @@
         
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataLocationPoint:) name:NOTIFICATION_UPDATALOCATIONPOINT object:nil];
+    
     CLLocationCoordinate2D coor_t;
-    coor_t.latitude = 26.110125;
-    coor_t.longitude = 119.25964;
+    coor_t.latitude = [ShareValue sharedShareValue].latitude;// 26.110125;
+    coor_t.longitude = [ShareValue sharedShareValue].longitude;// 119.25964;
     [_mapView setCenterCoordinate:coor_t];
-    [_mapView setZoomLevel:15];
+    [_mapView setZoomLevel:16.5];
+    
+    
+//    CLLocationCoordinate2D coor_t;
+//    coor_t.latitude = 26.110125;
+//    coor_t.longitude = 119.25964;
+//    [_mapView setCenterCoordinate:coor_t];
+//    [_mapView setZoomLevel:14];
     
     
     [self.view bringSubviewToFront:_btn_unitList];
@@ -71,8 +79,9 @@
 -(void)viewWillAppear:(BOOL)animated {
     [_mapView viewWillAppear];
     _mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
-    [self setLocationPoint];
     
+    [self setLocationPoint];
+    [self loadVisitMap];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -93,8 +102,8 @@
     [_hud show:YES];
     VisitMapHttpRequest *t_request = [[VisitMapHttpRequest alloc] init];
     t_request.userId = [ShareValue sharedShareValue].regiterUser.userId;
-    t_request.lon = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].longitude];
-    t_request.lat = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].latitude];
+    t_request.lon = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].longitude];// @"119.25964";
+    t_request.lat = [NSString stringWithFormat:@"%lf",[ShareValue sharedShareValue].latitude];// @"26.110125";
     [TrackAPI visitMapHttpAPIWithRequest:t_request Success:^(NSArray *result) {
         [_hud hide:YES];
         if ([result count] > 0) {
@@ -192,7 +201,7 @@
         NSLog(@"x----------%f,y--------------%f",pointAnnotation.coordinate.latitude,pointAnnotation.coordinate.longitude);
         annotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
         annotationView.tag = [_annotationArrays indexOfObject:pointAnnotation];
-        UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
+        UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 45, 45)];
         img.backgroundColor = [UIColor clearColor];
         if ([pointAnnotation.unit.isTask isEqual:@"1"]) {
             img.image = [UIImage imageNamed:@"走访地图_图标_坐标未完成.png"];
