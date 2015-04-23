@@ -15,6 +15,8 @@
 #import "Track.h"
 #import "TrackPolyLine.h"
 #import "TrackHelper.h"
+#import "UnitPaopaoView.h"
+#import "MBProgressHUD+Add.h"
 
 @interface VisitReturnVC (){
 
@@ -58,7 +60,7 @@
     coor_t.latitude = 26.105555;
     coor_t.longitude = 119.288234;
     [_mapView setCenterCoordinate:coor_t];
-    [_mapView setZoomLevel:14];
+    [_mapView setZoomLevel:13];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -77,11 +79,12 @@
 #pragma mark - private Action 
 
 -(void)loadTrackList{
-    
+   [MBProgressHUD showMessag:@"正在加载..." toView:self.view];
     TrackListHttpRequest *request = [[TrackListHttpRequest alloc] init];
     request.correctDate = _correctDate;
     request.userId = [ShareValue sharedShareValue].regiterUser.userId;
     [TrackAPI trackListHttpAPIWithRequest:request Success:^(TrackListHttpResponse *response,NSInteger result,NSString *msg) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         if ([response.track count] != 0) {
             [_arr_temp_tracks addObjectsFromArray:response.track];
         }
@@ -89,11 +92,10 @@
         if ([response.unit count] != 0) {
             [_arr_units addObjectsFromArray:response.unit];
         }
-        
         [self drawPoint];
-        
     } fail:^(NSString *description) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [MBProgressHUD showError:description toView:self.view];
     }];
 }
 
@@ -208,6 +210,12 @@
         [annotationView setImage:[img.image imageByScaleForSize:CGSizeMake(img.frame.size.width, img.frame.size.height)]];
         
         // 泡泡视图
+        
+        UnitPaopaoView *t_paopaoView = [UnitPaopaoView initCustomPaopaoView];
+        t_paopaoView.unit = pointAnnotation.unit;
+        
+        BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
+        [annotationView setPaopaoView:paopao];
         
     }
     

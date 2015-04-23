@@ -20,7 +20,7 @@
     return [Track class];
 }
 
-+(Class)__menuClass{
++(Class)__unitClass{
     return [Unit class];
 }
 
