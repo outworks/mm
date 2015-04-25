@@ -38,6 +38,7 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *btn_unitList;
 
+@property (weak, nonatomic) IBOutlet UIButton *btn_reload;
 
 @end
 
@@ -74,6 +75,7 @@
     
     
     [self.view bringSubviewToFront:_btn_unitList];
+    [self.view bringSubviewToFront:_btn_reload];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -87,6 +89,11 @@
 -(void)viewWillDisappear:(BOOL)animated {
     [_mapView viewWillDisappear];
     _mapView.delegate = nil; // 不用时，置nil
+}
+
+- (IBAction)reload:(id)sender {
+    [self setLocationPoint];
+    [self loadVisitMap];
 }
 
 #pragma mark - private methods
