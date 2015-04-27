@@ -258,7 +258,36 @@
         
         // 泡泡视图
         
+        PointPaopaoView *t_paopaoView = [PointPaopaoView initCustomPaopaoView];
+        t_paopaoView.unit = pointAnnotation.unit;
+        t_paopaoView.taskName = pointAnnotation.taskName;
+        t_paopaoView.taskId = pointAnnotation.taskId;
+        
+        NSArray *b = [pointAnnotation.opetypeid componentsSeparatedByString:@","];
+        for (int i = 0 ; i < [b count]; i++ ) {
+            NSString *t_str = b[i];
+            NSLog(@"%@",t_str);
+            if ([t_str isEqualToString:@"2"]) {
+                t_paopaoView.isTakePicture  = YES;
+            }else if([t_str isEqualToString:@"1"]) {
+                t_paopaoView.isSMSConfirmation = YES;
+            }else if([t_str isEqualToString:@"3"]) {
+                t_paopaoView.issceneConfirmation = YES;
+            }
+        }
+        t_paopaoView.lb_task.text = pointAnnotation.taskName;
+        t_paopaoView.lb_contact.text = [NSString stringWithFormat:@"%@(%@)",pointAnnotation.unit.bossname,pointAnnotation.unit.bossphonenum];
+        t_paopaoView.lb_wangdian.text = pointAnnotation.unit.unitname;
+        
+        [t_paopaoView setDelegate:(id<PointPaopaoViewDelegate>)self];
+        
+        BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
+        [annotationView setPaopaoView:paopao];
+        
+        [annotationView setSelected:YES animated:YES];
+        /*
         if (![pointAnnotation.unit.isFinish isEqual:@"1"]) {
+            
             PointPaopaoView *t_paopaoView = [PointPaopaoView initCustomPaopaoView];
             t_paopaoView.unit = pointAnnotation.unit;
             t_paopaoView.taskName = pointAnnotation.taskName;
@@ -298,7 +327,7 @@
             BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
             
             [annotationView setPaopaoView:paopao];
-        }
+        }*/
         
         
         [annotationView setSelected:YES animated:YES];
