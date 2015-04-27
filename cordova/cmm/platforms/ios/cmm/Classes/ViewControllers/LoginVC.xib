@@ -9,6 +9,10 @@
             <connections>
                 <outlet property="btn_login" destination="43i-4Q-V0C" id="Xid-G2-Nob"/>
                 <outlet property="btn_remenber" destination="LNX-zp-Tlc" id="zgH-bb-06u"/>
+                <outlet property="imageV_iconBg" destination="KNi-5v-cNv" id="PP2-EW-fbs"/>
+                <outlet property="imageV_logo" destination="a1T-Iu-jR9" id="IoT-2f-rcM"/>
+                <outlet property="imageV_user" destination="J7L-zb-ihf" id="cpe-F4-L3j"/>
+                <outlet property="lb_info" destination="UFD-CV-y8Q" id="zda-Nb-0By"/>
                 <outlet property="textF_password" destination="hXw-Vw-PS0" id="xUc-9Z-Ikc"/>
                 <outlet property="textF_userName" destination="OK3-Yi-W2U" id="QBn-Sb-2Rk"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -27,6 +31,28 @@
                     <rect key="frame" x="109" y="34" width="102" height="102"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                 </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="福州移动统一平台" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UFD-CV-y8Q">
+                    <rect key="frame" x="59" y="144" width="202" height="33"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" id="i0u-pY-l4Z">
+                    <rect key="frame" x="110" y="88" width="100" height="100"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="首页_背景_头像" id="KNi-5v-cNv">
+                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="J7L-zb-ihf">
+                            <rect key="frame" x="10" y="11" width="78" height="78"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="登录页_图标_用户_未选中" id="7so-bD-jIW">
                     <rect key="frame" x="59" y="241" width="23" height="23"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -71,13 +97,6 @@
                         <action selector="loginAction:" destination="-1" eventType="touchUpInside" id="l8p-Be-8sI"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="福州移动统一平台" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UFD-CV-y8Q">
-                    <rect key="frame" x="59" y="144" width="202" height="33"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="LNX-zp-Tlc">
                     <rect key="frame" x="59" y="328" width="16" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -106,6 +125,7 @@
         <image name="登录页_图标_用户_未选中" width="22" height="22"/>
         <image name="登录页_背景_复选框_未选中" width="16" height="16"/>
         <image name="背景" width="320" height="568"/>
+        <image name="首页_背景_头像" width="77" height="77"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

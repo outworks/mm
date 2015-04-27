@@ -67,7 +67,8 @@
     if ([savedPassword isEqualToString:password]) {
         self.sliderVC = [SliderVC shareSliderVC];
         
-        
+        [LKDBHelper clearTableData:[Menu class]];
+       
         UserRequest * t_request = [[UserRequest alloc] init];
         t_request.username = [ShareValue sharedShareValue].loginUserName;
         t_request.pass = [ShareValue sharedShareValue].password;
@@ -87,17 +88,20 @@
                 Menu * t_menu = t_arr[0];
                 [ShareValue sharedShareValue].selectedMenuId = t_menu.menuId;
             }
+            
+            LeftSideVC *leftVC = [[LeftSideVC alloc] initWithNibName:@"LeftSideVC" bundle:nil];
+            MainVC *mainVC = [[MainVC alloc] init];
+            self.sliderVC.leftVC = leftVC;
+            self.sliderVC.mainVC = mainVC;
+            [self.navigationController pushViewController:self.sliderVC animated:YES];
+            
         } fail:^(NSString *description) {
             [_hud hide:NO];
             [MBProgressHUD showError:description toView:self.view];
             
         }];
         
-        LeftSideVC *leftVC = [[LeftSideVC alloc] initWithNibName:@"LeftSideVC" bundle:nil];
-        MainVC *mainVC = [[MainVC alloc] init];
-        self.sliderVC.leftVC = leftVC;
-        self.sliderVC.mainVC = mainVC;
-        [self.navigationController pushViewController:self.sliderVC animated:YES];
+        
         
         return YLSwipeLockViewStateNormal;
     }else{

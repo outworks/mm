@@ -14,6 +14,8 @@
 #import "LeftSideVC.h"
 #import "MainVC.h"
 #import "Menu.h"
+#import "ShareFun.h"
+#import "UIImageView+WebCache.h"
 
 @interface LoginVC (){
 
@@ -27,6 +29,14 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *btn_remenber;
 @property(nonatomic,assign) BOOL isSelected;
+
+@property (weak, nonatomic) IBOutlet UIImageView *imageV_logo;
+
+@property (weak, nonatomic) IBOutlet UILabel *lb_info;
+
+@property (weak, nonatomic) IBOutlet UIImageView *imageV_user;
+
+@property (weak, nonatomic) IBOutlet UIImageView *imageV_iconBg;
 
 
 @end
@@ -48,6 +58,23 @@
 
     [super viewWillAppear:animated];
 
+//    NSString *savedPassword = [[NSUserDefaults standardUserDefaults] objectForKey:@"gesturePassword"];
+    if ([ShareValue sharedShareValue].regiterUser.userId != nil) {
+        _lb_info.hidden = YES;
+        _imageV_logo.hidden = YES;
+        _imageV_user.hidden = NO;
+        _imageV_iconBg.hidden = NO;
+        _imageV_user.layer.cornerRadius = _imageV_user.frame.size.width/2;
+        _imageV_user.layer.masksToBounds = YES;
+        [_imageV_user sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl]  placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
+    }else{
+        _lb_info.hidden = NO;
+        _imageV_logo.hidden = NO;
+        _imageV_user.hidden = YES;
+        _imageV_iconBg.hidden = YES;
+    }
+    
+    
     _textF_password.text = nil;
     if ([ShareValue sharedShareValue].isRember == YES) {
         _textF_password.text = [ShareValue sharedShareValue].password;
@@ -66,6 +93,11 @@
 #pragma mark - buttonAciton
 
 - (IBAction)loginAction:(id)sender {
+    
+    [_textF_password resignFirstResponder];
+    [_textF_userName resignFirstResponder];
+    
+    [LKDBHelper clearTableData:[Menu class]];
     
     if ([_textF_userName.text isEqualToString:@""]) {
         [MBProgressHUD showError:@"请输入用户名" toView:self.view];

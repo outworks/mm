@@ -17,6 +17,10 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *btn_endtime;
 
+
+
+
+
 @end
 
 @implementation VisitSearchVC

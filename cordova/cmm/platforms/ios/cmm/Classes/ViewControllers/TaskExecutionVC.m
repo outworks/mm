@@ -178,10 +178,11 @@
 #pragma mark - buttonAction
 
 -(void)backAction{
-    if (self.navigationController.navigationController) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }else {
+    if ([self.navigationController.viewControllers[0] isKindOfClass:[TaskExecutionVC class]]) {
         [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+        
+    }else {
+        [self.navigationController popViewControllerAnimated:YES];
     }
     
 }
@@ -257,54 +258,26 @@
         
         // 泡泡视图
         
-        PointPaopaoView *t_paopaoView = [PointPaopaoView initCustomPaopaoView];
-        t_paopaoView.unit = pointAnnotation.unit;
-        t_paopaoView.taskName = pointAnnotation.taskName;
-        t_paopaoView.taskId = pointAnnotation.taskId;
-        
-        NSArray *b = [pointAnnotation.opetypeid componentsSeparatedByString:@","];
-        for (int i = 0 ; i < [b count]; i++ ) {
-            NSString *t_str = b[i];
-            NSLog(@"%@",t_str);
-            if ([t_str isEqualToString:@"2"]) {
-                t_paopaoView.isTakePicture  = YES;
-            }else if([t_str isEqualToString:@"1"]) {
-                t_paopaoView.isSMSConfirmation = YES;
-            }else if([t_str isEqualToString:@"3"]) {
-                t_paopaoView.issceneConfirmation = YES;
-            }
-        }
-        t_paopaoView.lb_task.text = pointAnnotation.taskName;
-        t_paopaoView.lb_contact.text = [NSString stringWithFormat:@"%@(%@)",pointAnnotation.unit.bossname,pointAnnotation.unit.bossphonenum];
-        t_paopaoView.lb_wangdian.text = pointAnnotation.unit.unitname;
-        
-        [t_paopaoView setDelegate:(id<PointPaopaoViewDelegate>)self];
-        
-        BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
-        [annotationView setPaopaoView:paopao];
-
-        [annotationView setSelected:YES animated:YES];
-        /*if (![pointAnnotation.unit.isFinish isEqual:@"1"]) {
+        if (![pointAnnotation.unit.isFinish isEqual:@"1"]) {
             PointPaopaoView *t_paopaoView = [PointPaopaoView initCustomPaopaoView];
             t_paopaoView.unit = pointAnnotation.unit;
             t_paopaoView.taskName = pointAnnotation.taskName;
             t_paopaoView.taskId = pointAnnotation.taskId;
             
-            NSArray *b = [pointAnnotation.opetypeidLabel componentsSeparatedByString:@","];
+            NSArray *b = [pointAnnotation.opetypeid componentsSeparatedByString:@","];
             for (int i = 0 ; i < [b count]; i++ ) {
                 NSString *t_str = b[i];
                 NSLog(@"%@",t_str);
-                
-                if ([t_str isEqualToString:@"现场拍照"]) {
+                if ([t_str isEqualToString:@"2"]) {
                     t_paopaoView.isTakePicture  = YES;
-                }else if([t_str isEqualToString:@"短信确认"]) {
+                }else if([t_str isEqualToString:@"1"]) {
                     t_paopaoView.isSMSConfirmation = YES;
-                }else if([t_str isEqualToString:@"现场确认"]) {
+                }else if([t_str isEqualToString:@"3"]) {
                     t_paopaoView.issceneConfirmation = YES;
                 }
             }
             t_paopaoView.lb_task.text = pointAnnotation.taskName;
-            t_paopaoView.lb_contact.text = pointAnnotation.unit.bossname;
+            t_paopaoView.lb_contact.text = [NSString stringWithFormat:@"%@(%@)",pointAnnotation.unit.bossname,pointAnnotation.unit.bossphonenum];
             t_paopaoView.lb_wangdian.text = pointAnnotation.unit.unitname;
             
             [t_paopaoView setDelegate:(id<PointPaopaoViewDelegate>)self];
@@ -312,6 +285,7 @@
             BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
             [annotationView setPaopaoView:paopao];
         }else{
+            
             UnitFinishView *t_paopaoView = [UnitFinishView initCustomPaopaoView];
             t_paopaoView.unit = pointAnnotation.unit;
             t_paopaoView.taskName = pointAnnotation.taskName;
@@ -322,12 +296,12 @@
             t_paopaoView.lb_taskSatus.text = @"已完成";
             
             BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
+            
             [annotationView setPaopaoView:paopao];
         }
-        */
         
-//        [annotationView setSelected:YES animated:YES];
         
+        [annotationView setSelected:YES animated:YES];
         
     }else{
         NSString *positionID = @"PositionID";
