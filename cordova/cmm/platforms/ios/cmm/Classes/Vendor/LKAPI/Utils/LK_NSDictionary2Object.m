@@ -395,7 +395,7 @@
     if (flag) {
         return object;
     }
-    return NO;
+    return nil;
 }
 
 @end

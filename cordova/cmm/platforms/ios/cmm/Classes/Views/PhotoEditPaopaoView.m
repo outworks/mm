@@ -52,6 +52,7 @@
     }
     if ([_unit.isFinish isEqual:@"1"]) {
         _btn_send.enabled = NO;
+        [_btn_send setTitle:@"已完成" forState:UIControlStateNormal];
     }
 }
 

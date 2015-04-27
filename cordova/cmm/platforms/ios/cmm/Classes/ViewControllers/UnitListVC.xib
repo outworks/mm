@@ -33,6 +33,7 @@
                 <constraint firstItem="Cqe-6i-mMb" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="svQ-NF-dxp"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <point key="canvasLocation" x="130" y="153"/>
         </view>
     </objects>
 </document>

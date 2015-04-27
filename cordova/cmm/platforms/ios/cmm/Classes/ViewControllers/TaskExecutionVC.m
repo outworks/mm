@@ -25,6 +25,7 @@
 #import "NSData+Crypto.h"
 #import "TimePhotoInfo.h"
 #import "LKDBHelper.h"
+#import "SmsFinishPaopaoView.h"
 
 @interface TaskExecutionVC ()<PhotoEditPaopaoViewDelegate,LXActionSheetDelegate>{
     BMKAnnotationView *_positionAnnotationView;
@@ -426,7 +427,25 @@
 }
 
 -(void)SMSConfirmationAction:(PointPaopaoView *)view{
-    
+    if ([view.unit.isFinish isEqual:@"1"]) {
+        SmsFinishPaopaoView *t_paopaoView = [SmsFinishPaopaoView initCustomPaopaoView];
+        t_paopaoView.unit = view.unit;
+        t_paopaoView.taskName = view.taskName;
+        t_paopaoView.lb_task.text = view.taskName;
+        t_paopaoView.lb_wangdian.text = view.unit.unitname;
+        t_paopaoView.lb_taskstate.text = [NSString stringWithFormat:@"已完成(%@)",_task.finishtime];
+        t_paopaoView.frame = view.frame;
+        UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+        backView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        backView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeSmsView:)];
+        gestureRecognizer.numberOfTapsRequired = 1;
+        [backView addGestureRecognizer:gestureRecognizer];
+        t_paopaoView.center = CGPointMake(CGRectGetWidth(backView.frame)/2, CGRectGetHeight(backView.frame)/2);
+        [backView addSubview:t_paopaoView];
+        [self.view addSubview:backView];
+        return;
+    }
     SMSSendPaopaoView *t_paopaoView = [SMSSendPaopaoView initCustomPaopaoView];
     _sendPaopaoView = t_paopaoView;
     t_paopaoView.unit = view.unit;
@@ -457,7 +476,10 @@
 }
 
 -(void)sceneConfirmationAction:(PointPaopaoView *)view{
-    
+    if ([view.unit.isFinish isEqual:@"1"]) {
+        
+        return;
+    }
     MBProgressHUD *hud = [MBProgressHUD showMessag:@"确认中..." toView:self.view];
     [hud show:YES];
     SiteConfirmRequest *t_request = [[SiteConfirmRequest alloc] init];
