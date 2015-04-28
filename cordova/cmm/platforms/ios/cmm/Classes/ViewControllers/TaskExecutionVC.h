@@ -12,8 +12,9 @@
 #import "Task.h"
 #import "Unit.h"
 
-@interface TaskExecutionVC : BasicVC<BMKMapViewDelegate>{
+@interface TaskExecutionVC : BasicVC<BMKMapViewDelegate,BMKGeoCodeSearchDelegate>{
     IBOutlet BMKMapView* _mapView;
+    BMKGeoCodeSearch* _geocodesearch;
 }
 
 @property(nonatomic,strong)Task *task; // 传的是整个任务的时候调用

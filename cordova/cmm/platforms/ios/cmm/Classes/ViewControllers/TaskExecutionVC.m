@@ -12,7 +12,6 @@
 #import "SMSSendPaopaoView.h"
 #import "PhotoEditPaopaoView.h"
 #import "SMSVerificationView.h"
-#import "UnitFinishView.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 
 #import "HCatImageUpadataVC.h"
@@ -26,6 +25,7 @@
 #import "TimePhotoInfo.h"
 #import "LKDBHelper.h"
 #import "SmsFinishPaopaoView.h"
+#import "SceneFinishPaopaoView.h"
 
 @interface TaskExecutionVC ()<PhotoEditPaopaoViewDelegate,LXActionSheetDelegate>{
     BMKAnnotationView *_positionAnnotationView;
@@ -48,6 +48,7 @@
 @property(nonatomic,strong)NSMutableArray *annotationArrays;
 @property(nonatomic,strong)UIImage *headImage;
 @property(nonatomic,strong) NSArray *taskArray;
+@property(nonatomic,strong) NSString * addr; //反地址编译地址
 
 @property(nonatomic,strong)UnitPointAnnotation * unitPonit;
 
@@ -75,6 +76,14 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataLocationPoint:) name:NOTIFICATION_UPDATALOCATIONPOINT object:nil];
     
+    _geocodesearch = [[BMKGeoCodeSearch alloc]init];
+    
+    if (_unit != nil) {
+        CLLocationCoordinate2D pt = (CLLocationCoordinate2D){0, 0};
+        pt = (CLLocationCoordinate2D){[_unit.lat floatValue], [_unit.lon floatValue]};
+        [self reverseGeocode:pt];
+    }
+    
     CLLocationCoordinate2D coor;
     coor.latitude = [ShareValue sharedShareValue].latitude;
     coor.longitude = [ShareValue sharedShareValue].longitude;
@@ -85,6 +94,7 @@
 -(void)viewWillAppear:(BOOL)animated {
     [_mapView viewWillAppear];
     _mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
+    _geocodesearch.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     [self setLocationPoint];
     [self setUnitPoint];
 }
@@ -92,6 +102,7 @@
 -(void)viewWillDisappear:(BOOL)animated {
     [_mapView viewWillDisappear];
     _mapView.delegate = nil; // 不用时，置nil
+    _geocodesearch.delegate = nil; // 不用时，置nil
 }
 
 #pragma mark - private methods 
@@ -286,53 +297,7 @@
         [annotationView setPaopaoView:paopao];
         
         [annotationView setSelected:YES animated:YES];
-        /*
-        if (![pointAnnotation.unit.isFinish isEqual:@"1"]) {
-            
-            PointPaopaoView *t_paopaoView = [PointPaopaoView initCustomPaopaoView];
-            t_paopaoView.unit = pointAnnotation.unit;
-            t_paopaoView.taskName = pointAnnotation.taskName;
-            t_paopaoView.taskId = pointAnnotation.taskId;
-            
-            NSArray *b = [pointAnnotation.opetypeid componentsSeparatedByString:@","];
-            for (int i = 0 ; i < [b count]; i++ ) {
-                NSString *t_str = b[i];
-                NSLog(@"%@",t_str);
-                if ([t_str isEqualToString:@"2"]) {
-                    t_paopaoView.isTakePicture  = YES;
-                }else if([t_str isEqualToString:@"1"]) {
-                    t_paopaoView.isSMSConfirmation = YES;
-                }else if([t_str isEqualToString:@"3"]) {
-                    t_paopaoView.issceneConfirmation = YES;
-                }
-            }
-            t_paopaoView.lb_task.text = pointAnnotation.taskName;
-            t_paopaoView.lb_contact.text = [NSString stringWithFormat:@"%@(%@)",pointAnnotation.unit.bossname,pointAnnotation.unit.bossphonenum];
-            t_paopaoView.lb_wangdian.text = pointAnnotation.unit.unitname;
-            
-            [t_paopaoView setDelegate:(id<PointPaopaoViewDelegate>)self];
-            
-            BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
-            [annotationView setPaopaoView:paopao];
-        }else{
-            
-            UnitFinishView *t_paopaoView = [UnitFinishView initCustomPaopaoView];
-            t_paopaoView.unit = pointAnnotation.unit;
-            t_paopaoView.taskName = pointAnnotation.taskName;
-            t_paopaoView.taskId = pointAnnotation.taskId;
-            t_paopaoView.lb_task.text = pointAnnotation.taskName;
-            t_paopaoView.lb_contact.text = pointAnnotation.unit.bossname;
-            t_paopaoView.lb_wangdian.text = pointAnnotation.unit.unitname;
-            t_paopaoView.lb_taskSatus.text = @"已完成";
-            
-            BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
-            
-            [annotationView setPaopaoView:paopao];
-        }*/
-        
-        
-        [annotationView setSelected:YES animated:YES];
-        
+    
     }else{
         NSString *positionID = @"PositionID";
         if (_positionAnnotationView == nil) {
@@ -477,7 +442,23 @@
 
 -(void)sceneConfirmationAction:(PointPaopaoView *)view{
     if ([view.unit.isFinish isEqual:@"1"]) {
-        
+        SceneFinishPaopaoView *t_paopaoView = [SceneFinishPaopaoView initCustomPaopaoView];
+        t_paopaoView.unit = view.unit;
+        t_paopaoView.taskName = view.taskName;
+        t_paopaoView.lb_task.text = view.taskName;
+        t_paopaoView.lb_wangdian.text = view.unit.unitname;
+        t_paopaoView.lb_taskstate.text = [NSString stringWithFormat:@"已完成(%@)",_task.finishtime];
+        t_paopaoView.lb_addr.text = [NSString stringWithFormat:@"%@(%@,%@)",_addr,view.unit.lat,view.unit.lon];
+        t_paopaoView.frame = view.frame;
+        UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+        backView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        backView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeSmsView:)];
+        gestureRecognizer.numberOfTapsRequired = 1;
+        [backView addGestureRecognizer:gestureRecognizer];
+        t_paopaoView.center = CGPointMake(CGRectGetWidth(backView.frame)/2, CGRectGetHeight(backView.frame)/2);
+        [backView addSubview:t_paopaoView];
+        [self.view addSubview:backView];
         return;
     }
     MBProgressHUD *hud = [MBProgressHUD showMessag:@"确认中..." toView:self.view];
@@ -697,6 +678,28 @@
     
 }
 
+#pragma mark - 反地址编译
+
+-(void)reverseGeocode:(CLLocationCoordinate2D) pt{
+    BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
+    reverseGeocodeSearchOption.reverseGeoPoint = pt;
+    BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];
+    if(flag)
+    {
+        NSLog(@"反geo检索发送成功");
+    }
+    else
+    {
+        NSLog(@"反geo检索发送失败");
+    }
+}
+
+-(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
+{
+    if (error == 0) {
+        _addr = result.address;
+    }
+}
 
 
 #pragma mark - UIImagePickerControllerDelegate
