@@ -15,6 +15,8 @@
 
 @interface MainVC ()
 
+@property(nonatomic,assign) BOOL isBack;
+
 
 @end
 
@@ -116,11 +118,23 @@ static MainVC *main;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(applicationWillBack) name:NOTIFICATION_APPWILLBACK object:nil];
     [self initTabBar];
     [_vc_tab setSelectedIndex:0];
     // Do any additional setup after loading the view from its nib.
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    if (_isBack) {
+        [self.sliderVC.navigationController popViewControllerAnimated:NO];
+    }
+}
+
+
+-(void)applicationWillBack{
+    _isBack = YES;
+    
+}
 
 #pragma mark - dealloc
 

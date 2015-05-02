@@ -8,6 +8,7 @@
 
 #import "BasicVC.h"
 
+
 @interface SliderVC : BasicVC
 
 @property(nonatomic,strong)UIViewController *leftVC;
@@ -42,6 +43,7 @@
 
 @property(nonatomic,assign) float leftTrantY;//左侧位移y
 @property(nonatomic,assign) float rightTrantY;//右侧位移y
+
 
 
 +(SliderVC *)shareSliderVC;

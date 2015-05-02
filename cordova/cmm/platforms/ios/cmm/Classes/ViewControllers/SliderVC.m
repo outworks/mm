@@ -8,6 +8,7 @@
 
 #import "SliderVC.h"
 #import "MainVC.h"
+#import "SwipeLoginVC.h"
 
 
 typedef NS_ENUM(NSInteger, MoveDirection){
@@ -29,6 +30,8 @@ typedef NS_ENUM(NSInteger, MoveDirection){
 
 @property(nonatomic,assign) BOOL showingLeft;
 @property(nonatomic,assign) BOOL showingRight;
+
+@property(nonatomic,strong) SwipeLoginVC *swipeLoginVC;
 
 @end
 
@@ -140,8 +143,22 @@ static SliderVC *sharedSVC = nil;
     _panGestureRec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveViewWithGesture:)];
     _panGestureRec.delegate = self;
     [_mainView addGestureRecognizer:_panGestureRec];
-    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(appWillBack) name:NOTIFICATION_APPWILLBACK object:nil];
 }
+
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    _swipeLoginVC = nil;
+}
+
+-(void)appWillBack{
+    if (!_swipeLoginVC) {
+        _swipeLoginVC = [[SwipeLoginVC alloc]init];
+        [self presentViewController:_swipeLoginVC animated:YES completion:nil];
+    }
+}
+
 
 #pragma mark - private methods
 

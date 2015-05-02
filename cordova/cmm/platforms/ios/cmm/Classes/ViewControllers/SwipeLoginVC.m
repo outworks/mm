@@ -49,13 +49,25 @@
     
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     [userDefault setObject:nil forKey:@"gesturePassword"];
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if (!self.navigationController) {
+        
+        [self dismissViewControllerAnimated:NO completion:^{
+            [[SliderVC shareSliderVC].navigationController popToRootViewControllerAnimated:YES];
+        }];
+    }else{
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+    
 }
 
 - (IBAction)otherUserAction:(id)sender {
-    
-     [self.navigationController popToRootViewControllerAnimated:YES];
-    
+    if (!self.navigationController) {
+        [self dismissViewControllerAnimated:NO completion:^{
+            [[SliderVC shareSliderVC].navigationController popToRootViewControllerAnimated:YES];
+        }];
+    }else{
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 
@@ -65,6 +77,10 @@
 {
     NSString *savedPassword = [[NSUserDefaults standardUserDefaults] objectForKey:@"gesturePassword"];
     if ([savedPassword isEqualToString:password]) {
+        if (!self.navigationController) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+            return YLSwipeLockViewStateNormal;
+        }
         self.sliderVC = [SliderVC shareSliderVC];
         
         [LKDBHelper clearTableData:[Menu class]];
@@ -109,7 +125,10 @@
         if (self.unmatchCounter == 0) {
             self.lb_info.text = @"4次密码错误,请重新登录";
             self.lb_info.hidden = NO;
-            
+            if (!self.navigationController) {
+                [[SliderVC shareSliderVC].navigationController popToRootViewControllerAnimated:YES];
+                return YLSwipeLockViewStateWarning;
+            }
             [self.navigationController popToRootViewControllerAnimated:YES];
             
         }else {
