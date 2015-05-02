@@ -29,6 +29,9 @@
 @property(nonatomic,strong) NSMutableArray *normalPointLines; // 网店在地图上的点
 @property(nonatomic,strong) NSMutableArray *offlinePointLines;
 @property(nonatomic,strong) NSMutableArray *annotationArrays;
+@property(nonatomic,strong) BMKPointAnnotation *startPointAnnotation;
+@property(nonatomic,strong) BMKPointAnnotation *endPointAnnotation;
+
 
 @end
 
@@ -119,6 +122,25 @@
         }
     }
     
+    //设置起点和终点
+    if (_arr_tracks.count > 0) {
+        Track *start_track = _arr_tracks.firstObject;
+        _startPointAnnotation = [[BMKPointAnnotation alloc]init];
+        CLLocationCoordinate2D coor;
+        coor.latitude = start_track.lat;
+        coor.longitude = start_track.lon;
+        _startPointAnnotation.coordinate = coor;
+        
+        Track*end_tract = _arr_tracks.lastObject;
+        _endPointAnnotation = [[BMKPointAnnotation alloc]init];
+        CLLocationCoordinate2D coor1;
+        coor1.latitude = end_tract.lat;
+        coor1.longitude = end_tract.lon;
+        _endPointAnnotation.coordinate = coor1;
+        [_annotationArrays addObject:_startPointAnnotation];
+        [_annotationArrays addObject:_endPointAnnotation];
+        
+    }
     
     for (int i = 0 ; i < [_arr_tracks count]; i++) {
         Track *t_track_i = [_arr_tracks objectAtIndex:i];
@@ -178,7 +200,7 @@
         if ([_normalPointLines containsObject:line]) {
             polylineView.strokeColor = [[UIColor colorWithRed:0.219 green:0.395 blue:0.940 alpha:1.000] colorWithAlphaComponent:0.5];
         }else{
-            polylineView.strokeColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
+            polylineView.strokeColor = [[UIColor grayColor] colorWithAlphaComponent:0.5];
         }
         polylineView.lineWidth = 3.0;
         return polylineView;
@@ -192,8 +214,6 @@
 // 根据 anntation 生成对应的 View
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
 {
-    
-    
     BMKAnnotationView *annotationView =[mapView viewForAnnotation:annotation];
     
     if (annotationView==nil && [annotation isKindOfClass:[UnitPointAnnotation class]])
@@ -217,8 +237,22 @@
         BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
         [annotationView setPaopaoView:paopao];
         
+    }else if (annotationView==nil ){
+        if (annotation == _startPointAnnotation) {
+            annotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"start"];
+            UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
+            img.backgroundColor = [UIColor clearColor];
+            img.image = [UIImage imageNamed:@"走访地图_图标_起始点"];
+            [annotationView setImage:[img.image imageByScaleForSize:CGSizeMake(img.frame.size.width, img.frame.size.height)]];
+        }else if(annotation == _endPointAnnotation){
+            annotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"end"];
+            UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
+            img.backgroundColor = [UIColor clearColor];
+            img.image = [UIImage imageNamed:@"icon_nav_end"];
+            img.image = [UIImage imageNamed:@"走访地图_图标_终点"];
+            [annotationView setImage:[img.image imageByScaleForSize:CGSizeMake(img.frame.size.width, img.frame.size.height)]];
+        }
     }
-    
     return annotationView;
     
 }

@@ -12,6 +12,7 @@
 #import "SMSSendPaopaoView.h"
 #import "PhotoEditPaopaoView.h"
 #import "SMSVerificationView.h"
+#import "UnitFinishView.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 
 #import "HCatImageUpadataVC.h"
@@ -25,9 +26,10 @@
 #import "TimePhotoInfo.h"
 #import "LKDBHelper.h"
 #import "SmsFinishPaopaoView.h"
-#import "SceneFinishPaopaoView.h"
+#import "UIBarButtonItem+Badge.h"
+#import "PhotoPreviewVC.h"
 
-@interface TaskExecutionVC ()<PhotoEditPaopaoViewDelegate,LXActionSheetDelegate>{
+@interface TaskExecutionVC ()<PhotoEditPaopaoViewDelegate,LXActionSheetDelegate,PhotoPreviewVCDelegate>{
     BMKAnnotationView *_positionAnnotationView;
     BMKPointAnnotation * _positionAnnotation;
    
@@ -42,13 +44,12 @@
     
     int _pickerSource;
     NSMutableArray *_showTasks;
-    
+    UIBarButtonItem *_rightItem;
 }
 
 @property(nonatomic,strong)NSMutableArray *annotationArrays;
 @property(nonatomic,strong)UIImage *headImage;
 @property(nonatomic,strong) NSArray *taskArray;
-@property(nonatomic,strong) NSString * addr; //反地址编译地址
 
 @property(nonatomic,strong)UnitPointAnnotation * unitPonit;
 
@@ -69,32 +70,22 @@
     [item setTintColor:[UIColor whiteColor ]];
     self.navigationItem.leftBarButtonItem = item;
     self.navigationController.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],UITextAttributeTextColor,[UIFont systemFontOfSize:18],UITextAttributeFont, nil];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:@"更多任务" style:UIBarButtonItemStylePlain target:self action:@selector(moreAction)];
-    [rightItem setTintColor:[UIColor whiteColor ]];
-    self.navigationItem.rightBarButtonItem = rightItem;
+    
     self.title = @"任务执行";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataLocationPoint:) name:NOTIFICATION_UPDATALOCATIONPOINT object:nil];
-    
-    _geocodesearch = [[BMKGeoCodeSearch alloc]init];
-    
-    if (_unit != nil) {
-        CLLocationCoordinate2D pt = (CLLocationCoordinate2D){0, 0};
-        pt = (CLLocationCoordinate2D){[_unit.lat floatValue], [_unit.lon floatValue]};
-        [self reverseGeocode:pt];
-    }
     
     CLLocationCoordinate2D coor;
     coor.latitude = [ShareValue sharedShareValue].latitude;
     coor.longitude = [ShareValue sharedShareValue].longitude;
     [_mapView setCenterCoordinate:coor];
     [_mapView setZoomLevel:13];
+    [self loadMore];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [_mapView viewWillAppear];
     _mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
-    _geocodesearch.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     [self setLocationPoint];
     [self setUnitPoint];
 }
@@ -102,7 +93,6 @@
 -(void)viewWillDisappear:(BOOL)animated {
     [_mapView viewWillDisappear];
     _mapView.delegate = nil; // 不用时，置nil
-    _geocodesearch.delegate = nil; // 不用时，置nil
 }
 
 #pragma mark - private methods 
@@ -199,32 +189,45 @@
     
 }
 
--(void)moreAction{
-    [MBProgressHUD showMessag:@"加载中..." toView:self.view];
+-(void)loadMore{
+     [MBProgressHUD showMessag:@"加载中..." toView:self.view];
     UnitTasksRequest *request = [[UnitTasksRequest alloc]init];
     request.unitinfoId = _unit.id;
     [TaskAPI getUnitTasksByRequest:request Success:^(NSArray *tasks) {
+        self.taskArray = tasks;
+        UIImage *image = [UIImage imageNamed:@"someImage"];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(0,0,image.size.width, image.size.height);
+        [button addTarget:self action:@selector(moreAction) forControlEvents:UIControlEventTouchDown];
+        [button setBackgroundImage:image forState:UIControlStateNormal];
+        _rightItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+        self.navigationItem.rightBarButtonItem = _rightItem;
+        [self.navigationItem.rightBarButtonItem setBadgeValue:[NSString stringWithFormat:@"%d",(int)tasks.count -1]];
+        self.navigationItem.rightBarButtonItem.badgeBGColor = [UIColor redColor];
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        BOOL flag = NO;
-        if (tasks.count == 1) {
-            Task *tasktemp = tasks.firstObject;
-            if ([tasktemp.id isEqual:_taskId]) {
-                flag = YES;
-            }
-        }else if(tasks.count == 0){
-            flag = YES;
-        }
-        if (flag) {
-            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"没有更多的任务" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-            [alertView show];
-        }else{
-            self.taskArray = tasks;
-            [self showTaskChoose];
-        }
-    } fail:^(NSString *description) {
+    }fail:^(NSString *description) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [MBProgressHUD showError:description toView:self.view];
     }];
+}
+
+-(void)moreAction{
+    BOOL flag = NO;
+    if (_taskArray.count == 1) {
+        Task *tasktemp = _taskArray.firstObject;
+        if ([tasktemp.id isEqual:_taskId]) {
+            flag = YES;
+        }
+    }else if(_taskArray.count == 0){
+        flag = YES;
+    }
+    if (flag) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"没有更多的任务" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alertView show];
+    }else{
+        [self showTaskChoose];
+    }
+    
 }
 
 -(void)showTaskChoose{
@@ -297,7 +300,53 @@
         [annotationView setPaopaoView:paopao];
         
         [annotationView setSelected:YES animated:YES];
-    
+        /*
+        if (![pointAnnotation.unit.isFinish isEqual:@"1"]) {
+            
+            PointPaopaoView *t_paopaoView = [PointPaopaoView initCustomPaopaoView];
+            t_paopaoView.unit = pointAnnotation.unit;
+            t_paopaoView.taskName = pointAnnotation.taskName;
+            t_paopaoView.taskId = pointAnnotation.taskId;
+            
+            NSArray *b = [pointAnnotation.opetypeid componentsSeparatedByString:@","];
+            for (int i = 0 ; i < [b count]; i++ ) {
+                NSString *t_str = b[i];
+                NSLog(@"%@",t_str);
+                if ([t_str isEqualToString:@"2"]) {
+                    t_paopaoView.isTakePicture  = YES;
+                }else if([t_str isEqualToString:@"1"]) {
+                    t_paopaoView.isSMSConfirmation = YES;
+                }else if([t_str isEqualToString:@"3"]) {
+                    t_paopaoView.issceneConfirmation = YES;
+                }
+            }
+            t_paopaoView.lb_task.text = pointAnnotation.taskName;
+            t_paopaoView.lb_contact.text = [NSString stringWithFormat:@"%@(%@)",pointAnnotation.unit.bossname,pointAnnotation.unit.bossphonenum];
+            t_paopaoView.lb_wangdian.text = pointAnnotation.unit.unitname;
+            
+            [t_paopaoView setDelegate:(id<PointPaopaoViewDelegate>)self];
+            
+            BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
+            [annotationView setPaopaoView:paopao];
+        }else{
+            
+            UnitFinishView *t_paopaoView = [UnitFinishView initCustomPaopaoView];
+            t_paopaoView.unit = pointAnnotation.unit;
+            t_paopaoView.taskName = pointAnnotation.taskName;
+            t_paopaoView.taskId = pointAnnotation.taskId;
+            t_paopaoView.lb_task.text = pointAnnotation.taskName;
+            t_paopaoView.lb_contact.text = pointAnnotation.unit.bossname;
+            t_paopaoView.lb_wangdian.text = pointAnnotation.unit.unitname;
+            t_paopaoView.lb_taskSatus.text = @"已完成";
+            
+            BMKActionPaopaoView *paopao=[[BMKActionPaopaoView alloc] initWithCustomView:t_paopaoView];
+            
+            [annotationView setPaopaoView:paopao];
+        }*/
+        
+        
+        [annotationView setSelected:YES animated:YES];
+        
     }else{
         NSString *positionID = @"PositionID";
         if (_positionAnnotationView == nil) {
@@ -321,7 +370,13 @@
     _temporary_taskid = view.taskId;
     _temporary_unitid = view.unit.id;
     //[self takePhoto];
-    PhotoEditPaopaoView *t_paopaoView = [PhotoEditPaopaoView initCustomPaopaoView];
+    PhotoEditPaopaoView *t_paopaoView = nil;
+    if (!_task.isfinish) {
+        t_paopaoView = [PhotoEditPaopaoView initCustomPaopaoView];
+    }else{
+        t_paopaoView = [PhotoEditPaopaoView initFinishPaopaoView];
+        t_paopaoView.lb_state.text = [NSString stringWithFormat:@"已完成(%@)",_task.finishtime];
+    }
     _photoPaopaoView = t_paopaoView;
     t_paopaoView.unit = view.unit;
     t_paopaoView.taskName = view.taskName;
@@ -442,23 +497,7 @@
 
 -(void)sceneConfirmationAction:(PointPaopaoView *)view{
     if ([view.unit.isFinish isEqual:@"1"]) {
-        SceneFinishPaopaoView *t_paopaoView = [SceneFinishPaopaoView initCustomPaopaoView];
-        t_paopaoView.unit = view.unit;
-        t_paopaoView.taskName = view.taskName;
-        t_paopaoView.lb_task.text = view.taskName;
-        t_paopaoView.lb_wangdian.text = view.unit.unitname;
-        t_paopaoView.lb_taskstate.text = [NSString stringWithFormat:@"已完成(%@)",_task.finishtime];
-        t_paopaoView.lb_addr.text = [NSString stringWithFormat:@"%@(%@,%@)",_addr,view.unit.lat,view.unit.lon];
-        t_paopaoView.frame = view.frame;
-        UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-        backView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        backView.userInteractionEnabled = YES;
-        UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeSmsView:)];
-        gestureRecognizer.numberOfTapsRequired = 1;
-        [backView addGestureRecognizer:gestureRecognizer];
-        t_paopaoView.center = CGPointMake(CGRectGetWidth(backView.frame)/2, CGRectGetHeight(backView.frame)/2);
-        [backView addSubview:t_paopaoView];
-        [self.view addSubview:backView];
+        
         return;
     }
     MBProgressHUD *hud = [MBProgressHUD showMessag:@"确认中..." toView:self.view];
@@ -471,7 +510,6 @@
     t_request.unitinfoId = view.unit.id;
     
     [TaskAPI updataSiteConfirmHttpAPI:t_request Success:^(NSInteger result, NSString *msg) {
-        
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [MBProgressHUD showSuccess:@"提交成功" toView:self.view];
     } fail:^(NSString *description) {
@@ -678,28 +716,6 @@
     
 }
 
-#pragma mark - 反地址编译
-
--(void)reverseGeocode:(CLLocationCoordinate2D) pt{
-    BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
-    reverseGeocodeSearchOption.reverseGeoPoint = pt;
-    BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];
-    if(flag)
-    {
-        NSLog(@"反geo检索发送成功");
-    }
-    else
-    {
-        NSLog(@"反geo检索发送失败");
-    }
-}
-
--(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
-{
-    if (error == 0) {
-        _addr = result.address;
-    }
-}
 
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -724,18 +740,35 @@
             }else{
                 [self sendImage:image];
             }
+            [picker dismissViewControllerAnimated:NO completion:^{
+                
+            }];
         }else{
             image = [image fixOrientation];
             NSLog(@"%f-%f",image.size.width,image.size.height);
             image = [image imageByScaleForSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width/image.size.width*image.size.height)];
-            [self sendImage:image];
+            PhotoPreviewVC *vc = [[PhotoPreviewVC alloc]init];
+            vc.delegate = self;
+            vc.taskName = self.taskName;
+            vc.unit = _unit;
+            vc.image = image;
+            UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
+            [picker dismissViewControllerAnimated:NO completion:^{
+                [self presentViewController:nav animated:YES completion:^{
+                    
+                }];
+            }];
+            
         }
         
     }
-    [picker dismissViewControllerAnimated:NO completion:^{
-        
-    }];
+    
     _picker = nil;
+}
+
+
+-(void)willUploadImage:(UIImage *)image{
+    [self sendImage:image];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

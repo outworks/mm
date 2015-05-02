@@ -24,6 +24,7 @@
 @property(nonatomic,strong) NSString * cooperationmode;
 @property(nonatomic,strong) NSString * countyid;
 @property(nonatomic,strong) NSString * districtid;
+@property(nonatomic,strong) NSString * districtname;
 
 @property(nonatomic,strong) NSString *gpslat;
 @property(nonatomic,strong) NSString *gpslon;

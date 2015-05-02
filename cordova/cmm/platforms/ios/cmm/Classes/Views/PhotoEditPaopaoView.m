@@ -26,6 +26,11 @@
     return [nibView objectAtIndex:0];
 }
 
++ (PhotoEditPaopaoView *)initFinishPaopaoView{
+    NSArray* nibView =  [[NSBundle mainBundle] loadNibNamed:@"PhotoFinshPaopaoView" owner:self options:nil];
+    return [nibView objectAtIndex:0];
+}
+
 -(NSString *)photoParams{
     return [_photos componentsJoinedByString:@","];
 }
@@ -49,10 +54,6 @@
             [_photos addObjectsFromArray:[_unit.sitePhoto componentsSeparatedByString:@","]];
         }
         [self reloadUIScrollView];
-    }
-    if ([_unit.isFinish isEqual:@"1"]) {
-        _btn_send.enabled = NO;
-        [_btn_send setTitle:@"已完成" forState:UIControlStateNormal];
     }
 }
 

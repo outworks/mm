@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lb_wangdian;
 @property (weak, nonatomic) IBOutlet UILabel * tx_lbname;
 @property (weak, nonatomic) IBOutlet UILabel *lb_task;
+@property (weak, nonatomic) IBOutlet UILabel *lb_state;
 
 @property (weak, nonatomic) IBOutlet UIButton *btn_send;
 @property (weak, nonatomic) IBOutlet UIImageView *imageV_bg;
@@ -29,6 +30,8 @@
 @property(nonatomic,strong)NSString *taskId;
 
 + (PhotoEditPaopaoView *)initCustomPaopaoView;
+
++ (PhotoEditPaopaoView *)initFinishPaopaoView;
 
 -(void)addPhotoImage:(NSString *)imageurl;
 
