@@ -1,19 +1,18 @@
 //
-//  PointPaopaoView.m
+//  SceneFinishPaopaoView.m
 //  cmm
 //
-//  Created by Hcat on 15/4/6.
+//  Created by Hcat on 15/4/28.
 //
 //
 
-#import "SmsFinishPaopaoView.h"
+#import "SceneFinishPaopaoView.h"
 
-@implementation SmsFinishPaopaoView
+@implementation SceneFinishPaopaoView
 
-#pragma mark -
 
-+ (SmsFinishPaopaoView *)initCustomPaopaoView{
-    NSArray* nibView =  [[NSBundle mainBundle] loadNibNamed:@"SmsFinishPaopaoView" owner:self options:nil];
++ (SceneFinishPaopaoView *)initCustomPaopaoView{
+    NSArray* nibView =  [[NSBundle mainBundle] loadNibNamed:@"SceneFinishPaopaoView" owner:self options:nil];
     
     return [nibView objectAtIndex:0];
 }
@@ -23,14 +22,8 @@
     _unit = unit;
     _lb_wangdian.text = unit.unitname;
     _lb_contact.text = [NSString stringWithFormat:@"%@(%@)",unit.bossname,unit.bossphonenum];
-    _lb_phone.text = unit.busiinformsmsPhone;
     _lb_task.text = [NSString stringWithFormat:@"%@",[self telecomName]];
-    if (unit.busiinformtime) {
-        _lb_taskstate.text = [NSString stringWithFormat:@"已完成(%@)",unit.busiinformtime];
-    }else{
-        _lb_taskstate.text = @"已完成";
-    }
-    _lb_vcode.text = unit.busiinformsmscode;
+    _lb_addr.text = [NSString stringWithFormat:@"经度：%@，纬度:%@",unit.affirmLon,unit.affirmLat];
 }
 
 -(NSString *)telecomName{
@@ -45,5 +38,13 @@
     }
     return @"未知";
 }
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
 
 @end

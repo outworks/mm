@@ -28,6 +28,8 @@
 #import "SmsFinishPaopaoView.h"
 #import "UIBarButtonItem+Badge.h"
 #import "PhotoPreviewVC.h"
+#import "SceneFinishPaopaoView.h"
+
 
 @interface TaskExecutionVC ()<PhotoEditPaopaoViewDelegate,LXActionSheetDelegate,PhotoPreviewVCDelegate>{
     BMKAnnotationView *_positionAnnotationView;
@@ -195,15 +197,24 @@
     request.unitinfoId = _unit.id;
     [TaskAPI getUnitTasksByRequest:request Success:^(NSArray *tasks) {
         self.taskArray = tasks;
-        UIImage *image = [UIImage imageNamed:@"someImage"];
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(0,0,image.size.width, image.size.height);
-        [button addTarget:self action:@selector(moreAction) forControlEvents:UIControlEventTouchDown];
-        [button setBackgroundImage:image forState:UIControlStateNormal];
-        _rightItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-        self.navigationItem.rightBarButtonItem = _rightItem;
-        [self.navigationItem.rightBarButtonItem setBadgeValue:[NSString stringWithFormat:@"%d",(int)tasks.count -1]];
-        self.navigationItem.rightBarButtonItem.badgeBGColor = [UIColor redColor];
+        int count = 0;
+        for (Task *task in self.taskArray) {
+            if ([task.id isEqual:_taskId]) {
+                continue;
+            }
+            count ++;
+        }
+        if (count >0) {
+            UIImage *image = [UIImage imageNamed:@"someImage"];
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.frame = CGRectMake(0,0,image.size.width, image.size.height);
+            [button addTarget:self action:@selector(moreAction) forControlEvents:UIControlEventTouchDown];
+            [button setBackgroundImage:image forState:UIControlStateNormal];
+            _rightItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+            self.navigationItem.rightBarButtonItem = _rightItem;
+            [self.navigationItem.rightBarButtonItem setBadgeValue:[NSString stringWithFormat:@"%d",count]];
+            self.navigationItem.rightBarButtonItem.badgeBGColor = [UIColor redColor];
+        }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     }fail:^(NSString *description) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -371,11 +382,10 @@
     _temporary_unitid = view.unit.id;
     //[self takePhoto];
     PhotoEditPaopaoView *t_paopaoView = nil;
-    if (!_task.isfinish) {
+    if (![view.unit.isFinish isEqual:@"1"]) {
         t_paopaoView = [PhotoEditPaopaoView initCustomPaopaoView];
     }else{
         t_paopaoView = [PhotoEditPaopaoView initFinishPaopaoView];
-        t_paopaoView.lb_state.text = [NSString stringWithFormat:@"已完成(%@)",_task.finishtime];
     }
     _photoPaopaoView = t_paopaoView;
     t_paopaoView.unit = view.unit;
@@ -453,7 +463,6 @@
         t_paopaoView.taskName = view.taskName;
         t_paopaoView.lb_task.text = view.taskName;
         t_paopaoView.lb_wangdian.text = view.unit.unitname;
-        t_paopaoView.lb_taskstate.text = [NSString stringWithFormat:@"已完成(%@)",_task.finishtime];
         t_paopaoView.frame = view.frame;
         UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
         backView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
@@ -497,7 +506,18 @@
 
 -(void)sceneConfirmationAction:(PointPaopaoView *)view{
     if ([view.unit.isFinish isEqual:@"1"]) {
-        
+        SceneFinishPaopaoView *t_paopaoView = [SceneFinishPaopaoView initCustomPaopaoView];
+        t_paopaoView.unit = view.unit;
+        t_paopaoView.frame = view.frame;
+        UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+        backView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        backView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeSmsView:)];
+        gestureRecognizer.numberOfTapsRequired = 1;
+        [backView addGestureRecognizer:gestureRecognizer];
+        t_paopaoView.center = CGPointMake(CGRectGetWidth(backView.frame)/2, CGRectGetHeight(backView.frame)/2);
+        [backView addSubview:t_paopaoView];
+        [self.view addSubview:backView];
         return;
     }
     MBProgressHUD *hud = [MBProgressHUD showMessag:@"确认中..." toView:self.view];

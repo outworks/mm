@@ -54,6 +54,13 @@
 @property(nonatomic,strong) NSString *unitnum;
 @property(nonatomic,strong) NSString *unittypeid;
 @property(nonatomic,strong) NSString *isFinish;
+@property(nonatomic,strong) NSString *takeapicturetime;//现场拍照时间
+@property(nonatomic,strong) NSString *affirmtime;//现场确认时间
+@property(nonatomic,strong) NSString *affirmLon;//现场确认经度
+@property(nonatomic,strong) NSString *affirmLat;//现场确认维度
+@property(nonatomic,strong) NSString *busiinformsmscode;//业务通知-短信验证码
+@property(nonatomic,strong) NSString *busiinformtime;//业务通知-完成时间
+@property(nonatomic,strong) NSString *busiinformsmsPhone;//业务通知电话
 
 @property(nonatomic,strong) NSString *sitePhoto;
 

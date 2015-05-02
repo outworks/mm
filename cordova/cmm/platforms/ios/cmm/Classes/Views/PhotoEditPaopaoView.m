@@ -55,6 +55,9 @@
         }
         [self reloadUIScrollView];
     }
+    if ([_unit.isFinish isEqual:@"1"]) {
+        _lb_state.text = [NSString stringWithFormat:@"已完成(%@)",_unit.takeapicturetime];
+    }
 }
 
 -(id)init{
