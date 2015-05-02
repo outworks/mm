@@ -85,6 +85,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+-(NSUInteger)supportedInterfaceOrientations{
+    return UIInterfaceOrientationMaskPortrait;//这里返回哪个值，就看你想支持那几个方向了。这里必须和后面plist文件里面的一致（我感觉是这样的）。
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;//支持转屏
+}
+
+
 /*
 #pragma mark - Navigation
 
