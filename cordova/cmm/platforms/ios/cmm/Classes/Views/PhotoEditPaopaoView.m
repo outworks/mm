@@ -37,7 +37,6 @@
 
 -(void)awakeFromNib{
     [super awakeFromNib];
-    [self updateUntPhoto];
 }
 
 -(void)setUnit:(Unit *)unit{
@@ -53,11 +52,11 @@
         if (_unit.sitePhoto.length>0) {
             [_photos addObjectsFromArray:[_unit.sitePhoto componentsSeparatedByString:@","]];
         }
-        [self reloadUIScrollView];
     }
     if ([_unit.isFinish isEqual:@"1"]) {
         _lb_state.text = [NSString stringWithFormat:@"已完成(%@)",_unit.takeapicturetime];
     }
+    [self reloadUIScrollView];
 }
 
 -(id)init{
@@ -76,6 +75,9 @@
 }
 
 -(void)addPhotoImage:(NSString *)imageurl{
+    if (!_photos) {
+        _photos = [[NSMutableArray alloc]init];
+    }
     [self.photos addObject:imageurl];
     [self reloadUIScrollView];
 }

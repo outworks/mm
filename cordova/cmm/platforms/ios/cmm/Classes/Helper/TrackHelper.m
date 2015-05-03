@@ -38,7 +38,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
 -(id)init{
     self = [super init];
     if (self) {
-        [TrackTable deleteWithWhere:nil];
+//        [TrackTable deleteWithWhere:nil];
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             self.updateTimer  = [NSTimer scheduledTimerWithTimeInterval:[ShareValue sharedShareValue].positionTimeInterval  target:self selector:@selector(saveAndUploadRequest) userInfo:nil repeats:YES];
@@ -111,6 +111,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
         [self saveAndUploadRequest];
     }
 }
+
 
 -(void)saveAndUploadRequest{
     if (![self canStart]) {

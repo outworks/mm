@@ -374,10 +374,20 @@
     
 }
 
+-(CLLocationDistance)unitDistance:(Unit *)unit{
+    if (unit.lat && unit.lon) {
+        CLLocationCoordinate2D unitCoor = CLLocationCoordinate2DMake([unit.lat doubleValue], [unit.lon doubleValue]);
+        BMKMapPoint point1 = BMKMapPointForCoordinate([ShareValue sharedShareValue].currentLocation);
+        BMKMapPoint point2 = BMKMapPointForCoordinate(unitCoor);
+        return BMKMetersBetweenMapPoints(point1,point2);
+    }
+    return 10000;
+}
 
 #pragma mark - paopaoViewDelegate
 
 -(void)takePictureAction:(PointPaopaoView *)view{
+
     _temporary_taskid = view.taskId;
     _temporary_unitid = view.unit.id;
     //[self takePhoto];
@@ -445,6 +455,11 @@
         }
     }else if (actionSheet.tag == 12){
         if (buttonIndex == 0) {
+            if (ISDEBUG==0 && [self unitDistance:_unit] > 500) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"当前位置不在该渠道500米范围内，不允许执行任务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+                return;
+            }
             [self takePhoto];
         }else if (buttonIndex == 1){
             [self LocalPhoto];
@@ -457,6 +472,7 @@
 }
 
 -(void)SMSConfirmationAction:(PointPaopaoView *)view{
+
     if ([view.unit.isFinish isEqual:@"1"]) {
         SmsFinishPaopaoView *t_paopaoView = [SmsFinishPaopaoView initCustomPaopaoView];
         t_paopaoView.unit = view.unit;
@@ -505,6 +521,7 @@
 }
 
 -(void)sceneConfirmationAction:(PointPaopaoView *)view{
+
     if ([view.unit.isFinish isEqual:@"1"]) {
         SceneFinishPaopaoView *t_paopaoView = [SceneFinishPaopaoView initCustomPaopaoView];
         t_paopaoView.unit = view.unit;
@@ -518,6 +535,12 @@
         t_paopaoView.center = CGPointMake(CGRectGetWidth(backView.frame)/2, CGRectGetHeight(backView.frame)/2);
         [backView addSubview:t_paopaoView];
         [self.view addSubview:backView];
+        return;
+    }
+
+    if (ISDEBUG==0 && [self unitDistance:view.unit] > 500) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"当前位置不在该渠道500米范围内，不允许执行任务！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alert show];
         return;
     }
     MBProgressHUD *hud = [MBProgressHUD showMessag:@"确认中..." toView:self.view];
@@ -764,6 +787,7 @@
                 
             }];
         }else{
+            
             image = [image fixOrientation];
             NSLog(@"%f-%f",image.size.width,image.size.height);
             image = [image imageByScaleForSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width/image.size.width*image.size.height)];

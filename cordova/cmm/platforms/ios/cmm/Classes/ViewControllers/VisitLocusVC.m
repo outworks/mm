@@ -83,9 +83,9 @@
         }
     }];
     self.tableView.footer.hidden = YES;
-    NSDate *theDate = [[NSDate date] initWithTimeIntervalSinceNow: -24*60*60*4 ];
-    _startTime = [NSDate stringFromDate:theDate withFormat:@"yyyy-MM-dd"];
-    _endTime = [NSDate stringFromDate:[NSDate date] withFormat:@"yyyy-MM-dd"];
+//    NSDate *theDate = [[NSDate date] initWithTimeIntervalSinceNow: -24*60*60*4 ];
+//    _startTime = [NSDate stringFromDate:theDate withFormat:@"yyyy-MM-dd"];
+//    _endTime = [NSDate stringFromDate:[NSDate date] withFormat:@"yyyy-MM-dd"];
     _timeorder = @"DESC";
     
     
@@ -114,10 +114,10 @@
     TrackQueryHttpRequest *request = [[TrackQueryHttpRequest alloc] init];
      request.userId = [ShareValue sharedShareValue].regiterUser.userId;
     request.orderDirection = _timeorder;
-    if (_startTime) {
+    if (_startTime.length>0) {
         request.startTime = [NSString stringWithFormat:@"%@ 00:00:00",_startTime];
     }
-    if (_endTime) {
+    if (_endTime.length>0) {
         request.endTime = [NSString stringWithFormat:@"%@ 23:59:59",_endTime];
     }
     [TrackAPI trackQueryHttpAPIWithRequest:request Success:^(NSArray *result, BOOL isLastPage) {

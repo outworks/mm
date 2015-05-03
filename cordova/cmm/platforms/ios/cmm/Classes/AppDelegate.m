@@ -418,7 +418,8 @@
     CLLocationCoordinate2D location = BMKCoorDictionaryDecode(testdic);
     [ShareValue sharedShareValue].latitude = location.latitude; //纬度
     [ShareValue sharedShareValue].longitude = location.longitude;
-    //[[TrackHelper sharedTrackHelper] updateLocation:location];
+    [ShareValue sharedShareValue].currentLocation = location;
+    [[TrackHelper sharedTrackHelper] updateLocation:location];
 //    NSLog(@"x=%lf,y=%lf",newLocation.coordinate.latitude,newLocation.coordinate.longitude);
 //    
 //    NSLog(@"x=%lf,y=%lf",[ShareValue sharedShareValue].latitude,[ShareValue sharedShareValue].longitude);

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ARCSingletonTemplate.h"
 #import "User.h"
+#import <CoreLocation/CLLocation.h>
 
 #define SYSTEM_VERSION @"1.0.0"
 
@@ -35,7 +36,7 @@
 @property(nonatomic,assign) double latitude;
 @property(nonatomic,assign) double longitude;
 
-
+@property(nonatomic,assign) CLLocationCoordinate2D currentLocation;
 
 
 SYNTHESIZE_SINGLETON_FOR_HEADER(ShareValue)

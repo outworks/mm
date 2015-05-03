@@ -28,6 +28,8 @@
 #pragma mark - viewLift
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.btn_starttime setTitle:_startTime forState:UIControlStateNormal];
+    [self.btn_endtime setTitle:_endTime forState:UIControlStateNormal];
     // Do any additional setup after loading the view from its nib.
 }
 

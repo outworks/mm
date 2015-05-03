@@ -200,7 +200,7 @@
         if ([_normalPointLines containsObject:line]) {
             polylineView.strokeColor = [[UIColor colorWithRed:0.219 green:0.395 blue:0.940 alpha:1.000] colorWithAlphaComponent:0.5];
         }else{
-            polylineView.strokeColor = [[UIColor grayColor] colorWithAlphaComponent:0.5];
+            polylineView.strokeColor = [[UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.000] colorWithAlphaComponent:0.5];
         }
         polylineView.lineWidth = 3.0;
         return polylineView;

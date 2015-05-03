@@ -69,11 +69,13 @@
 #define DELOGPINK(...) LogPink(__VA_ARGS__)
 #define DELOGBLUE(...) LogBlue(__VA_ARGS__)
 #define DELOGRED(...) LogRed(__VA_ARGS__)
+#define ISDEBUG 1
 #else
 #define DELOG(...) do { } while (0);
 #define DELOGPINK(...) do { } while (0);
 #define DELOGBLUE(...) do { } while (0);
 #define DELOGRED(...) do { } while (0);
+#define ISDEBUG 0
 #endif
 
 /*
