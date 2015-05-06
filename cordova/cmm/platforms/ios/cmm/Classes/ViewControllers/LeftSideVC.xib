@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LeftSideVC">
             <connections>
+                <outlet property="btn_qiehuan" destination="FgC-xB-xQQ" id="uHX-bw-LGY"/>
                 <outlet property="imageV_bg_info" destination="9Na-xs-CVV" id="w3f-kF-2HG"/>
                 <outlet property="imageV_userIcon" destination="hkv-bE-S1N" id="9TD-nG-2DL"/>
                 <outlet property="lb_menu" destination="91o-x5-T2R" id="Nab-qS-JU8"/>

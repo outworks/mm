@@ -14,6 +14,7 @@
 #import "UIImageView+WebCache.h"
 #import "AppDelegate.h"
 #import "LXActionSheet.h"
+#import "UIButton+Block.h"
 
 
 #import "Menu.h"
@@ -104,6 +105,7 @@
     _lb_userName.text = [ShareValue sharedShareValue].regiterUser.userName;
     _lb_regional.text = [ShareValue sharedShareValue].regiterUser.jobId;
     _textf_signName.text = [ShareValue sharedShareValue].regiterUser.signName;
+    [_btn_qiehuan setEnlargeEdgeWithTop:50 right:400 bottom:50 left:400];
 
 }
 

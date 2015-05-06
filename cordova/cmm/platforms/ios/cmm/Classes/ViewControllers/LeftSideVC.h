@@ -14,6 +14,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *lb_userName;
 @property (weak, nonatomic) IBOutlet UILabel *lb_regional;
+@property (weak, nonatomic) IBOutlet UIButton *btn_qiehuan;
 
 @property (weak, nonatomic) IBOutlet UILabel *lb_menu;
 
