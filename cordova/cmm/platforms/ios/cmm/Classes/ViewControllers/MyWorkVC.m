@@ -86,22 +86,25 @@
         }
     }
     NSArray *t_arr = t_arr_menu;
-    _tabBar = [[CommonTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.v_nav.frame), ScreenWidth, 35) buttonItems:t_arr CommonTabBarType:CommonTabBarTypeTitleOnly isAnimation:YES];
-    _tabBar.delegate = (id<CommonTabBarDelegate>)self;
-    
-    _tabBar.backgroundColor = UIColorFromRGB(0xefefef);
-    _tabBar.titleColor = UIColorFromRGB(0x2f2f2f);
-    _tabBar.titleSelectColor = UIColorFromRGB(0x1fbbff);
-    _tabBar.titlesFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:13];
-    _tabBar.titleSelectFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:15];
-    _tabBar.selectedItemTopBackgroundColor = UIColorFromRGB(0x1fbbff);
-    _tabBar.selectedItemTopBackroundColorHeight = 1.5f;
-    
-    [_tabBar drawItems];
-    [self.view addSubview:_tabBar];
-    [_tabBar setSelectedIndex:0];
-    
-    [_scrollView setContentSize:CGSizeMake([t_arr count]*_scrollView.frame.size.width, _scrollView.frame.size.height)];
+    if (t_arr.count != 0) {
+        
+        _tabBar = [[CommonTabBar alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.v_nav.frame), ScreenWidth, 35) buttonItems:t_arr CommonTabBarType:CommonTabBarTypeTitleOnly isAnimation:YES];
+        _tabBar.delegate = (id<CommonTabBarDelegate>)self;
+        
+        _tabBar.backgroundColor = UIColorFromRGB(0xefefef);
+        _tabBar.titleColor = UIColorFromRGB(0x2f2f2f);
+        _tabBar.titleSelectColor = UIColorFromRGB(0x1fbbff);
+        _tabBar.titlesFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:13];
+        _tabBar.titleSelectFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:15];
+        _tabBar.selectedItemTopBackgroundColor = UIColorFromRGB(0x1fbbff);
+        _tabBar.selectedItemTopBackroundColorHeight = 1.5f;
+        
+        [_tabBar drawItems];
+        [self.view addSubview:_tabBar];
+        [_tabBar setSelectedIndex:0];
+        
+        [_scrollView setContentSize:CGSizeMake([t_arr count]*_scrollView.frame.size.width, _scrollView.frame.size.height)];
+    }
 }
 
 #pragma mark - private methods
@@ -183,7 +186,10 @@
     int index = fabs(scrollView.contentOffset.x) / scrollView.frame.size.width;
     NSLog(@"%d",index);
     
-    [self.tabBar setSelectedIndex:index];
+    if (self.tabBar != nil) {
+        [self.tabBar setSelectedIndex:index];
+    }
+    
     
 }
 
@@ -199,16 +205,20 @@
     Menu *t_menu = [note object];
     
     [_tabBar removeFromSuperview];
+    _tabBar = nil;
     for (UIView *t_view in [_scrollView subviews]) {
         [t_view removeFromSuperview];
     }
-    
+     [_arr_contens removeAllObjects];
+    [_scrollView setContentSize:CGSizeMake(_scrollView.frame.size.width, _scrollView.frame.size.height)];
     //导航栏title
     
     UILabel *t_lable = (UILabel *)[self.view viewWithTag:150];
     t_lable.text = t_menu.menuName;
+    _str_menu_1 = t_menu.menuName;
+    _menuid_1 = t_menu.menuId;
     
-    [_arr_contens removeAllObjects];
+   
     
     [self reloadView];
 

@@ -13,6 +13,8 @@
 #import "MBProgressHUD+Add.h"
 #import "UserAPI.h"
 #import "ShareValue.h"
+#import "LKDBHelper.h"
+#import "Menu.h"
 
 @interface SwipeLoginVC ()<YLSwipeLockViewDelegate>{
 

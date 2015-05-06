@@ -202,6 +202,8 @@
         return;
     }else{
         Menu *t_menu = _arr_menus[buttonIndex-1];
+        _lb_menu.text = t_menu.menuName;
+        [ShareValue sharedShareValue].selectedMenuId = t_menu.menuId;
         [[NSNotificationCenter defaultCenter]  postNotificationName:NOTIFICATION_UPDATAMENU object:t_menu];
         
     }

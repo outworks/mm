@@ -66,7 +66,9 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"%ld",indexPath.row);
     
-    if (indexPath.row == 1) {
+    Menu *t_menu = _arr_item[indexPath.row];
+    
+    if ([t_menu.menuName isEqualToString:@"走访任务"]) {
         TaskListVC *t_vc = [[TaskListVC alloc] init];
         UINavigationController *t_nav = [[UINavigationController alloc] initWithRootViewController:t_vc];
         [ApplicationDelegate.viewController presentViewController:t_nav animated:YES completion:nil];
