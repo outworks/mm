@@ -11,6 +11,8 @@
 #import <CoreLocation/CLLocationManager.h>
 #import <Cordova/CDVPlugin.h>
 
+#define NOTICATION_LKPARAM @"NOTICATION_LKPARAM"
+
 @interface LKNavPlugin : CDVPlugin
 
 -(void)openPage:(CDVInvokedUrlCommand*)command;
@@ -18,5 +20,7 @@
 -(void)closePage:(CDVInvokedUrlCommand*)command;
 
 -(void)backToPage:(CDVInvokedUrlCommand*)command;
+
+-(void)notifiNavtive:(CDVInvokedUrlCommand*)command;
 
 @end

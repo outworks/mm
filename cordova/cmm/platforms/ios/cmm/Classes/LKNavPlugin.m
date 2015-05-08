@@ -55,6 +55,25 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+-(void)notifiNavtive:(CDVInvokedUrlCommand*)command{
+    CDVPluginResult* pluginResult = nil;
+    NSString* params = [command.arguments objectAtIndex:0];
+    if (params != nil) {
+        NSError *error = nil;
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[params dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableLeaves error:&error];
+        if (!error) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:NOTICATION_LKPARAM object:nil userInfo:dict];
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK ];
+        }else{
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Arg was fails"];
+        }
+    } else {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Arg was null"];
+    }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+
 -(BOOL)isWebPage:(NSString *)url{
     return  [url rangeOfString:@".html"].length > 0 ;
 }
