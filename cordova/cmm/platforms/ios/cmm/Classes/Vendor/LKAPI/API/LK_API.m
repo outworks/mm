@@ -52,23 +52,28 @@
             if (dict) {
                 LK_HttpBaseResponse *response = [dict objectByClass:[LK_HttpBaseResponse class]];
                 if (response) {
-                    if ([dict objectForKey:@"data"]) {
-                        if([[dict objectForKey:@"data"] isKindOfClass:[NSArray class]]){
-                            NSMutableArray *array = [NSMutableArray array];
-                            NSArray *data = [dict objectForKey:@"data"];
-                            for (NSDictionary *dict1 in data) {
-                                NSObject *result = [dict1 objectByClass:responseClass];
-                                [array addObject:result];
+                    if (response.result != 0) {
+                        fail(response.msg);
+                    }else{
+                        if ([dict objectForKey:@"data"]) {
+                            if([[dict objectForKey:@"data"] isKindOfClass:[NSArray class]]){
+                                NSMutableArray *array = [NSMutableArray array];
+                                NSArray *data = [dict objectForKey:@"data"];
+                                for (NSDictionary *dict1 in data) {
+                                    NSObject *result = [dict1 objectByClass:responseClass];
+                                    [array addObject:result];
+                                }
+                                response.data = array;
+                            }else if([[dict objectForKey:@"data"] isKindOfClass:[NSDictionary class]]){
+                                NSDictionary *dict2 = [dict objectForKey:@"data"];
+                                NSLog(@"%@",dict2);
+                                NSObject *result = [dict2 objectByClass:responseClass];
+                                response.data = result;
                             }
-                            response.data = array;
-                        }else if([[dict objectForKey:@"data"] isKindOfClass:[NSDictionary class]]){
-                            NSDictionary *dict2 = [dict objectForKey:@"data"];
-                            NSLog(@"%@",dict2);
-                            NSObject *result = [dict2 objectByClass:responseClass];
-                            response.data = result;
                         }
+                        sucess(response.data,response.result,response.msg);
                     }
-                    sucess(response.data,response.result,response.msg);
+                    
                 }else{
                     fail(@"服务器异常");
                 }
@@ -97,15 +102,22 @@
             if (dict) {
                 LK_HttpBasePageResponse *response1 = [dict objectByClass:[LK_HttpBasePageResponse class]];
                 if (response1) {
-                    NSArray *result  = response1.data.result;
-                    NSMutableArray *array = [[NSMutableArray alloc]init];
-                    for (NSDictionary *dict in result) {
-                        NSObject *classResult = [dict objectByClass:resultClass];
-                        [array addObject:classResult];
+                    if (response1.result != 0) {
+                        fail(response1.msg);
+                    }else{
+                        NSArray *result  = response1.data.result;
+                        NSMutableArray *array = [[NSMutableArray alloc]init];
+                        for (NSDictionary *dict in result) {
+                            NSObject *classResult = [dict objectByClass:resultClass];
+                            [array addObject:classResult];
+                        }
+                        response1.data.result = array;
+                        success(response1,response1.result,response1.msg);
                     }
-                    response1.data.result = array;
+                    
+                }else{
+                    fail(@"服务器异常");
                 }
-                success(response1,response1.result,response1.msg);
             }else{
                 fail(@"服务器异常");
             }
@@ -128,22 +140,26 @@
             NSDictionary *dict = [responseString objectFromJSONString];
             if (dict) {
                 LK_HttpBaseResponse *response = [dict objectByClass:[LK_HttpBaseResponse class]];
-                if ([dict objectForKey:@"data"]) {
-                    if([[dict objectForKey:@"data"] isKindOfClass:[NSArray class]]){
-                        NSMutableArray *array = [NSMutableArray array];
-                        NSArray *data = [dict objectForKey:@"data"];
-                        for (NSDictionary *dict1 in data) {
-                            NSObject *result = [dict1 objectByClass:responseClass];
-                            [array addObject:result];
+                if (response.result != 0) {
+                    fail(response.msg);
+                }else{
+                    if ([dict objectForKey:@"data"]) {
+                        if([[dict objectForKey:@"data"] isKindOfClass:[NSArray class]]){
+                            NSMutableArray *array = [NSMutableArray array];
+                            NSArray *data = [dict objectForKey:@"data"];
+                            for (NSDictionary *dict1 in data) {
+                                NSObject *result = [dict1 objectByClass:responseClass];
+                                [array addObject:result];
+                            }
+                            response.data = array;
+                        }else if([[dict objectForKey:@"data"] isKindOfClass:[NSDictionary class]]){
+                            NSDictionary *dict2 = [dict objectForKey:@"data"];
+                            NSObject *result = [dict2 objectByClass:responseClass];
+                            response.data = result;
                         }
-                        response.data = array;
-                    }else if([[dict objectForKey:@"data"] isKindOfClass:[NSDictionary class]]){
-                        NSDictionary *dict2 = [dict objectForKey:@"data"];
-                        NSObject *result = [dict2 objectByClass:responseClass];
-                        response.data = result;
                     }
+                    sucess(response.data,response.result,response.msg);
                 }
-                sucess(response.data,response.result,response.msg);
             }else{
                 fail(@"服务器异常");
             }

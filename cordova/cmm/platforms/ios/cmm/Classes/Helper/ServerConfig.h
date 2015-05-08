@@ -10,9 +10,9 @@
 
 
 
-//#define BASE_SERVERLURL @"http://123.57.45.235:8090/SC/MobileService?requestType="
+//#define BASE_SERVERLURL @"http://123.57.45.235:8090/fz_yxjl/MobileService?requestType="
 //
-//#define BASE_UPLOADSERVERL @"http://123.57.45.235:8090/SC"
+//#define BASE_UPLOADSERVERL @"http://123.57.45.235:8090/fz_yxjl"
 
 
 
