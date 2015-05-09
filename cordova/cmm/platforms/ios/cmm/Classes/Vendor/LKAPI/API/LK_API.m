@@ -48,8 +48,9 @@
             NSData *responseData = (NSData *)responseObject;
             NSString *responseString = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
             NSLog(@"%@",responseString);
-            NSDictionary *dict = [responseString objectFromJSONString];
-            if (dict) {
+            NSError *error = nil;
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:&error];
+            if (!error && dict) {
                 LK_HttpBaseResponse *response = [dict objectByClass:[LK_HttpBaseResponse class]];
                 if (response) {
                     if (response.result != 0) {
@@ -96,10 +97,9 @@
     [client postPath:path parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if(responseObject){
             NSData *responseData = (NSData *)responseObject;
-            NSString *responseString = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
-            NSLog(@"%@",responseString);
-            NSDictionary *dict = [responseString objectFromJSONString];
-            if (dict) {
+            NSError *error = nil;
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:&error];
+            if (!error && dict) {
                 LK_HttpBasePageResponse *response1 = [dict objectByClass:[LK_HttpBasePageResponse class]];
                 if (response1) {
                     if (response1.result != 0) {

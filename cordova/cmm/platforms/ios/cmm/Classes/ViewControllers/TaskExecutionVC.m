@@ -214,6 +214,8 @@
             self.navigationItem.rightBarButtonItem = _rightItem;
             [self.navigationItem.rightBarButtonItem setBadgeValue:[NSString stringWithFormat:@"%d",count]];
             self.navigationItem.rightBarButtonItem.badgeBGColor = [UIColor redColor];
+        }else {
+            self.navigationItem.rightBarButtonItem = nil;
         }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     }fail:^(NSString *description) {
@@ -449,6 +451,7 @@
                 self.unit = [task.unit objectAtIndex:0];
                 [self reloadAnnotation];
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [self loadMore];
             } fail:^(NSString *description) {
                 [MBProgressHUD showError:@"加载失败" toView:self.view];
             }];
