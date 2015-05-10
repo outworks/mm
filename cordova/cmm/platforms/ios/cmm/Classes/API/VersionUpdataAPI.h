@@ -29,7 +29,7 @@
 
 @interface VersionUpdataAPI : NSObject
 
-+(void)versionUpdataHttpAPI:(VersionUpdataRequest *)request Success:(void (^)(NSArray *response,NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail;
++(void)versionUpdataHttpAPI:(VersionUpdataRequest *)request Success:(void (^)(VersionUpdataResponse *response,NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail;
 
 
 @end

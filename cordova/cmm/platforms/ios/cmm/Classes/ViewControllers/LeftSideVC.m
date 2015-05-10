@@ -198,9 +198,9 @@
         VersionUpdataRequest *t_request = [[VersionUpdataRequest alloc] init];
         t_request.clientType = @"ios";
         t_request.userId = @"123456";
-        [VersionUpdataAPI versionUpdataHttpAPI:t_request Success:^(NSArray *response, NSInteger result, NSString *msg) {
+        [VersionUpdataAPI versionUpdataHttpAPI:t_request Success:^(VersionUpdataResponse *response, NSInteger result, NSString *msg) {
             
-            _version = response[0];
+            _version = response;
             
             NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
             if ([version compare:_version.nversion] == NSOrderedAscending) {

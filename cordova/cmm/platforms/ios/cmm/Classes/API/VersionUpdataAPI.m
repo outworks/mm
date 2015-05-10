@@ -20,11 +20,11 @@
 
 @implementation VersionUpdataAPI
 
-+(void)versionUpdataHttpAPI:(VersionUpdataRequest *)request Success:(void (^)(NSArray *response,NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
++(void)versionUpdataHttpAPI:(VersionUpdataRequest *)request Success:(void (^)(VersionUpdataResponse *response,NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail{
 
     [LK_APIUtil postHttpRequest:request apiPath:URLPATH_CLIENTVERSION Success:^(NSObject *response,NSInteger result,NSString *msg){
     
-        sucess((NSArray *)response,result,msg);
+        sucess((VersionUpdataResponse *)response,result,msg);
     } fail:^(NSString * descript){
         fail(descript);
     }class:[VersionUpdataResponse class]];
