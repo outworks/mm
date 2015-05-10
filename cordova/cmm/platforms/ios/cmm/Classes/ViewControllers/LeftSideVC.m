@@ -15,6 +15,7 @@
 #import "AppDelegate.h"
 #import "LXActionSheet.h"
 #import "UIButton+Block.h"
+#import "VersionUpdataAPI.h"
 
 
 #import "Menu.h"
@@ -30,7 +31,7 @@
 
 @property (nonatomic,strong) NSMutableArray *arr_menus;
 
-
+@property (nonatomic,strong)  VersionUpdataResponse *version;
 
 
 @end
@@ -193,7 +194,26 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+    if (indexPath.row == 4) {
+        VersionUpdataRequest *t_request = [[VersionUpdataRequest alloc] init];
+        t_request.clientType = @"ios";
+        t_request.userId = @"123456";
+        [VersionUpdataAPI versionUpdataHttpAPI:t_request Success:^(NSArray *response, NSInteger result, NSString *msg) {
+            
+            _version = response[0];
+            
+            NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            if ([version compare:_version.nversion] == NSOrderedAscending) {
+                //vesion < nversion
+                UIAlertView *t_alertView = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"发现新版本:%@,是否更新",_version.nversion] delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"更新", nil];
+                t_alertView.tag = 11;
+                [t_alertView show];
+            };
+            
+        } fail:^(NSString *description) {
+            
+        }];
+    }
     
 }
 
@@ -211,6 +231,80 @@
     }
     
 }
+#pragma mark - alertViewDelegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"clickButtonAtIndex:%ld",buttonIndex);
+    
+    if (alertView.tag == 12) {
+        if (buttonIndex == 0) {
+            
+        }else{
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_version.filePath]];
+            
+        }
+        
+        [self exitApplication];
+    }else{
+        
+        if (buttonIndex == 0) {
+            
+            NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            if ([version compare:_version.sversion] == NSOrderedAscending) {
+                //vesion < nversion
+                UIAlertView *t_alertView = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"必须强制更新到%@版本,请更新",_version.sversion] delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"更新", nil];
+                t_alertView.tag = 12;
+                [t_alertView show];
+            };
+            
+        }else{
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_version.filePath]];
+            
+        }
+        
+    }
+    
+    
+}
+
+
+#pragma mark - 退出程序
+
+- (void)exitApplication {
+    
+    [UIView beginAnimations:@"exitApplication" context:nil];
+    
+    [UIView setAnimationDuration:0.5];
+    
+    [UIView setAnimationDelegate:self];
+    
+    //[UIView setAnimationTransition:UIViewAnimationCurveEaseOut forView:self.view.window cache:NO];
+    
+    [UIView setAnimationTransition:UIViewAnimationCurveEaseOut forView:ApplicationDelegate.window cache:NO];
+    
+    [UIView setAnimationDidStopSelector:@selector(animationFinished:finished:context:)];
+    
+    //self.view.window.bounds = CGRectMake(0, 0, 0, 0);
+    
+    ApplicationDelegate.window.bounds = CGRectMake(0, 0, 0, 0);
+    
+    [UIView commitAnimations];
+    
+}
+
+
+
+- (void)animationFinished:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
+    
+    if ([animationID compare:@"exitApplication"] == 0) {
+        
+        exit(0);
+        
+    }
+    
+}
+
 
 
 #pragma mark - Notification methods

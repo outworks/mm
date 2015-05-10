@@ -497,13 +497,13 @@
     
     if (alertView.tag == 12) {
         if (buttonIndex == 0) {
-           [self exitApplication];
+           
         }else{
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_version.filePath]];
             
         }
         
-        
+        [self exitApplication];
     }else{
         
         if (buttonIndex == 0) {
@@ -515,8 +515,6 @@
                 t_alertView.tag = 12;
                 [t_alertView show];
             };
-            
-            
             
         }else{
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_version.filePath]];
