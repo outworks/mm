@@ -50,7 +50,7 @@
 
 
 static const CGFloat kPadding = 4.f;
-static const CGFloat kLabelFontSize = 16.f;
+static const CGFloat kLabelFontSize = 14.f;
 static const CGFloat kDetailsLabelFontSize = 12.f;
 
 
@@ -450,6 +450,7 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 	label = [[UILabel alloc] initWithFrame:self.bounds];
 	label.adjustsFontSizeToFitWidth = NO;
 	label.textAlignment = MBLabelAlignmentCenter;
+    label.numberOfLines = 2;
 	label.opaque = NO;
 	label.backgroundColor = [UIColor clearColor];
 	label.textColor = self.labelColor;

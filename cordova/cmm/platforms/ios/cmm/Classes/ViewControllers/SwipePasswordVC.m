@@ -81,7 +81,7 @@
         [userDefault setObject:password forKey:@"gesturePassword"];
         
         NSMutableArray *t_arr = [Menu searchWithWhere:[NSString stringWithFormat:@"level=1"] orderBy:@"menuId" offset:0 count:0];
-        if (t_arr) {
+        if (t_arr.count > 0) {
             Menu * t_menu = t_arr[0];
             [ShareValue sharedShareValue].selectedMenuId = t_menu.menuId;
         }
