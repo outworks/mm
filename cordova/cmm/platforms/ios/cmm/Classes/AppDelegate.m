@@ -102,13 +102,13 @@
             _version = response;
             
             NSString * version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            version = CURRENT_VERSION;
             if ([version compare:_version.nversion] == NSOrderedAscending) {
                 //vesion < nversion
                 UIAlertView *t_alertView = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"发现新版本:%@,是否更新",_version.nversion] delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"更新", nil];
                 t_alertView.tag = 11;
                 [t_alertView show];
             };
-            
         } fail:^(NSString *description) {
             
         }];
@@ -431,6 +431,9 @@
     didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation
 {
+    if (![ShareValue sharedShareValue].regiterUser) {
+        return;
+    }
     
 //    [ShareValue sharedShareValue].latitude = newLocation.coordinate.latitude; //纬度
 //    [ShareValue sharedShareValue].longitude = newLocation.coordinate.longitude; // 经度

@@ -12,6 +12,7 @@
 #import "ShareValue.h"
 #import "TrackAPI.h"
 #import "NSDate+Helper.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface TrackHelper()
 
@@ -28,6 +29,8 @@
 @property(nonatomic,assign) BOOL isLocked;
 
 @property(nonatomic,assign) CLLocationCoordinate2D lastSaveLocation;
+
+@property(nonatomic,strong) AVAudioPlayer *player;
 
 @end
 
@@ -51,6 +54,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
 -(BOOL)canStart{
     
     if ([ShareValue sharedShareValue].regiterUser && [ShareValue sharedShareValue].positionTimeInterval>0) {
+        
+        CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+        if (kCLAuthorizationStatusDenied == status || kCLAuthorizationStatusRestricted == status) {
+            [self playSound];
+        }
         return YES;
     }
     return NO;
@@ -112,6 +120,27 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(TrackHelper)
     }
 }
 
+-(void) playSound
+
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"open" ofType:@"mp3"];
+    if (path) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSError *error = nil;
+            _player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:path] error:&error];//使用本地URL创建
+            if (error) {
+                return;
+            }
+            _player.volume=1.0;
+            [_player prepareToPlay];
+            _player.enableRate = YES;
+            _player.meteringEnabled = YES;
+            [_player play];
+        });
+        
+    }
+}
 
 -(void)saveAndUploadRequest{
     if (![self canStart]) {

@@ -52,6 +52,8 @@
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     [userDefault setObject:nil forKey:@"gesturePassword"];
     [ShareValue sharedShareValue].regiterUser = nil;
+    [ShareValue sharedShareValue].password = nil;
+    [ShareValue sharedShareValue].loginUserName  = nil;
     if (!self.navigationController) {
         
         [self dismissViewControllerAnimated:NO completion:^{
