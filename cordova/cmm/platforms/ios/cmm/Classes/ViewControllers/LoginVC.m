@@ -144,7 +144,6 @@
            [self.sliderVC closeSideBar];
             self.sliderVC.leftVC = leftVC;
            self.sliderVC.mainVC = mainVC;
-            
             [self.navigationController pushViewController:self.sliderVC animated:YES];
         }else{
             

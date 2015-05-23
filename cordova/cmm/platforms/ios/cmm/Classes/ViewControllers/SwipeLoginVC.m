@@ -51,6 +51,7 @@
     
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     [userDefault setObject:nil forKey:@"gesturePassword"];
+    [ShareValue sharedShareValue].regiterUser = nil;
     if (!self.navigationController) {
         
         [self dismissViewControllerAnimated:NO completion:^{
@@ -63,6 +64,7 @@
 }
 
 - (IBAction)otherUserAction:(id)sender {
+    [ShareValue sharedShareValue].regiterUser = nil;
     if (!self.navigationController) {
         [self dismissViewControllerAnimated:NO completion:^{
             [[SliderVC shareSliderVC].navigationController popToRootViewControllerAnimated:YES];
@@ -127,6 +129,9 @@
         if (self.unmatchCounter == 0) {
             self.lb_info.text = @"4次密码错误,请重新登录";
             self.lb_info.hidden = NO;
+            [ShareValue sharedShareValue].regiterUser= nil;
+            [ShareValue sharedShareValue].loginUserName = nil;
+            [ShareValue sharedShareValue].password = nil;
             if (!self.navigationController) {
                 [[SliderVC shareSliderVC].navigationController popToRootViewControllerAnimated:YES];
                 return YLSwipeLockViewStateWarning;

@@ -68,8 +68,8 @@
                             }else if([[dict objectForKey:@"data"] isKindOfClass:[NSDictionary class]]){
                                 NSDictionary *dict2 = [dict objectForKey:@"data"];
                                 NSLog(@"%@",dict2);
-                                NSObject *result = [dict2 objectByClass:responseClass];
-                                response.data = result;
+                                NSObject *result2 = [dict2 objectByClass:responseClass];
+                                response.data = result2;
                             }
                         }
                         sucess(response.data,response.result,response.msg);

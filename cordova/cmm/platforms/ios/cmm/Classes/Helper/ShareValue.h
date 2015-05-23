@@ -15,7 +15,7 @@
 
 #define SYSTEM_DEVERLOPER 0
 
-#define VERSION 16
+#define CURRENT_VERSION @"11"
 
 @interface ShareValue : NSObject{
     User *_regiterUser;
