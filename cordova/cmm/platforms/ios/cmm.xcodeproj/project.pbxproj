@@ -292,6 +292,10 @@
 		DF5732AF1AC7DF8F007E4B8B /* micon-camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DF5732AE1AC7DF8F007E4B8B /* micon-camera@2x.png */; };
 		DF5732B11AC7DFAB007E4B8B /* micon-album@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DF5732B01AC7DFAB007E4B8B /* micon-album@2x.png */; };
 		DF5732B41AC7DFE0007E4B8B /* UIColor+External.m in Sources */ = {isa = PBXBuildFile; fileRef = DF5732B31AC7DFE0007E4B8B /* UIColor+External.m */; };
+		DFA1408B1B28A03800C33326 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DFA1408A1B28A03800C33326 /* CDVStatusBar.m */; };
+		DFCFA3AE1AFF8DA50037AC0A /* VersionUpdataAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = DFCFA3AD1AFF8DA50037AC0A /* VersionUpdataAPI.m */; };
+		DFD0643E1B10553D00606C85 /* open.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DFD0643D1B10553D00606C85 /* open.mp3 */; };
+		DFD064401B10559A00606C85 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFD0643F1B10559A00606C85 /* AVFoundation.framework */; };
 		E0B012A4E359410B838EDFEE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9105BEFD474048E9A720C2F2 /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E50FBCB399A04C5489F1D49C /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 734E5F8EBC1846C3887141DB /* AddressBookUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F88B9AE49ED84F92A9E9FD8B /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = CB61BFE9E30C45FB9DD90CD8 /* CDVConnection.m */; };
@@ -860,6 +864,12 @@
 		DF5732B01AC7DFAB007E4B8B /* micon-album@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "micon-album@2x.png"; sourceTree = "<group>"; };
 		DF5732B21AC7DFE0007E4B8B /* UIColor+External.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+External.h"; sourceTree = "<group>"; };
 		DF5732B31AC7DFE0007E4B8B /* UIColor+External.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+External.m"; sourceTree = "<group>"; };
+		DFA140891B28A03800C33326 /* CDVStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDVStatusBar.h; sourceTree = "<group>"; };
+		DFA1408A1B28A03800C33326 /* CDVStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDVStatusBar.m; sourceTree = "<group>"; };
+		DFCFA3AC1AFF8DA50037AC0A /* VersionUpdataAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionUpdataAPI.h; sourceTree = "<group>"; };
+		DFCFA3AD1AFF8DA50037AC0A /* VersionUpdataAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionUpdataAPI.m; sourceTree = "<group>"; };
+		DFD0643D1B10553D00606C85 /* open.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = open.mp3; sourceTree = "<group>"; };
+		DFD0643F1B10559A00606C85 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		E031D1E9510D420FA5245FAC /* CDVLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVLocation.h; path = org.apache.cordova.geolocation/CDVLocation.h; sourceTree = "<group>"; };
 		E812BB785EE94241B16F63B1 /* CDVExif.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVExif.h; path = org.apache.cordova.camera/CDVExif.h; sourceTree = "<group>"; };
 		EA520C5F61A94DB3B85D136C /* CDVInAppBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVInAppBrowser.h; path = org.apache.cordova.inappbrowser/CDVInAppBrowser.h; sourceTree = "<group>"; };
@@ -876,6 +886,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFD064401B10559A00606C85 /* AVFoundation.framework in Frameworks */,
 				CECEE2811AD96D200087204B /* libsqlite3.dylib in Frameworks */,
 				DF5732641AC7B5F7007E4B8B /* OpenGLES.framework in Frameworks */,
 				CEAAABF21AC21965003D5A89 /* Security.framework in Frameworks */,
@@ -965,6 +976,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DFD0643D1B10553D00606C85 /* open.mp3 */,
 				CE1492921ABA2B9800D47FDA /* Images.xcassets */,
 				308D052D1370CCF300D202BF /* icons */,
 				308D05311370CCF300D202BF /* splash */,
@@ -979,6 +991,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DFD0643F1B10559A00606C85 /* AVFoundation.framework */,
 				CECEE2801AD96D200087204B /* libsqlite3.dylib */,
 				DF5732631AC7B5F7007E4B8B /* OpenGLES.framework */,
 				CEAAABF11AC21965003D5A89 /* Security.framework */,
@@ -1035,6 +1048,8 @@
 				3721EB803A844D76A73F6C57 /* CDVFile.h */,
 				B321BF996D034E7C904FC65D /* CDVLocalFilesystem.h */,
 				814250A5393247FCB38BDC01 /* CDVAssetLibraryFilesystem.h */,
+				DFA140891B28A03800C33326 /* CDVStatusBar.h */,
+				DFA1408A1B28A03800C33326 /* CDVStatusBar.m */,
 				447DB037620C4BBF8F42A869 /* CDVCapture.m */,
 				8B1986AC84134E7D83CA5CD6 /* CDVCapture.h */,
 				3E8ABD8B5AB24A12960BCD3E /* CDVSound.m */,
@@ -1296,6 +1311,8 @@
 		CEAAABBE1AC2110C003D5A89 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				DFCFA3AC1AFF8DA50037AC0A /* VersionUpdataAPI.h */,
+				DFCFA3AD1AFF8DA50037AC0A /* VersionUpdataAPI.m */,
 				CECEE2451AD93BA60087204B /* TrackTable */,
 				CED6E78C1AD18D470023ECAC /* Channel */,
 				CED6E78F1AD18D470023ECAC /* SaleTable */,
@@ -2193,6 +2210,7 @@
 				DF5732741AC7C253007E4B8B /* MyInfoVC.xib in Resources */,
 				CED6E7D31AD18E710023ECAC /* TaskListVC.xib in Resources */,
 				CED6E76A1AD18CE70023ECAC /* icon57.png in Resources */,
+				DFD0643E1B10553D00606C85 /* open.mp3 in Resources */,
 				CEA36F8E1AE716820011CDB9 /* VisitSearchVC.xib in Resources */,
 				CED6E7751AD18CE70023ECAC /* icon180.png in Resources */,
 				DF57325C1AC7B498007E4B8B /* mapapi.bundle in Resources */,
@@ -2236,10 +2254,12 @@
 			files = (
 				CEAAABC21AC21154003D5A89 /* User.m in Sources */,
 				CEAAABE81AC213F1003D5A89 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				DFCFA3AE1AFF8DA50037AC0A /* VersionUpdataAPI.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				DF57329E1AC7D654007E4B8B /* SDWebImageDecoder.m in Sources */,
 				CECEE24E1AD93C0D0087204B /* TrackHttpResponse.m in Sources */,
 				CEAAABE41AC213F1003D5A89 /* AFHTTPClient.m in Sources */,
+				DFA1408B1B28A03800C33326 /* CDVStatusBar.m in Sources */,
 				CE14929D1ABA364F00D47FDA /* SliderVC.m in Sources */,
 				CED0BBB31ABBC341004022A8 /* NSString+md5.m in Sources */,
 				CE47FC4A1ADDF4FB008687B3 /* MyWorkCollectionCell.m in Sources */,
@@ -2441,6 +2461,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2468,7 +2489,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = cmm;
-				PROVISIONING_PROFILE = "01c78d9c-059d-4ee1-963b-67815a01f150";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -2478,8 +2499,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Fujian TQ Digital Co., Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Fujian TQ Digital Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cmm/cmm-Prefix.pch";
@@ -2505,7 +2526,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = cmm;
-				PROVISIONING_PROFILE = "01c78d9c-059d-4ee1-963b-67815a01f150";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

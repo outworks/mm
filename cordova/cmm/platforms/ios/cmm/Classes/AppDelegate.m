@@ -39,6 +39,7 @@
 #import "TrackHelper.h"
 
 #import "VersionUpdataAPI.h"
+#import "LKNavController.h"
 
 
 #import <Cordova/CDVPlugin.h>
@@ -115,23 +116,26 @@
     });
     
     
-
+//    LKNavController *loginVC = [[LKNavController alloc]init];
+//    loginVC.startPage = @"order.html?userId=1005992";
+//    loginVC.startPage = @"index.html";
+//
     LoginVC *loginVC = [[LoginVC alloc] init];
     
     self.viewController = [[UINavigationController alloc]initWithRootViewController:loginVC];
     self.viewController.navigationBarHidden = YES;
     self.window.rootViewController = self.viewController;
     
-    NSString *savedPassword = [[NSUserDefaults standardUserDefaults] objectForKey:@"gesturePassword"];
-    BOOL isLoginOut = [ShareValue sharedShareValue].isLoginOut;
-
-    if (savedPassword != nil && isLoginOut == NO) {
-        SwipeLoginVC *swipeLoginVC = [[SwipeLoginVC alloc] init];
-        [self.viewController pushViewController:swipeLoginVC animated:NO];
-    }
-    [self thirdPartInit];
-    _pointTag = 0;
-    [self initData];
+//    NSString *savedPassword = [[NSUserDefaults standardUserDefaults] objectForKey:@"gesturePassword"];
+//    BOOL isLoginOut = [ShareValue sharedShareValue].isLoginOut;
+//
+//    if (savedPassword != nil && isLoginOut == NO) {
+//        SwipeLoginVC *swipeLoginVC = [[SwipeLoginVC alloc] init];
+//        [self.viewController pushViewController:swipeLoginVC animated:NO];
+//    }
+//    [self thirdPartInit];
+//    _pointTag = 0;
+//    [self initData];
     [self.window makeKeyAndVisible];
     
 }

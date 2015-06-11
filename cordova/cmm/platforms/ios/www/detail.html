@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="format-detection" content="telephone=no" />  
+<meta name="format-detection" content="email=no" /> 
+<!--<script>
+    if (navigator.userAgent.toLowerCase().match(/ipad/i) == "ipad") {
+        document.write('<meta name="viewport" content="width=device-width,maximum-scale=1,minimum-scale=1">');
+    } else if (/Android/.test(navigator.userAgent) && parseFloat(navigator.userAgent.match(/Android\s(\d|\.)+/g)[0].replace('Android ', '')) < 4) {
+        document.write('<meta name="viewport" content="width=640,maximum-scale=0.5,minimum-scale=0.5">');
+    } else {
+        document.write('<meta name="viewport" content="target-densitydpi=device-dpi,width=640,user-scalable=no">');
+    }
+</script>-->
+
+<!-- <meta name="viewport" content="target-densitydpi=device-dpi,width=640,user-scalable=no"> -->
+<meta name="viewport" content="width=640,maximum-scale=0.5,minimum-scale=0.5">
+<title>我要提单</title>
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body class="page p-order-detail">
+    <div class="header container">
+        <div class="row">
+            <a href="javascript:void(0);" class="b b-back pull-left"></a>
+            <h1 class="title"><img src="images/order/title_detail.png"></h1>
+        </div>
+    </div>
+    <div class="content">
+        <form class="form-horizontal detail ">
+            <div class="title">工单详情:</div>
+            <div class="form-wrap container">
+                <div class="form-group">
+                    <label for="" class="col-xs-3 control-label">工单号:</label>
+                    <div class="col-xs-9 clearfix control">
+                        <span class="text">225989888989</span>
+                    </div>                                
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-xs-3 control-label">工单主题:</label>
+                    <div class="col-xs-9 clearfix control">
+                        <span class="text">关于渠道设备硬件故障反馈</span>
+                    </div>                                
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-xs-3 control-label">工单类型:</label>
+                    <div class="col-xs-9 clearfix control">
+                        <span class="text">设备硬件故障</span>
+                    </div>                                
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-xs-3 control-label">涉及渠道:</label>
+                    <div class="col-xs-9 clearfix control">
+                        <span class="text">个别</span>
+                    </div>                                
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-xs-3 control-label">工单内容:</label>
+                    <div class="col-xs-9 clearfix control">
+                        <span class="text">林水明-1005555</span>
+                    </div>                                
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-xs-3 control-label">提交时间:</label>
+                    <div class="col-xs-9 clearfix control">
+                        <span class="text">2014-09-18 10:22:23</span>
+                    </div>                                
+                </div>
+            </div>
+            <div class="from-wrap container mt50">
+                <div class="steps">
+                    <div class="step">
+                        <span class="index">1</span>
+                        <div class="info container">
+                            <div class="row">
+                                <span class="col-xs-7 tit">县级智控中心管理员</span>
+                                <span class="col-xs-5 tc name"><i class="i i-user"></i>张三</span>
+                            </div>
+                        </div>
+                        <p class="state">
+                            已解决
+                        </p>
+                    </div>
+                    <div class="step">
+                        <span class="index">2</span>
+                        <div class="info container">
+                            <div class="row">
+                                <span class="col-xs-7 tit">县级智控中心管理员</span>
+                                <span class="col-xs-5 tc name"><i class="i i-user"></i>张三</span>
+                            </div>
+                        </div>
+                        <p class="state">
+                            已解决
+                        </p>
+                    </div>
+                    <div class="step cur">
+                        <span class="index">3</span>
+                        <div class="info container">
+                            <div class="row">
+                                <span class="col-xs-7 tit">县级智控中心管理员</span>
+                                <span class="col-xs-5 tc name"><i class="i i-user"></i>张三</span>
+                            </div>
+                        </div>
+                        <p class="state">
+                            已解决
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="from-group container mt20 mb20">
+                <button href="javascript:void(0);" class="b-stop c2">中止</button>
+            </div>
+            <div class="from-group container mt20 mb20">
+                <button href="javascript:void(0);" class="b-rollback c1">撤回</button>
+            </div>
+        </form>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="script/plugin.js"></script>
+    <script src="script/i.js"></script>
+    <script src="script/config.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="script/bootstrap.min.js"></script>
+    <script src="script/app/detail.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+</body>
+</html>

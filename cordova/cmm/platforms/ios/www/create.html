@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="format-detection" content="telephone=no" />  
+<meta name="format-detection" content="email=no" /> 
+<!--<script>
+    if (navigator.userAgent.toLowerCase().match(/ipad/i) == "ipad") {
+        document.write('<meta name="viewport" content="width=device-width,maximum-scale=1,minimum-scale=1">');
+    } else if (/Android/.test(navigator.userAgent) && parseFloat(navigator.userAgent.match(/Android\s(\d|\.)+/g)[0].replace('Android ', '')) < 4) {
+        document.write('<meta name="viewport" content="width=640,maximum-scale=0.5,minimum-scale=0.5">');
+    } else {
+        document.write('<meta name="viewport" content="target-densitydpi=device-dpi,width=640,user-scalable=no">');
+    }
+</script>-->
+
+<!-- <meta name="viewport" content="target-densitydpi=device-dpi,width=640,user-scalable=no"> -->
+<meta name="viewport" content="width=640,maximum-scale=0.5,minimum-scale=0.5">
+<title>我要提单</title>
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body class="page p-order-create">
+    <div class="header container">
+        <div class="row">
+            <a href="javascript:void(0);" class="b b-back pull-left"></a>
+            <h1 class="title"><img src="images/order/title_create.png"></h1>
+        </div>
+    </div>
+    <div class="content">
+        <form class="form-horizontal create ">
+            <div class="form-wrap container">
+                <div class="form-group">
+                    <label for="" class="col-xs-3 control-label">工单主题:</label>
+                    <div class="col-xs-9 clearfix control-dates">
+                        <input type="text" class="inp"> 
+                    </div>                                
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-xs-3 control-label">故障类型:</label>
+                    <div class="col-xs-9 clearfix">
+                        <select name="type" class="control-select">
+                            <option value="1">硬件设备故障</option>
+                            <option value="1">软件系统故障</option>
+                            <option value="1">业务问题故障</option>
+                            <option value="1">其他问题故障</option>
+                        </select>
+                    </div>                                
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-xs-3 control-label">涉及渠道:</label>
+                    <div class="col-xs-9 clearfix control-checkboxs">
+                        <div class="col-xs-5 checkbox">
+                          <label>
+                            <input type="radio" name="type" value="">
+                            所有
+                          </label>
+                        </div>
+                        <div class="col-xs-5 checkbox">
+                          <label>
+                            <input type="radio" name="type" value="">
+                            个别
+                          </label>
+                        </div>
+                    </div>                                
+                </div>
+            </div>
+            <div class="title">工单内容:</div>
+            <div class="form-wrap container form-audio">
+                <a href="javascript:void(0);" class="b b-rec pull-left"></a>
+                <p class="work-wrap">
+                    <input type="text" class="inp inp-work" placeholder="请输入工作内容...">
+                </p>
+                <div class="audios">
+                    <span class="tit pull-left">已录制语音：</span>
+                    <div class="audio-wrap">
+                        <div class="audio-item">
+                            <a href="javascript:void(0);" class="b b-audio"></a>
+                            <div class="time">01:26</div>
+                        </div>
+                        <div class="audio-item">
+                            <a href="javascript:void(0);" class="b b-audio"></a>
+                            <div class="time">01:26</div>
+                        </div>
+                        <div class="audio-item">
+                            <a href="javascript:void(0);" class="b b-audio"></a>
+                            <div class="time">01:26</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-wrap container form-images mt20">
+                <div class="images container">
+                    <div class="col-xs-4">
+                        <a href="javascript:void(0);" class="b b-image">
+                            <input type="file">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-wrap container form-videos mt20">
+                <div class="videos container">
+                    <div class="col-xs-4">
+                        <a href="javascript:void(0);" class="b b-video">
+                            <input type="file">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="from-group container mt20 mb20">
+                <button href="javascript:void(0);" class="b-next">下一步</button>
+            </div>
+        </form>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="script/plugin.js"></script>
+    <script src="script/i.js"></script>
+    <script src="script/config.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="script/bootstrap.min.js"></script>
+    <script src="script/app/create.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+</body>
+</html>

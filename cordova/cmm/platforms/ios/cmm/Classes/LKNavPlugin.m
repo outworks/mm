@@ -41,13 +41,22 @@
     CDVPluginResult* pluginResult = nil;
     NSString* url = [command.arguments objectAtIndex:0];
     if (url != nil) {
-        UIViewController * vc =[self indexPage:url];
-        if (vc) {
-            [self.viewController.navigationController popToViewController:vc
-                                                                 animated:YES];
+        if ([url isEqual:@"-1"]) {
+            if (self.viewController.navigationController.navigationController) {
+               [self.viewController.navigationController popToRootViewControllerAnimated:YES];
+            }else{
+                [self.viewController.navigationController dismissViewControllerAnimated:YES completion:nil];
+            }
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         }else{
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Arg was null"];
+            UIViewController * vc =[self indexPage:url];
+            if (vc) {
+                [self.viewController.navigationController popToViewController:vc
+                                                                     animated:YES];
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+            }else{
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Arg was null"];
+            }
         }
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Arg was null"];
@@ -154,7 +163,15 @@
 
 -(void)closePage{
     if (self.viewController.navigationController) {
-        [self.viewController.navigationController popViewControllerAnimated:YES];
+        if (self.viewController.navigationController.childViewControllers.count == 1) {
+            if (!self.viewController.navigationController.navigationController) {
+                [self.viewController.navigationController dismissViewControllerAnimated:YES completion:^{}];
+            }else{
+                [self.viewController.navigationController popViewControllerAnimated:YES];
+            }
+        }else{
+            [self.viewController.navigationController popViewControllerAnimated:YES];
+        }
     }else{
         [self.viewController dismissViewControllerAnimated:YES completion:^{
             

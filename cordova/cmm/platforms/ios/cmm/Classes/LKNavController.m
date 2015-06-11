@@ -115,7 +115,7 @@
 {
     // Black base color for background matches the native apps
     //    [MBProgressHUD hideHUDForView:self.view animated:YES];
-    self.webView.backgroundColor = [UIColor redColor];
+    self.webView.backgroundColor = [UIColor whiteColor];
     self.webView.hidden = NO;
     return [super webViewDidFinishLoad:theWebView];
 }

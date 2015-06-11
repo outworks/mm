@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="format-detection" content="telephone=no" />  
+<meta name="format-detection" content="email=no" /> 
+<!--<script>
+    if (navigator.userAgent.toLowerCase().match(/ipad/i) == "ipad") {
+        document.write('<meta name="viewport" content="width=device-width,maximum-scale=1,minimum-scale=1">');
+    } else if (/Android/.test(navigator.userAgent) && parseFloat(navigator.userAgent.match(/Android\s(\d|\.)+/g)[0].replace('Android ', '')) < 4) {
+        document.write('<meta name="viewport" content="width=640,maximum-scale=0.5,minimum-scale=0.5">');
+    } else {
+        document.write('<meta name="viewport" content="target-densitydpi=device-dpi,width=640,user-scalable=no">');
+    }
+</script>-->
+
+<meta name="viewport" content="target-densitydpi=device-dpi,width=640,user-scalable=no">
+<title>提交订单</title>
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body class="page p-order-save">
+    
+    <div class="pop pop-search"  style="display:block;" ontouchmove="event.stopPropagation();">
+        <div class="box">
+            <div class="head">
+                <div class="inp-wrap">
+                    <input type="text" class="inp inp-search">
+                    <div class="line"></div>
+                </div>
+                <button href="javascript:void(0);" class="b b2 b-tosearch button">搜索</button>
+                <i class="i i-conner"></i>
+            </div>
+            <div class="body">
+                    <form class="form-horizontal search container">
+                        <div class="form-group">
+                            <label for="" class="col-xs-12 control-label">提交时间:</label>
+                            <div class="col-xs-12 clearfix control-dates">
+                                <input type="date" class="inp inp-date inp-start">
+                                <span class="tip">至</span>
+                                <input type="date" class="inp inp-date inp-end"> 
+                            </div>                                
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">故障类型:</label>
+                            <div class="col-xs-8 clearfix">
+                                <select name="type" class="control-select">
+                                    <option value="1">硬件设备故障</option>
+                                    <option value="1">软件系统故障</option>
+                                    <option value="1">业务问题故障</option>
+                                    <option value="1">其他问题故障</option>
+                                </select>
+                            </div>                                
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-xs-4 control-label">当前状态:</label>
+                            <div class="col-xs-8 clearfix control-checkboxs">
+                                <div class="col-xs-6 checkbox">
+                                  <label>
+                                    <input type="checkbox" value="">
+                                    处理中
+                                  </label>
+                                </div>
+                                <div class="col-xs-6 checkbox">
+                                  <label>
+                                    <input type="checkbox" value="">
+                                    待评价
+                                  </label>
+                                </div>
+                                <div class="col-xs-6 checkbox">
+                                  <label>
+                                    <input type="checkbox" value="">
+                                    已办结
+                                  </label>
+                                </div>
+                                <div class="col-xs-6 checkbox">
+                                  <label>
+                                    <input type="checkbox" value="">
+                                    已撤回
+                                  </label>
+                                </div>
+                                <div class="col-xs-6 checkbox">
+                                  <label>
+                                    <input type="checkbox" value="">
+                                    草稿箱
+                                  </label>
+                                </div>
+                                <div class="col-xs-6 checkbox">
+                                  <label>
+                                    <input type="checkbox" value="">
+                                    已中止
+                                  </label>
+                                </div>
+                            </div>                                
+                        </div>
+                        <div class="form-group">
+                            <button type="reset" href="javascript:void(0);" class="b b2 b-reset button">重置</button>
+                        </div>
+                    </form>
+                    <div class="history">
+                        <div class="title">历史记录:</div>
+                        <div class="his-list">
+                            <a href="javascript:void(0);" class="b b-history">福州移动</a>
+                            <a href="javascript:void(0);" class="b b-history">恒易达</a>
+                            <a href="javascript:void(0);" class="b b-history">鼓楼区</a>
+                        </div>
+                        <button type="reset" href="javascript:void(0);" class="b b2 b-clear button">清空历史数据</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="script/jquery-2.1.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="script/bootstrap.min.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+</body>
+</html>

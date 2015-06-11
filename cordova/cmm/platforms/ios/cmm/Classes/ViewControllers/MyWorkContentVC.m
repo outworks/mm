@@ -12,6 +12,8 @@
 #import "UIImageView+WebCache.h"
 #import "AppDelegate.h"
 #import "ShareFun.h"
+#import "LKNavController.h"
+#import "ShareValue.h"
 
 #import "TaskListVC.h"
 
@@ -72,6 +74,12 @@
         TaskListVC *t_vc = [[TaskListVC alloc] init];
         UINavigationController *t_nav = [[UINavigationController alloc] initWithRootViewController:t_vc];
         [ApplicationDelegate.viewController presentViewController:t_nav animated:YES completion:nil];
+    }else{
+        LKNavController *nav = [[LKNavController alloc]init];
+        nav.startPage = [NSString stringWithFormat:@"order.html?userId=%@",[ShareValue sharedShareValue].regiterUser.userId];
+        UINavigationController *t_nav = [[UINavigationController alloc] initWithRootViewController:nav];
+        nav.navHidden = YES;
+         [ApplicationDelegate.viewController presentViewController:t_nav animated:YES completion:nil];
     }
     
 }
