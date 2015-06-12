@@ -32,24 +32,91 @@ var PG = {
 		}
 	},
 	back : function(url,success,error){
+		//-1
 		var _ = this;
 		if(_.cordova()){
-			cordova.exec(success||function(){},error||function(){},'LKNav','backToPage',[url]);
+			cordova.exec(success||function(){},error||function(){},'LKNav','backToPage',url=='-1'?url:[url]);
 		}else{
-			document.location.href = url;
+			url=='-1'?history.go(-1):(document.location.href = url);
 		}
+	},
+	native:{
+		upload : function(mediaFile,success,error,param){
+			if(!window.FileTransfer){
+				$f.isFunction(error)&&error();
+				log('Upload Error');
+				return;
+			}
+            alert('native upload:'+JSON.stringify(mediaFile));
+			var ft = new FileTransfer(),
+            	path = mediaFile.fullPath;
+            alert(param);
+            	// name = mediaFile.name;
+            var _p = $f.object.toUrlString(param,true);
+            alert(_p);
+			ft.upload(path,
+                PG.upload+(_p?'&'+_p:''),
+				success||$.noop,
+				error||$.noop,
+                      {filekey:'file'}
+			);
+            alert(2);
+		},
+		//http://blog.csdn.net/mengxiangyue/article/details/8806638
+		audio : function(success,error,limit){
+			if(!navigator||!navigator.device||!navigator.device.capture){
+				$f.isFunction(error)&&error();
+				log('Audio Error');
+				return;
+			}
+			navigator.device.capture.captureAudio(success||$.noop, error||$.noop, {limit:limit||1,duration: 60});
+		},
+		image : function(success,error,limit){
+			if(!navigator||!navigator.device||!navigator.device.capture){
+				$f.isFunction(error)&&error();
+				log('Image Error');
+				return;
+			}
+			navigator.device.capture.captureImage(success||$.noop, error||$.noop, {limit:limit||1});
+		},
+		video : function(success,error,limit){
+			if(!navigator||!navigator.device||!navigator.device.capture){
+				$f.isFunction(error)&&error();
+				log('Image Error');
+				return;
+			}
+			navigator.device.capture.captureVideo(success||$.noop, error||$.noop, {limit:limit||1});
+		},
+		//http://cordova.apache.org/docs/en/3.0.0/cordova_media_media.md.html#Media
+		media : function(url,success,error){
+			if(!window.Media){
+				$f.isFunction(error)&&error();
+				log('Media Error');
+				return;
+			}
+			var media = new Media(url,success||$.noop, error||$.noop);
+			return media;
+		}
+	},
+	href : function(path,obj){
+		if(!path)return '';
+		return path+$f.object.toUrlString(obj);
 	},
 	path : function(){
 		var head = 'http://123.57.45.235:8090/fz_yxjl/';
 		var _path = {
 			'userInfo':'MobileService?requestType=getNextTchUser',
 			'billList':'MobileService?requestType=searchBill',
-			'billType':'MobileService?requestType=billType'
+			'billType':'MobileService?requestType=billType',
+			'billChannel':'MobileService?requestType=unitinfo',
+			'billDetail':'MobileService?requestType=billDetails',
+			'addBill':'MobileService?requestType=addBill'
 		};
 		return function(tar){
 			return head+(_path[tar]||tar);
 		}
 	}(),
+	upload : 'http://123.57.45.235:8090/fz_yxjl/MobileService?requestType=upload',
 	state : {
 		'全部':'',//10,11,12,13,14,15
 		'处理中':'10',
@@ -67,10 +134,15 @@ var PG = {
 		'13' : ['s-4','已中止'],
 		'11' : ['s-4','草稿箱']
 	},
+	relateChannel : {
+		'1' : '所有',
+		'2' : '个别'
+	},
 	history : 'HISTORY'
 };
 var TPL = {
 	nocont : '<div class="nocont">暂无数据</div>',
+	option : '<option value="{key}">{value}</option>',
 	state : '<ul class="dropdown-menu" role="menu">\
 		<% $.each(state,function(index,value){ %>\
 			<li role="presentation">\
@@ -79,7 +151,7 @@ var TPL = {
 		<% }) %>\
 	</ul>',
 	order : '<% $.each(order,function(index,_order){ %>\
-		<a href="javascript:void(0);" class="item">\
+		<a href="javascript:void(0);" data-id="<%=_order.id%>" class="item">\
             <span class="state <%=_order.stateClass%>"><%=_order.stateString%></span>\
             <div class="info container">\
                 <div class="row">\
@@ -93,6 +165,126 @@ var TPL = {
             </p>\
         </a>\
 	<% }) %>',
+	detail : '<div class="title">工单详情:</div>\
+        <div class="form-wrap container">\
+            <div class="form-group">\
+                <label for="" class="col-xs-3 control-label">工单号:</label>\
+                <div class="col-xs-9 clearfix control">\
+                    <span class="text"><%=order.billNum %></span>\
+                </div>                                \
+            </div>\
+            <div class="form-group">\
+                <label for="" class="col-xs-3 control-label">工单主题:</label>\
+                <div class="col-xs-9 clearfix control">\
+                    <span class="text"><%=order.billTitle %></span>\
+                </div>                                \
+            </div>\
+            <div class="form-group">\
+                <label for="" class="col-xs-3 control-label">工单类型:</label>\
+                <div class="col-xs-9 clearfix control">\
+                    <span class="text" data-type="<%=order.billType %>"><%=order.billTypeName%></span>\
+                </div>                                \
+            </div>\
+            <div class="form-group">\
+                <label for="" class="col-xs-3 control-label">涉及渠道:</label>\
+                <div class="col-xs-9 clearfix control">\
+                    <span class="text" data-channel="<%=order.relateChannel%>" data-channelIds="<%=order.relateChannelIds%>"><%=order.relateChannelString%></span>\
+                </div>                                \
+            </div>\
+            <div class="form-group">\
+                <label for="" class="col-xs-3 control-label">工单内容:</label>\
+                <div class="col-xs-9 clearfix control">\
+                    <span class="text">点击展开</span>\
+                </div>                                \
+            </div>\
+            <div class="form-group">\
+                <label for="" class="col-xs-3 control-label">提交时间:</label>\
+                <div class="col-xs-9 clearfix control">\
+                    <span class="text"><%=order.createTimeString%></span>\
+                </div>                                \
+            </div>\
+        </div>\
+        <div class="from-wrap container mt50">\
+            <div class="steps">\
+            	<% $.each(order.questionLogs,function(index,obj){ %>\
+				<div class="step  <%=!obj.finishTimeString?\'cur\':\'\'%>">\
+                    <span class="index"><%=index+1%></span>\
+                    <div class="info container">\
+                        <div class="row">\
+                            <span class="col-xs-7 tit"><%=obj.tchName%></span>\
+                            <% if(!!obj.userName){%>\
+                            	<span class="col-xs-5 tc name"><i class="i i-user"></i><%=obj.userName%></span>\
+                            <% } %>\
+                        </div>\
+                        <div class="row">\
+                            <span class="col-xs-4 tit">操作类型：</span>\
+                            <span class="col-xs-8 txt"><%=obj.logTypeName%></span>\
+                        </div>\
+                        <div class="row">\
+                            <span class="col-xs-4 tit">处理意见：</span>\
+                            <span class="col-xs-8 txt"><%=obj.logContent%></span>\
+                        </div>\
+                    </div>\
+                    <% if(obj.finishTimeString){ %>\
+                    <p class="time">\
+                        <i class="i i-time"></i><%=obj.finishTimeString%>\
+                    </p>\
+                    <% } %>\
+                </div>\
+            	<% }) %>\
+            </div>\
+        </div>',
+    save : '<div class="title">详细信息:</div>\
+	    <div class="form-wrap container">\
+	        <div class="form-group">\
+	            <label for="" class="col-xs-3 control-label">提单人:</label>\
+	            <div class="col-xs-9 clearfix control">\
+	                <span class="text"><%=order.userName%></span>\
+	            </div>                                \
+	        </div>\
+	        <div class="form-group">\
+	            <label for="" class="col-xs-3 control-label">联系方式:</label>\
+	            <div class="col-xs-9 clearfix control">\
+	                <span class="text"><%=order.mobilePhone%></span>\
+	            </div>                                \
+	        </div>\
+	        <div class="form-group">\
+	            <label for="" class="col-xs-3 control-label">归属县区:</label>\
+	            <div class="col-xs-9 clearfix control">\
+	                <span class="text"><%=order.regionName%></span>\
+	            </div>                                \
+	        </div>\
+	        <div class="form-group">\
+	            <label for="" class="col-xs-3 control-label">归属片区:</label>\
+	            <div class="col-xs-9 clearfix control">\
+	                <span class="text"><%=order.orgName%></span>\
+	            </div>                                \
+	        </div>\
+	        <div class="form-group">\
+	            <label for="" class="col-xs-3 control-label">订单时间:</label>\
+	            <div class="col-xs-9 clearfix control">\
+	                <span class="text"><%=order.createTime%></span>\
+	            </div>                                \
+	        </div>\
+	    </div>\
+	    <div class="title">下一步代理人:</div>\
+	    <div class="form-wrap container">\
+	        <div class="form-group">\
+	            <div class="col-xs-12 clearfix">\
+	                <select name="type" class="control-select">\
+	                	<% $.each(users,function(index,user){ %>\
+							<option value="<%=user.userId%>"><%=user.userName%></option>\
+	                	<% })%>\
+	                </select>\
+	            </div>                                \
+	        </div>\
+	    </div>\
+	    <div class="from-group container mt20 mb20">\
+	        <button href="javascript:void(0);" data-type="2" class="b-save c2">暂存</button>\
+	    </div>\
+	    <div class="from-group container mt20 mb20">\
+	        <button href="javascript:void(0);" data-type="1" class="b-submit c1">提交</button>\
+	    </div>',
 	search :'<div class="pop pop-search">\
 		<div class="mask"></div>\
         <div class="box">\
@@ -177,6 +369,14 @@ var TPL = {
 			od = od || [];
 			var _tpl = $f.template(TPL.order);
 			return _tpl({order:od});
+		},
+		detail : function(detail){
+			var _tpl = $f.template(TPL.detail);
+			return _tpl({order:detail});
+		},
+		save : function(save,users){
+			var _tpl = $f.template(TPL.save);
+			return _tpl({order:save,users:users});
 		}
 	};
 	$f.pop = {
@@ -274,6 +474,7 @@ var TPL = {
 			return time&&(time==new Date().format('yyyy-MM-dd'));
 		},
 		user : function(func){
+            $f.db.remove('userInfo');
 			var url = $f.api.urlparam();
 			var _userId = url['userId'];
 			$f.db.set('userId',_userId);
@@ -285,17 +486,15 @@ var TPL = {
 				var $load = $f.pop.load();
 				$load.show();
 				$f.db.remove('userInfo');
+				$f.db.remove('nextTchUser');
 				$f.ajax({
 					url:PG.path('userInfo'),
 					option:{userId:_userId},
 					success:function(json){
 						if(json.result=='0'&&json.data){
 							var _userInfo = json.data.userInfo;
-							$f.db.set('userInfo',{
-								userName:_userInfo.userName,
-								userId:_userInfo.userId,
-								userType:_userInfo.userType
-							});
+							$f.db.set('userInfo',_userInfo);
+							$f.db.set('nextTchUser',json.data.nextTchUser);
 						}
 					},
 					complete:function(){
@@ -309,7 +508,7 @@ var TPL = {
 		},
 		type : function(){
 			var _ = this;
-			return _.hasUpdate($f.db.get('typeTime'))
+			return _.hasUpdate($f.db.get('typeTime'))&&$f.db.get('type')
 				?$.Deferred(function(dtd){dtd.resolve();})
 				:$f.ajax({
 					url:PG.path('billType'),
@@ -318,6 +517,21 @@ var TPL = {
 						if(json.result=='0'&&json.data){
 							$f.db.set('typeTime',new Date().format('yyyy-MM-dd'));
 							$f.db.set('type',json.data);
+						}
+					}
+				})
+		},
+		channel : function(){
+			var _ = this;
+			return _.hasUpdate($f.db.get('channelTime'))&&$f.db.get('channel')
+				?$.Deferred(function(dtd){dtd.resolve();})
+				:$f.ajax({
+					url:PG.path('billChannel'),
+					option:{},
+					success:function(json){
+						if(json.result=='0'&&json.data){
+							$f.db.set('channelTime',new Date().format('yyyy-MM-dd'));
+							$f.db.set('channel',json.data);
 						}
 					}
 				})

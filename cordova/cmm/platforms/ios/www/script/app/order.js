@@ -136,7 +136,7 @@ var Page = {
 		});
 		$('.orders').on('click', '.item', function(event) {
 			event.preventDefault();
-			PG.open('detail.html'+$f.object.toUrlString({userId:userId}));
+			PG.open('detail.html'+$f.object.toUrlString({userId:userId,billId:$(this).data('id')}));
 		});
 	},
 	buttonInit:function(){
@@ -171,7 +171,7 @@ var Page = {
 		var $load = _first?$f.pop.load():$('.load');
 		$load.show();
 		_flag = true;
-		var $load = $load
+		// var $load = $load
 		$f.ajax({
 			url:PG.path('billList'),
 			option:_param,
@@ -192,7 +192,17 @@ var Page = {
 							cont = TPL.nocont;
 						}
 					}
+					// var $cont = $(cont).appendTo($order);
 					$order.append(cont);
+					/*$cont.each(function(index, el) {
+						$(this).bind('click',function(){
+							PG.open(PG.href('detail.html',{
+								userId : userId,
+								billId : $(this).data('id')
+							}))
+						})
+					});*/
+
 				}
 				_has = json.data?json.data.hasNextPage : false;
 				if(_has){

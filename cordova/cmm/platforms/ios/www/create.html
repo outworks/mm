@@ -36,17 +36,17 @@
                 <div class="form-group">
                     <label for="" class="col-xs-3 control-label">工单主题:</label>
                     <div class="col-xs-9 clearfix control-dates">
-                        <input type="text" class="inp"> 
+                        <input type="text" class="inp inp-title"> 
                     </div>                                
                 </div>
                 <div class="form-group">
                     <label for="" class="col-xs-3 control-label">故障类型:</label>
                     <div class="col-xs-9 clearfix">
-                        <select name="type" class="control-select">
-                            <option value="1">硬件设备故障</option>
+                        <select name="type" class="control-select select-type">
+                            <!-- <option value="1">硬件设备故障</option>
                             <option value="1">软件系统故障</option>
                             <option value="1">业务问题故障</option>
-                            <option value="1">其他问题故障</option>
+                            <option value="1">其他问题故障</option> -->
                         </select>
                     </div>                                
                 </div>
@@ -55,17 +55,17 @@
                     <div class="col-xs-9 clearfix control-checkboxs">
                         <div class="col-xs-5 checkbox">
                           <label>
-                            <input type="radio" name="type" value="">
+                            <input type="radio" checked name="relateChannel" value="1">
                             所有
                           </label>
                         </div>
                         <div class="col-xs-5 checkbox">
                           <label>
-                            <input type="radio" name="type" value="">
+                            <input type="radio" name="relateChannel" value="2">
                             个别
                           </label>
                         </div>
-                    </div>                                
+                    </div>
                 </div>
             </div>
             <div class="title">工单内容:</div>
@@ -74,10 +74,10 @@
                 <p class="work-wrap">
                     <input type="text" class="inp inp-work" placeholder="请输入工作内容...">
                 </p>
-                <div class="audios">
+                <div class="audios none">
                     <span class="tit pull-left">已录制语音：</span>
                     <div class="audio-wrap">
-                        <div class="audio-item">
+                        <!-- <div class="audio-item">
                             <a href="javascript:void(0);" class="b b-audio"></a>
                             <div class="time">01:26</div>
                         </div>
@@ -88,7 +88,7 @@
                         <div class="audio-item">
                             <a href="javascript:void(0);" class="b b-audio"></a>
                             <div class="time">01:26</div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                 <div class="images container">
                     <div class="col-xs-4">
                         <a href="javascript:void(0);" class="b b-image">
-                            <input type="file">
+                            <!-- <input type="file"> -->
                         </a>
                     </div>
                 </div>
@@ -105,13 +105,13 @@
                 <div class="videos container">
                     <div class="col-xs-4">
                         <a href="javascript:void(0);" class="b b-video">
-                            <input type="file">
+                            <!-- <input type="file"> -->
                         </a>
                     </div>
                 </div>
             </div>
             <div class="from-group container mt20 mb20">
-                <button href="javascript:void(0);" class="b-next">下一步</button>
+                <button href="javascript:void(0);" class="c2 b-next">下一步</button>
             </div>
         </form>
     </div>

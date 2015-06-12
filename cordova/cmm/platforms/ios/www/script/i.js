@@ -118,8 +118,8 @@
                 });
                 return _i_;
             },
-            toUrlString:function(obj){
-            	var s = '?';
+            toUrlString:function(obj,flag){
+            	var s = !!flag?'':'?';
         		$.each(obj, function(index, val) {
         			s+=(index+'='+val+'&');
         		});

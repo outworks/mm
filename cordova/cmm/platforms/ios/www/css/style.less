@@ -190,6 +190,10 @@ icon
 		width: 17px;height: 18px;
 		background: url(../images/order/i_search.png) 0 0 no-repeat;
 	}
+	&.i-time{
+		width: 12px;height: 12px;
+		background: url(../images/order/i_time.png) 0 0 no-repeat;
+	}
 }
 
 /* 
@@ -606,7 +610,7 @@ content
 
 		.steps{
 			.step{
-				background: #fff;position: relative;padding:30px 0;
+				background: #fff;position: relative;padding:30px 0 15px;
 				margin-bottom: 25px;
 				.index{
 					position: absolute;left: 0px;top:0px;z-index: 1;width: 74px;height: 60px;
@@ -616,6 +620,12 @@ content
 				}
 				.info{
 					padding-left: 80px;
+					.row{
+						margin-bottom: 15px;
+					}
+					.txt{
+
+					}
 				}
 				.tit{
 					color:#000;font-size: 30px;
@@ -626,6 +636,10 @@ content
 				}
 				.state{
 					padding:30px 0;color:#65b63d;font-size: 32px;line-height: 1.2;text-align: center;
+				} 
+				.time{
+					padding:10px 15px;color:#9d9d9d;font-size: 18px;line-height: 1.2;text-align: right;
+					i{margin-right: 10px;}
 				}
 				&.cur{
 					.index{

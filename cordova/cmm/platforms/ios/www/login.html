@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<script>
+    if (navigator.userAgent.toLowerCase().match(/ipad/i) == "ipad") {
+        document.write('<meta name="viewport" content="width=device-width,maximum-scale=1,minimum-scale=1">');
+    } else if (/Android/.test(navigator.userAgent) && parseFloat(navigator.userAgent.match(/Android\s(\d|\.)+/g)[0].replace('Android ', '')) < 4) {
+        document.write('<meta name="viewport" content="width=640,maximum-scale=0.5,minimum-scale=0.5">');
+    } else {
+        document.write('<meta name="viewport" content="target-densitydpi=device-dpi,width=640,user-scalable=no">');
+    }
+</script>
+<title>福州移动统一平台--登录</title>
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script type="text/javascript" src="script/html5shiv.min.js"></script>
+<script type="text/javascript" src="script/respond.min.js"></script>
+<![endif]-->
+</head>
+<body class="page p-login p-bg-1">
+    <div class="container">
+        <div class="row">
+           <div class="col-md-12 box-head">
+                <img  class="img-responsive img-circle " alt="200x200" src="images/login/logo.jpg">
+           </div>
+        </div>
+        <div class="row">
+            <div class="title">福州移动统一平台</div>
+        </div>
+        <div class="row mt70">
+            <form class="form f-login">
+                <div class="form-group pr">
+                    <span class="icon i-user form-control-addon" aria-hidden="true"></span>
+                    <input type="text" class="form-control inp" id="f-username" placeholder="用户名">
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="script/jquery-2.1.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="script/bootstrap.min.js"></script>
+</body>
+</html>

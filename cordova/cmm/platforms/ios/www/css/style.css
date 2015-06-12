@@ -225,6 +225,7 @@ body{background:#f2f2f2;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif,
 .i.i-sort{width:13px;height:19px;background:url(../images/order/i_sort.png) 0 0 no-repeat;}
 .i.i-down{width:18px;height:8px;background:url(../images/common/down.png) 0 0 no-repeat;}
 .i.i-search{width:17px;height:18px;background:url(../images/order/i_search.png) 0 0 no-repeat;}
+.i.i-time{width:12px;height:12px;background:url(../images/order/i_time.png) 0 0 no-repeat;}
 .inp{background-color:transparent !important;color:#fff;font-size:26px;line-height:1;padding:20px 20px;display:block;outline:none;border:none;}
 select{background-color:transparent !important;font-size:26px;line-height:1;padding:12px ;display:block;outline:none;border:none;width:100%;background-image:url(../images/common/inner.png);background-repeat:no-repeat;border-radius:0;background-position:right center;text-align:center;}select.c1{color:#f2471f;}
 em{font-style:normal;}em.e1{font-weight:bold;}
@@ -238,7 +239,7 @@ a:active,a:hover{opacity:0.75;}
 .button.b-12,button.b-12,input[type=button].b-12,input[type=reset].b-12,input[type=submit].b-12{width:100%;display:block;}
 .button.b,button.b,input[type=button].b,input[type=reset].b,input[type=submit].b{box-sizing:content-box;}
 .button:active,button:active,input[type=button]:active,input[type=reset]:active,input[type=submit]:active,.button:hover,button:hover,input[type=button]:hover,input[type=reset]:hover,input[type=submit]:hover{opacity:0.75;}
-.header{height:72px;background:#008cec;width:100%;position:fixed;z-index:110;}.header .b{z-index:10;height:72px;display:block;padding:0 22px;position:relative;}
+.header{height:72px;background:#0085d0;width:100%;position:fixed;z-index:110;}.header .b{z-index:10;height:72px;display:block;padding:0 22px;position:relative;}
 .header .b-back{width:76px;background:url(../images/common/b_back.png) center center no-repeat;}
 .header .title{text-align:center;vertical-align:middle;display:block;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;outline:0!important;color:#fff;position:absolute;width:100%;}
 .loading{background-image:url(../images/common/load_3.gif);background-position:center center;background-repeat:no-repeat;}
@@ -298,11 +299,12 @@ a:active,a:hover{opacity:0.75;}
 .p-order-detail .detail .control-checkboxs input[type="checkbox"],.p-order-detail .detail .control-checkboxs input[type="radio"]{margin-top:16px;}
 .p-order-detail .detail .control-checkboxs .checkbox{padding-top:0px;color:#989da3;}
 .p-order-detail .detail .title{width:100%;padding:18px 15px 0;font-size:28px;color:#86898e;background:#f4f1f1;}
-.p-order-detail .detail .steps .step{background:#fff;position:relative;padding:30px 0;margin-bottom:25px;}.p-order-detail .detail .steps .step .index{position:absolute;left:0px;top:0px;z-index:1;width:74px;height:60px;padding:0 34px 12px 0;line-height:48px;font-size:24px;color:#fff;background:url(../images/order/step_bg.png) 0 0 no-repeat;display:block;text-align:center;}
-.p-order-detail .detail .steps .step .info{padding-left:80px;}
+.p-order-detail .detail .steps .step{background:#fff;position:relative;padding:30px 0 15px;margin-bottom:25px;}.p-order-detail .detail .steps .step .index{position:absolute;left:0px;top:0px;z-index:1;width:74px;height:60px;padding:0 34px 12px 0;line-height:48px;font-size:24px;color:#fff;background:url(../images/order/step_bg.png) 0 0 no-repeat;display:block;text-align:center;}
+.p-order-detail .detail .steps .step .info{padding-left:80px;}.p-order-detail .detail .steps .step .info .row{margin-bottom:15px;}
 .p-order-detail .detail .steps .step .tit{color:#000;font-size:30px;}
 .p-order-detail .detail .steps .step .name{text-align:right;}.p-order-detail .detail .steps .step .name .i{margin-right:5px;margin-top:1px;}
 .p-order-detail .detail .steps .step .state{padding:30px 0;color:#65b63d;font-size:32px;line-height:1.2;text-align:center;}
+.p-order-detail .detail .steps .step .time{padding:10px 15px;color:#9d9d9d;font-size:18px;line-height:1.2;text-align:right;}.p-order-detail .detail .steps .step .time i{margin-right:10px;}
 .p-order-detail .detail .steps .step.cur .index{background-position:0px -60px;}
 .p-order-detail .detail .steps .step.cur .state{color:#f79311;}
 .p-order-detail .detail .form-audio .b-rec{width:48px;height:48px;display:block;margin-top:3px;background:url(../images/order/b_audio.png) 0 0 no-repeat;}.p-order-detail .detail .form-audio .b-rec:active{background-position:0 -48px;}

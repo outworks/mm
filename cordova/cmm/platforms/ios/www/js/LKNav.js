@@ -25,5 +25,8 @@ closePage:function(args){
 },
 backToPage:function(url,openSuc,openFaild){
     cordova.exec(openSuc, openFaild, "LKNav", "backToPage", [url]);
+},
+notifiNavtive:function(args){
+    cordova.exec(function(winParam){}, function(error){},"LKNav", "notifiNavtive", [args]);
 }
 };
