@@ -51,6 +51,13 @@
         }else{
             UIViewController * vc =[self indexPage:url];
             if (vc) {
+                if ([vc isKindOfClass:[LKNavController class]]) {
+                    NSString* reload = [command.arguments objectAtIndex:1];
+                    if ([reload isEqual:@"true"]) {
+                        LKNavController *navController = (LKNavController *)vc;
+                        [navController.webView reload];
+                    }
+                }
                 [self.viewController.navigationController popToViewController:vc
                                                                      animated:YES];
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];

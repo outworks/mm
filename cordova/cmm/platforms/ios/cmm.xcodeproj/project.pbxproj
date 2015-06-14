@@ -292,6 +292,8 @@
 		DF5732AF1AC7DF8F007E4B8B /* micon-camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DF5732AE1AC7DF8F007E4B8B /* micon-camera@2x.png */; };
 		DF5732B11AC7DFAB007E4B8B /* micon-album@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DF5732B01AC7DFAB007E4B8B /* micon-album@2x.png */; };
 		DF5732B41AC7DFE0007E4B8B /* UIColor+External.m in Sources */ = {isa = PBXBuildFile; fileRef = DF5732B31AC7DFE0007E4B8B /* UIColor+External.m */; };
+		DF6C4F851B2C1BD900601A3F /* StreamingMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = DF6C4F841B2C1BD900601A3F /* StreamingMedia.m */; };
+		DF6C4F871B2C1D6A00601A3F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF6C4F861B2C1D6A00601A3F /* MediaPlayer.framework */; };
 		DFA1408B1B28A03800C33326 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DFA1408A1B28A03800C33326 /* CDVStatusBar.m */; };
 		DFCFA3AE1AFF8DA50037AC0A /* VersionUpdataAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = DFCFA3AD1AFF8DA50037AC0A /* VersionUpdataAPI.m */; };
 		DFD0643E1B10553D00606C85 /* open.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = DFD0643D1B10553D00606C85 /* open.mp3 */; };
@@ -864,6 +866,9 @@
 		DF5732B01AC7DFAB007E4B8B /* micon-album@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "micon-album@2x.png"; sourceTree = "<group>"; };
 		DF5732B21AC7DFE0007E4B8B /* UIColor+External.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+External.h"; sourceTree = "<group>"; };
 		DF5732B31AC7DFE0007E4B8B /* UIColor+External.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+External.m"; sourceTree = "<group>"; };
+		DF6C4F831B2C1BD900601A3F /* StreamingMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamingMedia.h; sourceTree = "<group>"; };
+		DF6C4F841B2C1BD900601A3F /* StreamingMedia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreamingMedia.m; sourceTree = "<group>"; };
+		DF6C4F861B2C1D6A00601A3F /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		DFA140891B28A03800C33326 /* CDVStatusBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDVStatusBar.h; sourceTree = "<group>"; };
 		DFA1408A1B28A03800C33326 /* CDVStatusBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDVStatusBar.m; sourceTree = "<group>"; };
 		DFCFA3AC1AFF8DA50037AC0A /* VersionUpdataAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionUpdataAPI.h; sourceTree = "<group>"; };
@@ -886,6 +891,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF6C4F871B2C1D6A00601A3F /* MediaPlayer.framework in Frameworks */,
 				DFD064401B10559A00606C85 /* AVFoundation.framework in Frameworks */,
 				CECEE2811AD96D200087204B /* libsqlite3.dylib in Frameworks */,
 				DF5732641AC7B5F7007E4B8B /* OpenGLES.framework in Frameworks */,
@@ -991,6 +997,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DF6C4F861B2C1D6A00601A3F /* MediaPlayer.framework */,
 				DFD0643F1B10559A00606C85 /* AVFoundation.framework */,
 				CECEE2801AD96D200087204B /* libsqlite3.dylib */,
 				DF5732631AC7B5F7007E4B8B /* OpenGLES.framework */,
@@ -1021,6 +1028,8 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				DF6C4F831B2C1BD900601A3F /* StreamingMedia.h */,
+				DF6C4F841B2C1BD900601A3F /* StreamingMedia.m */,
 				63F8E6241AC04B079AB7F1F7 /* CDVDevice.m */,
 				0B411F3F818B43F2B54182E4 /* CDVDevice.h */,
 				CB61BFE9E30C45FB9DD90CD8 /* CDVConnection.m */,
@@ -2390,6 +2399,7 @@
 				CECEE2731AD940C40087204B /* NSObject+LKDBHelper.m in Sources */,
 				CE959CC51AD9BED900AF7E21 /* NSData+Crypto.m in Sources */,
 				CE8CEA3D1ADAF331002B28B1 /* VisitLocusVC.m in Sources */,
+				DF6C4F851B2C1BD900601A3F /* StreamingMedia.m in Sources */,
 				DF5732A81AC7D654007E4B8B /* UIImageView+WebCache.m in Sources */,
 				CED6E74F1AD18C880023ECAC /* UIScrollView+MJRefresh.m in Sources */,
 				CE6CEAEB1AD3729800F19FE6 /* HCatImageUpadataVC.m in Sources */,

@@ -119,6 +119,7 @@
                 return _i_;
             },
             toUrlString:function(obj,flag){
+                if(!$f.isObject(obj)){return '';}
             	var s = !!flag?'':'?';
         		$.each(obj, function(index, val) {
         			s+=(index+'='+val+'&');

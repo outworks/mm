@@ -31,11 +31,11 @@ var PG = {
 			history.go(-1);
 		}
 	},
-	back : function(url,success,error){
+	back : function(url,reload,success,error){
 		//-1
 		var _ = this;
 		if(_.cordova()){
-			cordova.exec(success||function(){},error||function(){},'LKNav','backToPage',url=='-1'?url:[url]);
+			cordova.exec(success||function(){},error||function(){},'LKNav','backToPage',url=='-1'?url:[url,reload?'true':'false']);
 		}else{
 			url=='-1'?history.go(-1):(document.location.href = url);
 		}
@@ -47,20 +47,16 @@ var PG = {
 				log('Upload Error');
 				return;
 			}
-            alert('native upload:'+JSON.stringify(mediaFile));
 			var ft = new FileTransfer(),
             	path = mediaFile.fullPath;
-            alert(param);
-            	// name = mediaFile.name;
+            console.log(mediaFile.type);
             var _p = $f.object.toUrlString(param,true);
-            alert(_p);
 			ft.upload(path,
-                PG.upload+(_p?'&'+_p:''),
+				PG.upload+(!!_p?'&'+_p:''),
 				success||$.noop,
 				error||$.noop,
-                      {filekey:'file'}
+                {fileKey:'file',fileName:path.substr(path.lastIndexOf('/') + 1),mimeType:mediaFile.type}
 			);
-            alert(2);
 		},
 		//http://blog.csdn.net/mengxiangyue/article/details/8806638
 		audio : function(success,error,limit){
@@ -117,6 +113,12 @@ var PG = {
 		}
 	}(),
 	upload : 'http://123.57.45.235:8090/fz_yxjl/MobileService?requestType=upload',
+	resource : 'http://123.57.45.235:8090/file/',
+	RS : {
+		voice:4,
+		image:4,
+		video:4
+	},
 	state : {
 		'全部':'',//10,11,12,13,14,15
 		'处理中':'10',
@@ -420,7 +422,7 @@ var TPL = {
 		},
 		load : function(){
 			var _ = this;
-			var $elem = $('<div class="pop pop-load"></div>');
+			var $elem = $('<div class="pop pop-load"><div class="box"></div></div>');
 			$elem.bind('touchmove',function(e){
 				e.preventDefault();  
 				e.stopPropagation(); 
@@ -430,14 +432,54 @@ var TPL = {
 				show : function(){
 					$elem.appendTo('body').show();
 					$elem.addClass('animated ffast fadeIn');
+					return this;
 				},
 				hide : function(func){
+					if(!$elem)return null;
 					$elem.removeClass('fadeIn').addClass('fadeOut');
 					_.bind.call($elem,function(){
 						$elem.remove();
 						$elem = null;
 						$.isFunction(func)&&func();
 					});
+					return this;
+				},
+				elem:$elem
+			}
+		},
+		resource : function(){
+			var _ = this;
+			var $elem = $('<div class="pop pop-resource"><div class="mask"></div><div class="box"></div></div>');
+			$elem.bind('touchmove',function(e){
+				e.preventDefault();  
+				e.stopPropagation(); 
+				return false;
+			});
+			return {
+				show : function(){
+					$elem.appendTo('body').show();
+					$elem.addClass('animated ffast fadeIn');
+					return this;
+				},
+				hide : function(func){
+					if(!$elem)return null;
+					$elem.removeClass('fadeIn').addClass('fadeOut');
+					_.bind.call($elem,function(){
+						$elem.remove();
+						$elem = null;
+						$.isFunction(func)&&func();
+					});
+					return this;
+				},
+				bg : function(src){
+					$elem.find('.box').css({backgroundImage:'url('+src+')'});
+					return this;
+				},
+				video : function(src){
+					var str = '<video class="mp4" autoplay="autoplay" controls="controls" name="media" src="{path}"></video>'.replace('{path}',src);
+					var $video = $(str).appendTo($elem.find('.box'));
+					return this;
+					// return '<div class="videobox"><video class="mp4" autoplay="autoplay" controls="controls" name="media" src="{path}"></video><a href="javascript:;" class="btn b-close"></a></div>'.replace('{path}',src);
 				},
 				elem:$elem
 			}
@@ -474,9 +516,9 @@ var TPL = {
 			return time&&(time==new Date().format('yyyy-MM-dd'));
 		},
 		user : function(func){
-            $f.db.remove('userInfo');
 			var url = $f.api.urlparam();
-			var _userId = url['userId'];
+			var _userId = url['userId']||$f.db.get('pageUserId');
+			$f.db.remove('pageUserId');
 			$f.db.set('userId',_userId);
 			var _u = $f.db.get('userInfo');
 			if(_u && _u.userId == _userId){

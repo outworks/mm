@@ -94,4 +94,7 @@
     <feature name="LKNav">
         <param name="ios-package" value="LKNavPlugin" />
     </feature>
+    <feature name="StreamingMedia">
+        <param name="ios-package" value="StreamingMedia" />
+    </feature>
 </widget>
