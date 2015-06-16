@@ -12,6 +12,7 @@ function closePage(){
 
 */
 var PG = {
+	test : false,
 	cordova : function(){
 		return !!window.cordova;
 	},
@@ -35,7 +36,7 @@ var PG = {
 		//-1
 		var _ = this;
 		if(_.cordova()){
-			cordova.exec(success||function(){},error||function(){},'LKNav','backToPage',url=='-1'?url:[url,reload?'true':'false']);
+			cordova.exec(success||function(){},error||function(){},'LKNav','backToPage',url=='-1'?[url,'false']:[url,reload?'true':'false']);
 		}else{
 			url=='-1'?history.go(-1):(document.location.href = url);
 		}
@@ -49,13 +50,17 @@ var PG = {
 			}
 			var ft = new FileTransfer(),
             	path = mediaFile.fullPath;
-            console.log(mediaFile.type);
+            	// name = mediaFile.name;
             var _p = $f.object.toUrlString(param,true);
 			ft.upload(path,
 				PG.upload+(!!_p?'&'+_p:''),
 				success||$.noop,
 				error||$.noop,
-                {fileKey:'file',fileName:path.substr(path.lastIndexOf('/') + 1),mimeType:mediaFile.type}
+				{
+					fileKey:'file',
+					fileName:path.substr(path.lastIndexOf('/') + 1),
+					mimeType:mediaFile.type
+				}
 			);
 		},
 		//http://blog.csdn.net/mengxiangyue/article/details/8806638
@@ -101,23 +106,43 @@ var PG = {
 	path : function(){
 		var head = 'http://123.57.45.235:8090/fz_yxjl/';
 		var _path = {
-			'userInfo':'MobileService?requestType=getNextTchUser',
+			'nextTchUser':'MobileService?requestType=getNextTchUser',
+			'userInfo':'MobileService?requestType=getSelfInfo',
 			'billList':'MobileService?requestType=searchBill',
 			'billType':'MobileService?requestType=billType',
 			'billChannel':'MobileService?requestType=unitinfo',
 			'billDetail':'MobileService?requestType=billDetails',
-			'addBill':'MobileService?requestType=addBill'
+			'addBill':'MobileService?requestType=addBill',
+			'delBill':'MobileService?requestType=delBill',
+			'stopBill':'MobileService?requestType=stopBill',
+			'cancelBill':'MobileService?requestType=cancelBill',
+			'evalBill':'MobileService?requestType=evalateBill'
 		};
 		return function(tar){
 			return head+(_path[tar]||tar);
 		}
 	}(),
 	upload : 'http://123.57.45.235:8090/fz_yxjl/MobileService?requestType=upload',
-	resource : 'http://123.57.45.235:8090/file/',
+	resource : function(){
+		return $f.db.get('serverUrl')||'http://123.57.45.235:8090/fz_yxjl/downloadFullPath?fullPath=';
+	},
+	playpath : function(){
+		return $f.db.get('playFileUrl')||'http://123.57.45.235:8090/file/';
+	},
 	RS : {
+		channel:5,
+		channelShow:20,
 		voice:4,
 		image:4,
 		video:4
+	},
+	unit:{
+		1:'业务代办员',
+		2:'营业厅',
+		3:'指定专营店',
+		4:'特约代理',
+		5:'社会代办点',
+		6:'农村服务站'
 	},
 	state : {
 		'全部':'',//10,11,12,13,14,15
@@ -193,10 +218,26 @@ var TPL = {
                     <span class="text" data-channel="<%=order.relateChannel%>" data-channelIds="<%=order.relateChannelIds%>"><%=order.relateChannelString%></span>\
                 </div>                                \
             </div>\
+            <% if(order.relateChannelArr&&order.relateChannelArr.length>0){%>\
+				<div class="form-group form-channels">\
+                    <label for="" class="col-xs-3 control-label">个别渠道:</label>\
+                    <div class="col-xs-9 clearfix channels">\
+                    	<% $.each(order.relateChannelArr,function(index,cl){%>\
+							<div class="col-xs-4">\
+	                            <div class="channel">\
+	                                <span class="id"><%=cl.unitnum%></span>\
+	                                <span class="name"><%=cl.unitname%></span>\
+	                            </div>\
+	                        </div>\
+                    	<% });%>\
+                    </div>\
+                    <!-- <div class="tip pull-right">&nbsp;</div> -->\
+                </div>\
+            <% } %>\
             <div class="form-group">\
                 <label for="" class="col-xs-3 control-label">工单内容:</label>\
                 <div class="col-xs-9 clearfix control">\
-                    <span class="text">点击展开</span>\
+                    <a class="text opentext">点击展开<b class="caret"></b></a>\
                 </div>                                \
             </div>\
             <div class="form-group">\
@@ -235,7 +276,40 @@ var TPL = {
                 </div>\
             	<% }) %>\
             </div>\
+        </div>\
+        <div class="buttons container"></div>',
+    button:'<div class="form-group container mt20 mb20">\
+        <button href="javascript:void(0);" class="<%=cls%>"><%=text%></button>\
+    </div>',
+    eval:'<div class="form-group eval container mt40 mb40">\
+    	<label for="" class="col-xs-3 control-label">评价</label>\
+    	<div class="col-xs-9">\
+    		<i class="i i-star"></i><i class="i i-star"></i><i class="i i-star"></i><i class="i i-star"></i><i class="i i-star"></i>\
+    	</div>\
+    </div>',
+    showeval:'<div class="form-group eval container mt40 mb40">\
+    	<p for="" class="col-xs-12 control-label mb30 tc">你的评价</p>\
+    	<div class="col-xs-12 tc">\
+    		<i class="i i-star"></i><i class="i i-star"></i><i class="i i-star"></i><i class="i i-star"></i><i class="i i-star"></i>\
+    	</div>\
+    </div>',
+    /*button:{
+    	stop:'<div class="from-group container mt20 mb20">\
+            <button href="javascript:void(0);" class="b-stop c2">中止</button>\
         </div>',
+        cancel:'<div class="from-group container mt20 mb20">\
+            <button href="javascript:void(0);" class="b-rollback c1">撤回</button>\
+        </div>',
+        delete:'<div class="from-group container mt20 mb20">\
+            <button href="javascript:void(0);" class="b-rollback c3">删除</button>\
+        </div>',
+        eval:'<div class="from-group container mt20 mb20">\
+            <button href="javascript:void(0);" class="b-rollback c1">评价</button>\
+        </div>',
+        edit:'<div class="from-group container mt20 mb20">\
+            <button href="javascript:void(0);" class="b-rollback c1">编辑</button>\
+        </div>',
+    },*/
     save : '<div class="title">详细信息:</div>\
 	    <div class="form-wrap container">\
 	        <div class="form-group">\
@@ -350,15 +424,146 @@ var TPL = {
             </div>\
         </div>\
     </div>',
-	stop : {
-
-	},
-	end : {
-
-	},
-	cont : {
-
-	}
+    channel:'<div class="pop pop-channel">\
+        <div class="mask"></div>\
+        <div class="box  loading_2">\
+            <div class="head">\
+                <div class="inp-wrap">\
+                    <input type="text" class="inp inp-search">\
+                    <div class="line"></div>\
+                </div>\
+                <button href="javascript:void(0);" class="b b2 b-tosearch button">搜索</button>\
+                <button class="b2 button b-confirm">确认</button>\
+                <i class="i i-conner"></i>\
+            </div>\
+            <div class="body">\
+                <div class="wrap">\
+                </div>\
+            </div>\
+        </div>\
+    </div>',
+    cl:'<% $.each(channel,function(index,cl){ %>\
+	    <a href="javascript:void(0);" class="cl" data-id="<%=cl.id%>">\
+	        <input type="checkbox" name="cl" <%=cl.checked?\'checked\':\'\'%> >\
+            <span class="id"><%=cl.unitnum%></span>\
+            <span class="name"><%=cl.unitname%></span>\
+            <span class="type"><%=cl.unittype%></span>\
+	    </a>\
+    <% })%>',
+	cldiv : '<div class="col-xs-4">\
+        <div class="channel">\
+            <span class="id">{unitnum}</span>\
+            <span class="name">{unitname}</span>\
+        </div>\
+    </div>',
+    stop:'<div class="pop dialog pop-end">\
+        <div class="mask"></div>\
+        <div class="box">\
+            <div class="head">\
+                <div class="title">工单中止</div>\
+            </div>\
+            <div class="body">\
+                <div class="row">\
+                    <div class="radio">\
+                        <label>\
+                            <input type="radio" name="optionsRadios" value="1">\
+                            <span>原因1：问题已经处理完成</span>\
+                        </label>\
+                    </div>\
+                    <div class="radio">\
+                        <label>\
+                            <input type="radio" name="optionsRadios" value="2">\
+                            <span>原因2：重新发单</span>\
+                        </label>\
+                    </div>\
+                    <div class="radio">\
+                        <label>\
+                            <input type="radio" name="optionsRadios" value="3">\
+                            <span>原因3：其他原因</span>\
+                        </label>\
+                    </div>\
+                </div>\
+            </div>\
+            <div class="foot">\
+                <div class="btngroup">\
+                    <button class="b-6 b-cancel">取消</button>\
+                    <button class="b-6 b-confirm">确定</button>\
+                </div>\
+            </div>\
+        </div>\
+    </div>',
+    cancel:'<div class="pop dialog pop-stop">\
+        <div class="mask"></div>\
+        <div class="box">\
+            <div class="head">\
+                <div class="title">工单撤回</div>\
+            </div>\
+            <div class="body">\
+                <textarea name="reason" id="" cols="30" rows="10" placeholder="写点什么..."></textarea>\
+            </div>\
+            <div class="foot">\
+                <div class="btngroup">\
+                    <button class="b-6 b-cancel">取消</button>\
+                    <button class="b-6 b-confirm">确定</button>\
+                </div>\
+            </div>\
+        </div>\
+    </div>',
+    cont:'<div class="pop dialog pop-cont">\
+        <div class="mask"></div>\
+        <div class="box">\
+            <div class="head">\
+                <div class="title">工单内容</div>\
+            </div>\
+            <div class="body">\
+                <div class="row">\
+                    <p class="cont">\
+                        <em class="e1">描述：</em><%=cont%>\
+                    </p>\
+                    <% if(voice.length>0){%>\
+                    <div class="audios">\
+                        <span class="tit pull-left">已录制语音：</span>\
+                        <div class="audio-wrap">\
+                        	<% $.each(voice,function(index,val){ %>\
+                            <div class="audio-item">\
+                                <a href="javascript:void(0);" class="b b-audio ad" data-src="<%=val%>"></a>\
+                            </div>\
+                            <% }); %>\
+                        </div>\
+                    </div>\
+                    <% } %>\
+                </div>\
+                <% if(image.length>0){%>\
+                <div class="row mt20">\
+                    <div class="images">\
+                    	<% $.each(image,function(index,val){ %>\
+                        <div class="col-xs-4">\
+                            <a href="javascript:void(0);" class="b b-image img" data-src="<%=val%>" style="background-image:url(<%=val%>)">\
+                            </a>\
+                        </div>\
+                        <% }); %>\
+                    </div>\
+                </div>\
+                <% } %>\
+                <% if(video.length>0){%>\
+                <div class="row mt20">\
+                    <div class="videos">\
+                    	<% $.each(video,function(index,val){ %>\
+                        <div class="col-xs-4">\
+                            <a href="javascript:void(0);" class="b vd" data-src="<%=val%>"></a>\
+                        </div>\
+                        <% }); %>\
+                    </div>\
+                </div>\
+                <% } %>\
+            </div>\
+            <div class="foot">\
+                <div class="btngroup">\
+                    <button class="b-fold"><i class="i i-fold"></i></button>\
+                </div>\
+            </div>\
+        </div>\
+    </div>'
 };
 
 !function($){
@@ -379,6 +584,13 @@ var TPL = {
 		save : function(save,users){
 			var _tpl = $f.template(TPL.save);
 			return _tpl({order:save,users:users});
+		},
+		button : function(btn){
+			var _tpl = $f.template(TPL.button);
+			return _tpl(btn);
+		},
+		text : function(val){
+			return TPL[val]||'';
 		}
 	};
 	$f.pop = {
@@ -429,7 +641,7 @@ var TPL = {
 				return false;
 			});
 			return {
-				show : function(){
+				show : function(func){
 					$elem.appendTo('body').show();
 					$elem.addClass('animated ffast fadeIn');
 					return this;
@@ -492,22 +704,139 @@ var TPL = {
 				show : function(func){
 					var _this = this;
 					_.show(_this,'ffast fadeInRight',func);
+					return this;
 				},
 				hide : function(func){
 					var _this = this;
 					_.hide(_this,'fadeInRight','fadeOutRight',func);
 					_this.elem.trigger('hide');
+					return this;
+				},
+				elem:$elem
+			}
+		},
+		stop : function(data){
+			var _ = this;
+			var _tpl = $f.template(TPL.stop),
+				$elem = $(_tpl(data));
+			return {
+				show : function(func){
+					var _this = this;
+					_.show(_this,'ffast fadeIn',func);
+					return this;
+				},
+				hide : function(func){
+					var _this = this;
+					_.hide(_this,'fadeIn','fadeOut',func);
+					_this.elem.trigger('hide');
+					return this;
+				},
+				elem:$elem
+			}
+		},
+		cancel : function(data){
+			var _ = this;
+			var _tpl = $f.template(TPL.cancel),
+				$elem = $(_tpl(data));
+			return {
+				show : function(func){
+					var _this = this;
+					_.show(_this,'ffast fadeIn',func);
+					return this;
+				},
+				hide : function(func){
+					var _this = this;
+					_.hide(_this,'fadeIn','fadeOut',func);
+					_this.elem.trigger('hide');
+					return this;
+				},
+				elem:$elem
+			}
+		},
+		channel : function(data){
+			var _ = this;
+			var _tpl = $f.template(TPL.channel),
+				$elem = $(_tpl(data));
+			return {
+				show : function(func){
+					var _this = this;
+					_.show(_this,'ffast fadeInRight',func);
+					return this;
+				},
+				hide : function(func){
+					var _this = this;
+					_.hide(_this,'fadeInRight','fadeOutRight',func);
+					_this.elem.trigger('hide');
+					return this;
+				},
+				elem:$elem
+			}
+		},
+		stage : function(tpl,data){
+			var _ = this;
+			log(data);
+			var _tpl = $f.template(TPL[tpl]),
+				$elem = $(_tpl(data));
+			return {
+				show : function(func){
+					var _this = this;
+					_.show(_this,'ffast fadeIn',func);
+					return this;
+				},
+				hide : function(func){
+					var _this = this;
+					_.hide(_this,'fadeIn','fadeOut',func);
+					_this.elem.trigger('hide');
+					return this;
+				},
+				elem:$elem
+			}
+		},
+		cl : function(data){
+			var _ = this;
+			var _tpl = $f.template(TPL.cl);
+			return _tpl(data);
+		},
+		tip : function(tip,dur){
+			var _ = this;
+			var $elem = $($f.TPL('<div class="pop pop-tip"><div class="box"><div class="wrap"><span class="tip">{tip}</span></div></div></div>',{tip:tip}));
+			$elem.bind('touchmove',function(e){
+				e.preventDefault();  
+				e.stopPropagation(); 
+				return false;
+			});
+			return {
+				show : function(func){
+					var _this = this;
+					$elem.appendTo('body').show();
+					// $elem.find('.box').css({visibility:'hidden'});
+					$elem.find('.box').addClass('animated ffast bounceIn');//.css({visibility:'visible'});
+					setTimeout(function(){
+						_this.hide(func);
+					},dur||1000);
+					return this;
+				},
+				hide : function(func){
+					if(!$elem)return null;
+					$elem.find('.box').removeClass('bounceIn').addClass('bounceOut');
+					_.bind.call($elem,function(){
+						$elem.remove();
+						$elem = null;
+						$.isFunction(func)&&func();
+					});
+					return this;
 				},
 				elem:$elem
 			}
 		},
 		scroll:function($tar){
 			return new IScroll($tar[0], {
-				zoom: true,
+				zoom: false,
 				scrollbars: true,
 				interactiveScrollbars: true,
 				shrinkScrollbars: 'scale',
-				fadeScrollbars: false
+				fadeScrollbars: false,
+				preventDefaultException:{tagName: /^(A|SPAN|INPUT|TEXTAREA|BUTTON|SELECT)$/ }
 			});
 		}
 	};
@@ -528,7 +857,7 @@ var TPL = {
 				var $load = $f.pop.load();
 				$load.show();
 				$f.db.remove('userInfo');
-				$f.db.remove('nextTchUser');
+				// $f.db.remove('nextTchUser');
 				$f.ajax({
 					url:PG.path('userInfo'),
 					option:{userId:_userId},
@@ -536,7 +865,9 @@ var TPL = {
 						if(json.result=='0'&&json.data){
 							var _userInfo = json.data.userInfo;
 							$f.db.set('userInfo',_userInfo);
-							$f.db.set('nextTchUser',json.data.nextTchUser);
+							// $f.db.set('nextTchUser',json.data.nextTchUser);
+							$f.db.set('serverUrl',json.data.serverUrl);
+							$f.db.set('playFileUrl',json.data.playFileUrl);
 						}
 					},
 					complete:function(){
@@ -550,38 +881,61 @@ var TPL = {
 		},
 		type : function(){
 			var _ = this;
-			return _.hasUpdate($f.db.get('typeTime'))&&$f.db.get('type')
+			return !!$f.db.get('type')
 				?$.Deferred(function(dtd){dtd.resolve();})
 				:$f.ajax({
 					url:PG.path('billType'),
 					option:{userId:$f.db.get('userId')},
 					success:function(json){
 						if(json.result=='0'&&json.data){
-							$f.db.set('typeTime',new Date().format('yyyy-MM-dd'));
 							$f.db.set('type',json.data);
 						}
 					}
-				})
+				});
+		},
+		nextUser : function(){
+			var _ = this;
+			return !!$f.db.get('nextTchUser')
+				?$.Deferred(function(dtd){dtd.resolve();})
+				:$f.ajax({
+					url:PG.path('nextTchUser'),
+					option:{userId:$f.db.get('userId'),billType:(_save=$f.db.get('save'))?_save.billType:''},
+					success:function(json){
+						if(json.result=='0'&&json.data){
+							log(json);
+							$f.db.set('nextTchUser',json.data.nextTchUser);
+						}
+					}
+				});
 		},
 		channel : function(){
 			var _ = this;
-			return _.hasUpdate($f.db.get('channelTime'))&&$f.db.get('channel')
+			return !!$f.db.get('channel')
 				?$.Deferred(function(dtd){dtd.resolve();})
 				:$f.ajax({
 					url:PG.path('billChannel'),
-					option:{},
+					option:{userId:$f.db.get('userId')},
 					success:function(json){
 						if(json.result=='0'&&json.data){
-							$f.db.set('channelTime',new Date().format('yyyy-MM-dd'));
 							$f.db.set('channel',json.data);
 						}
 					}
-				})
+				});
 		}
 	}
 }(jQuery);
 
-// $f.db.empty();
+if(PG.test || !$f.req.hasUpdate($f.db.get('updateTime'))){
+	var _temp = {
+		save : $f.db.get('save'),
+		detail : $f.db.get('detail')
+	};
+	$f.db.empty();
+	$.each(_temp, function(index, val) {
+		val&&$f.db.set(index,val);
+	});
+	$f.db.set('updateTime',new Date().format('yyyy-MM-dd'));
+}
 
 function log(msg) {
     if (window.console && window.console.log)

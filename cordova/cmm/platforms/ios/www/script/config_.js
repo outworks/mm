@@ -31,10 +31,10 @@ var PG = {
 			history.go(-1);
 		}
 	},
-	back : function(url,reload,success,error){
+	back : function(url,success,error){
 		var _ = this;
 		if(_.cordova()){
-			cordova.exec(success,error,'LKNav','backToPage',[url,reload]);
+			cordova.exec(success,error,'LKNav','backToPage',[url]);
 		}else{
 			document.location.href = url;
 		}

@@ -1,17 +1,106 @@
 !function($){
 
 var $order = $('.orders');
-var userId , userInfo ,type ;
-var voice = [],image = [],video = [];
+var userId , userInfo ,type , channels , detail ;
+var voice = [],image = [],video = [],channel = [],channelArr = [];
 var Page = {
 	init : function(){
 		var _ = this;
 		userId = $f.db.get('userId');
 		userInfo = $f.db.get('userInfo');
 		type = $f.db.get('type');
+		channels = $f.db.get('channel');
 		_.cssInit();
 		_.pageInit();
 		_.btnInit();
+		_.editInit();
+	},
+	editInit:function(){
+		var _ = this;
+		var _url = $f.api.urlparam();
+		if(_url.edit == '1'){
+			detail = $f.db.get('detail');
+			// $f.db.remove('detail');
+			voice = !!detail.voice?detail.voice.split(','):[],
+			image = !!detail.image?detail.image.split(','):[],
+			video = !!detail.video?detail.video.split(','):[];
+			$('.inp-title').val(detail.billTitle);
+			$('.select-type option[value="'+detail.billType+'"]').attr("selected", "selected");
+			$('input[name="relateChannel"]').filter('[value='+detail.relateChannel+']')[0].checked = true;
+			$('.inp-work').val(detail.billContent);
+			if(detail.relateChannel=='2'){
+				var $channels = $('.form-channels').show();
+				channel = $f.isArray(detail.relateChannelIds)?detail.relateChannelIds:[];
+				$.each(channel,function(index, el) {
+					channel[index] = parseInt(el);
+				});
+				$.each(channel,function(index,id){
+					var flag = false;
+					for(var i=0;i<channels.length;i++){
+						if(!flag&&id==channels[i].id){
+							channelArr.push(channels[i]);
+							flag = true;
+						}
+					}	
+				});
+				$.each(channelArr,function(index,val){
+					var str = $f.TPL(TPL.cldiv,{
+						unitnum : val.unitnum,
+						unitname : val.unitname
+					});
+					$(str).insertBefore($channels.find('.col-btn'));
+				});
+			}
+
+			if(voice.length>0){
+				var $audios = $('.audios'),
+				$tipaudio = $audios.find('.tip'),
+				tpl_audio = '<div class="audio-item"><a href="javascript:void(0);" data-src="{src}" class="b b-audio ad"></a> </div>';
+				$.each(voice,function(index, src) {
+					var $v = $($f.TPL(tpl_audio,{src:PG.resource()+src})).appendTo($audios.find('.audio-wrap'));
+				});
+				$tipaudio.html(_.tip(voice,PG.RS.voice));
+	    		if(voice.length==1){
+	    			$audios.show();
+	    		};
+	    		if(voice.length>=PG.RS.voice){
+	    			$('.b-rec').unbind('click').hide();
+	    		}
+			}
+			if(image.length>0){
+				var $images = $('.form-images'),
+				$colimage = $images.find('.col-btn'),
+				$tipimage = $images.find('.tip'),
+				tpl_image = '<div class="col-xs-3"><div class="img" data-src="{src}" style="background-image:url({src})"></div></div>';
+
+				$.each(image,function(index, src) {
+					var $img = $($f.TPL(tpl_image,{src:PG.resource()+src})).insertBefore($colimage);
+				});
+        		$tipimage.html(_.tip(image,PG.RS.image));
+        		if(image.length>=PG.RS.image){
+        			$('.b-image').unbind('click');
+        			$colimage.hide();
+        		}
+			}
+
+			if(video.length>0){
+				var $videos = $('.form-videos'),
+				$colvideo = $videos.find('.col-btn'),
+				$tipvideo = $videos.find('.tip'),
+				tpl_video = '<div class="col-xs-3"><div class="vd" data-src="{src}"></div></div>';
+
+				$.each(video,function(index, src) {
+					var $vd = $($f.TPL(tpl_video,{src:PG.playpath()+src})).insertBefore($colvideo);
+				});
+        		$tipvideo.html(_.tip(video,PG.RS.video));
+
+        		if(video.length>=PG.RS.video){
+        			$('.b-video').unbind('click');
+        			$colvideo.hide();
+        		}
+			}
+			
+		};
 	},
 	cssInit:function(){
 		var _ = this;
@@ -24,6 +113,7 @@ var Page = {
 		var $audios = $('.audios'),
 			$tipaudio = $audios.find('.tip'),
 			tpl_audio = '<div class="audio-item"><a href="javascript:void(0);" data-src="{src}" class="b b-audio ad"></a> </div>';
+		
 		$tipaudio.html(_.tip(voice,PG.RS.voice));
 		$('.b-rec').bind('click',function(){
 			if(_state)return;
@@ -38,7 +128,7 @@ var Page = {
 		            	var json = $f.isObject(r.response)?r.response:JSON.parse(r.response);
 		            	if(json&&json.result=='0'){
 		            		voice.push(json.data);
-		            		var $v = $($f.TPL(tpl_audio,{src:PG.resource+json.data})).appendTo($audios.find('.audio-wrap'));
+		            		var $v = $($f.TPL(tpl_audio,{src:PG.resource()+json.data})).appendTo($audios.find('.audio-wrap'));
 		            		$tipaudio.html(_.tip(voice,PG.RS.voice));
 
 		            		if(voice.length==1){
@@ -83,7 +173,7 @@ var Page = {
 		            	var json = $f.isObject(r.response)?r.response:JSON.parse(r.response);
 		            	if(json&&json.result=='0'){
 		            		image.push(json.data);
-		            		var $img = $($f.TPL(tpl_image,{src:PG.resource+json.data})).insertBefore($colimage);
+		            		var $img = $($f.TPL(tpl_image,{src:PG.resource()+json.data})).insertBefore($colimage);
 		            		$tipimage.html(_.tip(image,PG.RS.image));
 
 		            		if(image.length>=PG.RS.image){
@@ -121,10 +211,11 @@ var Page = {
 			PG.native.video(function(mediaFiles){
 				 for (var i = 0, len = mediaFiles.length; i < len; i += 1) {
 		            _.upload(mediaFiles[i],function(r){
+		            	// log(r);
 		            	var json = $f.isObject(r.response)?r.response:JSON.parse(r.response);
 		            	if(json&&json.result=='0'){
 		            		video.push(json.data);
-		            		var $vd = $($f.TPL(tpl_video,{src:PG.resource+json.data})).insertBefore($colvideo);
+		            		var $vd = $($f.TPL(tpl_video,{src:PG.playpath()+json.data})).insertBefore($colvideo);
 		            		$tipvideo.html(_.tip(video,PG.RS.video));
 
 		            		if(video.length>=PG.RS.video){
@@ -170,17 +261,22 @@ var Page = {
 		$('.b-next').bind('touchstart click',function(e){
 			e.preventDefault();  
 			e.stopPropagation(); 
-			$f.db.set('save',{
+			var rc = $('input[name=relateChannel]:checked').val();
+			$f.db.set('save',$.extend({
 				userId:userId,
 				video:video.join(','),
 				voice:voice.join(','),
-				image:voice.join(','),
+				image:image.join(','),
+				relateChannelIds:rc=='1'?'':channel.join(','),
 				billContent:$('.inp-work').val(),
-				relateChannel:$('input[name=relateChannel]:checked').val(),
+				relateChannel:rc,
 				billTitle:$('.inp-title').val(),
 				billType: $('.select-type').val(),
-				createTime : new Date().format('yyyy-MM-dd hh:mm:ss')
-			});
+				createTime : new Date().format('yyyy-MM-dd hh:mm:ss'),
+			},!!detail?{
+				createTime:detail.createTime,
+				id:detail.id
+			}:undefined));
 			PG.open(PG.href('save.html',{userId:userId}));
 			return false;
 		});
@@ -218,7 +314,6 @@ var Page = {
 			$('body').one('touchstart',function(){
 				_unload();
 			});
-
 		});
 
 		$('body').on('click touchstart','.vd',function(){
@@ -237,15 +332,132 @@ var Page = {
 			};
 		});
 
+
+		$('.rd-channel').bind('click', function(event) {
+			$('.form-channels').show();
+		});
+		$('.rd-all').bind('click',function(event){
+			$('.form-channels').hide();
+		});
+
+		var getChannel = function(option){
+				var arr = [];
+				for(var i =0;i<channels.length;i++){
+					if(!option.text||channels[i].unitname.indexOf(option.text)>-1){
+						var cl = channels[i];
+						if($f.array.indexOf(channel,cl.id)>-1){
+							cl.checked = true;
+						}else{
+							cl.checked = null;
+						}
+						cl.unittype = PG.unit[cl.unittypeid];
+						arr.push(cl);
+					}
+				}
+				return arr.slice(option.page*PG.RS.channelShow,PG.RS.channelShow*(option.page+1));
+			},
+			renderChannel = function($wrap,option,clear,func){
+				var data = getChannel(option);
+				if(channels.length<=PG.RS.channelShow*(option.page+1)){
+					option.has = false;
+				}
+				if(clear){$wrap.empty();}
+				var $cont = $($f.pop.cl({channel:data})).appendTo($wrap);
+				$cont.bind('click',function(){
+					var _this = this;
+					var input = $(this).find('input'),checked = input[0].checked;
+					var id = $(this).data('id'),idx = $f.array.indexOf(channel,id);
+					if(idx>-1){
+						channel.splice(idx,1);
+						channelArr.splice(idx,1);
+					}else{
+						channel.push(id);
+						var flag = false;
+						for(var i=0;i<channels.length;i++){
+							if(!flag&&id==channels[i].id){
+								channelArr.push(channels[i]);
+								flag = true;
+							}
+						}
+					}
+					!checked?(input[0].checked = true):(input[0].checked = false);
+					
+					var $channels = $('.channels');
+					$channels.children().not('.col-btn').remove();
+					$.each(channelArr,function(index,val){
+						var str = $f.TPL(TPL.cldiv,{
+							unitnum : val.unitnum,
+							unitname : val.unitname
+						});
+						$(str).insertBefore($channels.find('.col-btn'));
+					});
+				})
+				$f.isFunction(func)&&func();
+				// $scroll.refresh();
+			};
+
+		$('.b-channel').bind('click', function(event) {
+			var $sc = $f.pop.channel({});
+			$sc.show(function(){
+				var $elem = $sc.elem;
+				var $scroll = $f.pop.scroll($sc.elem.find('.body'));
+				window.aaa = $scroll;
+				var option = {
+					page : 0,
+					text : '',
+					has : true
+				};
+				// PG.RS.channelShow
+				var $body = $elem.find('.body'),$wrap = $body.find('.wrap');
+
+				$body.height($elem.height()-205);
+				renderChannel($wrap,option,true,function(){$scroll.refresh();});
+				$body.parents('.box').removeClass('loading_2');
+				var _state_ = false;
+				if(!!option.has){
+					$scroll.on('scrollEnd',function(){
+						if(!!option.has&&!_state_&&$scroll.y<=$scroll.maxScrollY+100){
+							_state_ = true;
+							option.page ++;
+							renderChannel($wrap,option,false,function(){
+								$scroll.refresh();
+								_state_ = false;
+							});
+						}
+					});
+				};
+				$elem.find('.b-tosearch').bind('click',function(){
+					option = {
+						text :$elem.find('.inp-search').val(),
+						page : 0,
+						has : true
+					};
+					_state_ = true;
+					renderChannel($wrap,option,true,function(){
+						$scroll.refresh();
+						_state_ = false;
+					});
+				});
+				$elem.find('.b-confirm').bind('click', function(event) {
+					$sc.hide();
+				});
+			});
+		});
+		/*$('body').on('click','.cl',function(){
+			var input = $(this).find('input');
+			!input[0].checked?(input[0].checked = true):(input[0].checked = false);
+		});*/
 	}
 };
 
 $(function(){
 	$f.req.user(function(){
-		$f.req.type().always(function(){
+		var $load = $f.pop.load().show();
+		$.when($f.req.type(),$f.req.channel()).always(function(){
 			Page.init();
-		})
+			$load.hide();
+		});
 	});
-})
+});
 
 }(jQuery);

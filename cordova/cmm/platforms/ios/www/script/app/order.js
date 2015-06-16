@@ -56,7 +56,8 @@ var Page = {
 				state : PG.stateClass,
 				type : $f.db.get('type'),
 				history : $f.db.get(PG.history)
-			}
+			};
+			// alert(JSON.stringify(data.state));
 			var $sc = $f.pop.search(data);
 			$sc.show(function(){
 				var $scroll = $f.pop.scroll($sc.elem.find('.box'));
@@ -101,6 +102,7 @@ var Page = {
 
 				$sc.elem.find('.b-clear').bind('click', function(event) {
 					$sc.elem.find('.history').remove();
+					$scroll.refresh();
 					$f.db.set(PG.history,[]);
 				});
 
@@ -227,7 +229,7 @@ var Page = {
 		var $win = $(window),$doc = $(document);
 		$win.bind('scroll', function(event) {
 			if(!!_has&&!_flag){
-				var trigger = ($win.scrollTop() + $win.height() > $doc.height() - 50);
+				var trigger = ($win.scrollTop() + $win.height() > $doc.height() - 100);
 				if(trigger){
 					_param.curPageNum ++ ;
 					$win.unbind('scroll');
@@ -240,9 +242,11 @@ var Page = {
 
 $(function(){
 	$f.req.user(function(){
-		$f.req.type().always(function(){
+		var $load = $f.pop.load().show();
+		$.when($f.req.type(),$f.req.channel()).always(function(){
 			Page.init();
-		})
+			$load.hide();
+		});
 	});
 })
 

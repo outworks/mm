@@ -2,15 +2,22 @@
 
 var $save = $('.save');
 var userId , userInfo ;
-var url = $f.db.get('save'),_url ;//$f.api.urlparam()
-$f.db.remove('save');
+var url ,_url ,nextTchUser ;
+
 var _flag = false;
 var Page = {
 	init : function(){
+		log('init');
 		var _ = this;
 		userId = $f.db.get('userId');
 		userInfo = $f.db.get('userInfo');
+
+		url = $f.db.get('save');
+		$f.db.remove('save');
 		_url = $.extend({},url,userInfo);
+
+		nextTchUser = $f.db.get('nextTchUser') || [];
+		$f.db.remove('nextTchUser');
 		_.cssInit();
 	},
 	cssInit:function(){
@@ -30,7 +37,7 @@ var Page = {
 			$load = $f.pop.load();
 		$load.show();
 		_flag = true;
-		var cont = $f.page.save(_url,$f.db.get('nextTchUser'));
+		var cont = $f.page.save(_url,nextTchUser);
 		$save.append(cont||TPL.nocont);
 		setTimeout(function(){
 			_flag = false;
@@ -56,13 +63,15 @@ var Page = {
 				}),
 				success:function(json){
 					if(json.result=='0'){
-						PG.back(PG.href('order.html',{userId:userId}),true);
+						$f.pop.tip(json.msg).show(function(){
+							PG.back(PG.href('order.html',{userId:userId}),true);
+						});
 					}else{
-						alert(json.msg);
+						$f.pop.tip(json.msg).show();
 					}
 				},
 				error:function(){
-					alert('请求失败');
+					$f.pop.tip('请求失败').show();
 				},
 				complete:function(){
 					_flag = false;
@@ -76,8 +85,10 @@ var Page = {
 
 $(function(){
 	$f.req.user(function(){
-		$f.req.type().always(function(){
+		var $load = $f.pop.load().show();
+		$.when($f.req.type(),$f.req.nextUser()).always(function(){
 			Page.init();
+			$load.hide();
 		})
 	});
 })
