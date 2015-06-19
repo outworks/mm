@@ -43,8 +43,6 @@
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>YES</string>
-	<key>NSMainNibFile</key>
-	<string></string>
 	<key>NSMainNibFile~ipad</key>
 	<string></string>
 	<key>UIBackgroundModes</key>

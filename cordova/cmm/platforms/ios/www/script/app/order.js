@@ -74,11 +74,11 @@ var Page = {
 						$(this).addClass('has');
 					}
 				});
-				$sc.elem.find('.b-tosearch').bind('click', function(event) {
+				
+				$sc.elem.find('.b-tosearch').bind('tap', function(event) {
 					var param = $f.api.serializeObject($form.serializeArray());
-
 					param.billTitle = $inpsch.val();
-					param.state = !param.state?'':param.state.join(',');
+					param.state = !$f.isArray(param.state)?param.state||'':param.state.join(',');
 					param.createTimeBegin&&(param.createTimeBegin += ' 00:00:00');
 					param.createTimeEnd&&(param.createTimeEnd += ' 23:59:59');
 
@@ -100,14 +100,19 @@ var Page = {
 					// $sc.hide();
 				});
 
-				$sc.elem.find('.b-clear').bind('click', function(event) {
+				$sc.elem.find('.b-reset').bind('tap',function(){
+					$inpsch.val('');
+					$(this).trigger('click');
+				});
+
+				$sc.elem.find('.b-clear').bind('tap', function(event) {
 					$sc.elem.find('.history').remove();
 					$scroll.refresh();
 					$f.db.set(PG.history,[]);
 				});
 
 				var $btnhis = $sc.elem.find('.b-history')
-				$btnhis.bind('click touchstart', function(event) {
+				$btnhis.bind('tap', function(event) {
 					var index = $btnhis.index(this),
 						$his = $f.db.get(PG.history),
 						param = $his[index].value;

@@ -64,7 +64,7 @@ var Page = {
 				success:function(json){
 					if(json.result=='0'){
 						$f.pop.tip(json.msg).show(function(){
-							PG.back(PG.href('order.html',{userId:userId}),true);
+							PG.back(PG.href('order.html',{userId:userId}),'true');
 						});
 					}else{
 						$f.pop.tip(json.msg).show();

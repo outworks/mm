@@ -165,6 +165,11 @@ var PG = {
 		'1' : '所有',
 		'2' : '个别'
 	},
+	info:{
+		test : false,
+		CreateContent:'声音、图片、视频必须录入一个',
+		CreateChannel:'请选择渠道'
+	},
 	history : 'HISTORY'
 };
 var TPL = {
@@ -509,6 +514,23 @@ var TPL = {
             </div>\
         </div>\
     </div>',
+    confirm:'<div class="pop dialog pop-confirm">\
+        <div class="mask"></div>\
+        <div class="box">\
+            <div class="head">\
+                <div class="title">提示</div>\
+            </div>\
+            <div class="body">\
+                <p class="cont"><%=tip%></p>\
+            </div>\
+            <div class="foot">\
+                <div class="btngroup">\
+                    <button class="b-6 b-cancel">取消</button>\
+                    <button class="b-6 b-confirm">确定</button>\
+                </div>\
+            </div>\
+        </div>\
+    </div>',
     cont:'<div class="pop dialog pop-cont">\
         <div class="mask"></div>\
         <div class="box">\
@@ -614,7 +636,7 @@ var TPL = {
 				$box.addClass('animated '+cls).css({visibility:'visible'});
 				_.bind.call($box,function(){
 					$f.isFunction(func)&&func();
-					$mask.one('touchstart click',function(){
+					$mask.one('tap',function(){
 						$$.hide();
 					});
 				})
@@ -623,7 +645,6 @@ var TPL = {
 		hide : function($$,cls1,cls2,func){
 			var _ = this,$tar = $$.elem,
 				$box = $tar.find('.box'),$mask = $tar.find('.mask');
-
 			$mask.removeClass('fadeIn').addClass('fadeOut');
 			$box.removeClass(cls1).addClass(cls2);
 			_.bind.call($box,function(){
@@ -797,6 +818,40 @@ var TPL = {
 			var _tpl = $f.template(TPL.cl);
 			return _tpl(data);
 		},
+		confirm : function(tip,confirm,cancel){
+			var _ = this;
+			var _tpl = $f.template(TPL.confirm),
+				$elem = $(_tpl({tip:tip}));
+			var _confirm = false;
+
+			return {
+				show : function(func){
+					var _this = this;
+					_.show(_this,'ffast fadeIn',func);
+					$elem.find('.b-confirm').bind('tap',function(){
+						_confirm = true;
+						_this.hide(confirm);
+					});
+					$elem.find('.b-cancel').bind('tap',function(){
+						_this.hide();
+					});
+					return this;
+				},
+				hide : function(func){
+					var _this = this;
+					_.hide(_this,'fadeIn','fadeOut',function(){
+						if(!_confirm){
+							$f.isFunction(cancel)&&cancel();
+						}else{
+							$f.isFunction(func)&&func();
+						}
+					});
+					_this.elem.trigger('hide');
+					return this;
+				},
+				elem:$elem
+			}
+		},
 		tip : function(tip,dur){
 			var _ = this;
 			var $elem = $($f.TPL('<div class="pop pop-tip"><div class="box"><div class="wrap"><span class="tip">{tip}</span></div></div></div>',{tip:tip}));
@@ -928,13 +983,15 @@ var TPL = {
 if(PG.test || !$f.req.hasUpdate($f.db.get('updateTime'))){
 	var _temp = {
 		save : $f.db.get('save'),
-		detail : $f.db.get('detail')
+		detail : $f.db.get('detail'),
 	};
 	$f.db.empty();
 	$.each(_temp, function(index, val) {
 		val&&$f.db.set(index,val);
 	});
 	$f.db.set('updateTime',new Date().format('yyyy-MM-dd'));
+}else{
+	$f.db.remove('type');
 }
 
 function log(msg) {

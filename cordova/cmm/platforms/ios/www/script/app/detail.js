@@ -146,7 +146,7 @@ var Page = {
 						if(json.result=='0'){
 							$f.pop.tip(json.msg).show(function(){
 								// PG.close();
-								PG.back(PG.href('order.html',{userId:userId}),ture);
+								PG.back(PG.href('order.html',{userId:userId}),'true');
 							});
 						}else{
 							$f.pop.tip(json.msg).show();
@@ -169,7 +169,7 @@ var Page = {
 			var $ebtn = $eval.find('i');
 			var index = 0;
 			$ebtn.bind('click touchstart',function(){
-				var index = $ebtn.index(this)+1;
+				index = $ebtn.index(this)+1;
 				$ebtn.removeClass('sel');
 				for(var j=0;j<index;j++){
 					$ebtn.eq(j).addClass('sel');
@@ -192,7 +192,7 @@ var Page = {
 						if(json.result=='0'){
 							$f.pop.tip(json.msg).show(function(){
 								// PG.close();
-								PG.back(PG.href('order.html',{userId:userId}),true);
+								PG.back(PG.href('order.html',{userId:userId}),'true');
 							});
 						}else{
 							$f.pop.tip(json.msg).show();
@@ -240,7 +240,7 @@ var Page = {
 								if(json.result=='0'){
 									$f.pop.tip(json.msg).show(function(){
 										// PG.close();
-										PG.back(PG.href('order.html',{userId:userId}),true);
+										PG.back(PG.href('order.html',{userId:userId}),'true');
 									});
 								}else{
 									$f.pop.tip(json.msg).show();
@@ -293,7 +293,7 @@ var Page = {
 								if(json.result=='0'){
 									$f.pop.tip(json.msg).show(function(){
 										// PG.close();
-										PG.back(-1,true);
+										PG.back(PG.href('order.html',{userId:userId}),'true');
 									});
 								}else{
 									$f.pop.tip(json.msg).show();

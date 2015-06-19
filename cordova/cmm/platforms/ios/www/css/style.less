@@ -274,10 +274,10 @@ a{
 		width: auto;padding:16px 32px;border-radius: 28px;
 	}
 	&.b2{
-		width: 200px;text-align: center;border-radius: 28px;
+		width: 40%;text-align: center;border-radius: 28px;
 	}
 	&.b3{
-		width: 200px;text-align: center;
+		width: 40%;text-align: center;
 	}
 	&.b-6{
 		width: 50%;
@@ -497,6 +497,9 @@ content
 		.control-checkboxs{
 			input[type="checkbox"], input[type="radio"]{
 				margin-top:16px;
+				transform:scale(1.5);
+				-webkit-transform:scale(1.5);
+				vertical-align: top;
 			}
 			.checkbox{
 				padding-top:0px;color:#989da3;
@@ -508,14 +511,15 @@ content
 		}
 		.form-audio{
 			.b-rec{
-				width: 48px;height: 48px;display: block;margin-top: 3px;
+				width: 72px;height: 72px;display: block;margin-top: -8px;
 				background: url(../images/order/b_audio.png) 0 0 no-repeat;
-				&:active{
-					background-position: 0 -48px;
-				}
+				background-size: 100%;
+				// &:active{
+				// 	background-position: 0 -48px;
+				// }
 			}
 			.work-wrap{
-				margin-left: 60px;
+				margin-left: 90px;
 			}
 			.audios{
 				margin-top: 25px;
@@ -530,9 +534,10 @@ content
 				.audio-item{
 					float: left;width: auto;margin-right: 20px;margin-top: 10px;
 					.b{
-						display: block;margin: 0 auto 10px;
-						width: 37px;height: 37px;
+						display: block;margin: -10px auto 0px;
+						width: 64px;height: 64px;
 						background: url(../images/order/audio.png) center center no-repeat;
+						background-size: 100%;
 					}
 					.time{
 						text-align: center;display: block;white-space:nowrap;
@@ -760,13 +765,6 @@ content
 		}
 
 		.form-audio{
-			.b-rec{
-				width: 48px;height: 48px;display: block;margin-top: 3px;
-				background: url(../images/order/b_audio.png) 0 0 no-repeat;
-				&:active{
-					background-position: 0 -48px;
-				}
-			}
 			.work-wrap{
 				margin-left: 60px;
 			}
@@ -783,9 +781,10 @@ content
 				.audio-item{
 					float: left;width: auto;margin-right: 20px;
 					.b{
-						display: block;margin: 0 auto 10px;
-						width: 37px;height: 37px;
+						display: block;margin: -10px auto 0px;
+						width: 64px;height: 64px;
 						background: url(../images/order/audio.png) center center no-repeat;
+						background-size: 100%;
 					}
 					.time{
 						text-align: center;display: block;white-space:nowrap;
@@ -897,7 +896,7 @@ pop
 			/* letter-spacing: 5px;margin: 22px auto;display: block; */
 		}
 		button{
-			letter-spacing: 5px;display: inline-block;margin:22px;
+			letter-spacing: 5px;display: inline-block;margin:22px 4%;
 		}
 		.i-conner{
 			position: absolute;left: 50%;margin-left: -10px;bottom: -10px;
@@ -924,8 +923,8 @@ pop
 			}
 			input[type=checkbox]{
 				position: absolute;right: 5%;top:50%;margin-top: -7px;
-				transform:scale(1.5);
-				-webkit-transform:scale(1.5);
+				transform:scale(2);
+				-webkit-transform:scale(2);
 			}
 		}
 	}
@@ -969,6 +968,7 @@ pop
 	}
 
 	.body{
+		padding:0 10px;
 		.search{
 			margin-top: 40px;
 			font-size: 26px;line-height: 50px;
@@ -995,6 +995,8 @@ pop
 			.control-checkboxs{
 				input[type="checkbox"], input[type="radio"]{
 					margin-top:16px;
+					transform:scale(1.5);
+					-webkit-transform:scale(1.5);
 				}
 				.checkbox{
 					padding-top:0px;color:#989da3;
@@ -1151,6 +1153,11 @@ pop
 		top:50%;margin-top:-60px;background-color: #000;
 		border-radius: 15px;
 		.loading();
+	}
+}
+.pop-confirm{
+	.cont{
+		font-size: 30px;line-height: 1.6;
 	}
 }
 .pop-tip{

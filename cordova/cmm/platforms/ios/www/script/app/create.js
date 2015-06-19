@@ -255,13 +255,24 @@ var Page = {
 	pageInit:function(){
 		var _ = this;
 
-		$('.b-back').bind('touchstart click',function(){
+		$('.b-back').bind('tap',function(){
 			PG.close();
 		});
-		$('.b-next').bind('touchstart click',function(e){
+		$('.b-next').bind('tap',function(e){
 			e.preventDefault();  
 			e.stopPropagation(); 
+
 			var rc = $('input[name=relateChannel]:checked').val();
+			if(rc=='2'&&channel.length==0){
+				$f.pop.tip(PG.info.CreateChannel,1500).show();
+				return;
+			}
+
+			if(!PG.info.test&&!(video.length||image.length||voice.length)){
+				$f.pop.tip(PG.info.CreateContent,1500).show();
+				return;
+			};
+			
 			$f.db.set('save',$.extend({
 				userId:userId,
 				video:video.join(','),
@@ -274,7 +285,7 @@ var Page = {
 				billType: $('.select-type').val(),
 				createTime : new Date().format('yyyy-MM-dd hh:mm:ss'),
 			},!!detail?{
-				createTime:detail.createTime,
+				createTime:detail.createTimeString,
 				id:detail.id
 			}:undefined));
 			PG.open(PG.href('save.html',{userId:userId}));
@@ -283,7 +294,9 @@ var Page = {
 	},
 	btnInit:function(){
 		var _ = this;
-		$('body').on('click','.ad',function(){
+		var $audios = $('.audios'),
+			$tipaudio = $audios.find('.tip');
+		$('body').on('tap','.ad',function(){
 			var src = $(this).data('src');
 			if(!src)return;
 			var ad = PG.native.media(src);
@@ -292,8 +305,22 @@ var Page = {
 				ad.stop();
 				ad = null;
 			});
+		}).on('press','.ad',function(){
+			var _this = this;
+			var index = $('.ad').index(this);
+			$f.pop.confirm('确定删除该录音？',function(){
+				voice.splice(index,1);
+				$(_this).parents('.audio-item').remove();
+				if(voice.length==0){
+					$audios.hide();
+				}
+				$tipaudio.html(_.tip(voice,PG.RS.voice));
+			}).show();
 		});
-		$('body').on('click touchstart','.img',function(){
+
+		var $images = $('.form-images'),
+			$tipimage = $images.find('.tip');
+		$('body').on('tap','.img',function(){
 			var src = $(this).data('src');
 			if(!src)return;
 			var $pop = $f.pop.resource().show();
@@ -314,9 +341,19 @@ var Page = {
 			$('body').one('touchstart',function(){
 				_unload();
 			});
+		}).on('press','.img',function(){
+			var _this = this;
+			var index = $('.img').index(this);
+			$f.pop.confirm('确定删除该图片？',function(){
+				image.splice(index,1);
+				$(_this).parents('.col-xs-3').remove();
+				$tipimage.html(_.tip(image,PG.RS.image));
+			}).show();
 		});
 
-		$('body').on('click touchstart','.vd',function(){
+		var $videos = $('.form-videos'),
+			$tipvideo = $videos.find('.tip');
+		$('body').on('tap','.vd',function(){
 			var src = $(this).data('src');
 			if(!src)return;
 			var $pop = $f.pop.resource().show();
@@ -330,6 +367,14 @@ var Page = {
 			var _unload = function(){
 				$pop&&$pop.hide();
 			};
+		}).on('press','.vd',function(){
+			var _this = this;
+			var index = $('.vd').index(this);
+			$f.pop.confirm('确定删除该视频？',function(){
+				video.splice(index,1);
+				$(_this).parents('.col-xs-3').remove();
+				$tipvideo.html(_.tip(video,PG.RS.video));
+			}).show();
 		});
 
 
@@ -363,7 +408,9 @@ var Page = {
 				}
 				if(clear){$wrap.empty();}
 				var $cont = $($f.pop.cl({channel:data})).appendTo($wrap);
-				$cont.bind('click',function(){
+				$cont.bind('tap',function(e){
+					e.preventDefault();
+					e.stopPropagation();
 					var _this = this;
 					var input = $(this).find('input'),checked = input[0].checked;
 					var id = $(this).data('id'),idx = $f.array.indexOf(channel,id);
@@ -396,52 +443,55 @@ var Page = {
 				// $scroll.refresh();
 			};
 
-		$('.b-channel').bind('click', function(event) {
+		$('.b-channel').bind('tap', function(event) {
+			$('.inp').blur();
 			var $sc = $f.pop.channel({});
-			$sc.show(function(){
-				var $elem = $sc.elem;
-				var $scroll = $f.pop.scroll($sc.elem.find('.body'));
-				window.aaa = $scroll;
-				var option = {
-					page : 0,
-					text : '',
-					has : true
-				};
-				// PG.RS.channelShow
-				var $body = $elem.find('.body'),$wrap = $body.find('.wrap');
-
-				$body.height($elem.height()-205);
-				renderChannel($wrap,option,true,function(){$scroll.refresh();});
-				$body.parents('.box').removeClass('loading_2');
-				var _state_ = false;
-				if(!!option.has){
-					$scroll.on('scrollEnd',function(){
-						if(!!option.has&&!_state_&&$scroll.y<=$scroll.maxScrollY+100){
-							_state_ = true;
-							option.page ++;
-							renderChannel($wrap,option,false,function(){
-								$scroll.refresh();
-								_state_ = false;
-							});
-						}
-					});
-				};
-				$elem.find('.b-tosearch').bind('click',function(){
-					option = {
-						text :$elem.find('.inp-search').val(),
+			setTimeout(function(){
+				$sc.show(function(){
+					var $elem = $sc.elem;
+					var $scroll = $f.pop.scroll($sc.elem.find('.body'));
+					window.aaa = $scroll;
+					var option = {
 						page : 0,
+						text : '',
 						has : true
 					};
-					_state_ = true;
-					renderChannel($wrap,option,true,function(){
-						$scroll.refresh();
-						_state_ = false;
+					// PG.RS.channelShow
+					var $body = $elem.find('.body'),$wrap = $body.find('.wrap');
+
+					$body.height($elem.height()-205);
+					renderChannel($wrap,option,true,function(){$scroll.refresh();});
+					$body.parents('.box').removeClass('loading_2');
+					var _state_ = false;
+					if(!!option.has){
+						$scroll.on('scrollEnd',function(){
+							if(!!option.has&&!_state_&&$scroll.y<=$scroll.maxScrollY+100){
+								_state_ = true;
+								option.page ++;
+								renderChannel($wrap,option,false,function(){
+									$scroll.refresh();
+									_state_ = false;
+								});
+							}
+						});
+					};
+					$elem.find('.b-tosearch').bind('click',function(){
+						option = {
+							text :$elem.find('.inp-search').val(),
+							page : 0,
+							has : true
+						};
+						_state_ = true;
+						renderChannel($wrap,option,true,function(){
+							$scroll.refresh();
+							_state_ = false;
+						});
+					});
+					$elem.find('.b-confirm').bind('click', function(event) {
+						$sc.hide();
 					});
 				});
-				$elem.find('.b-confirm').bind('click', function(event) {
-					$sc.hide();
-				});
-			});
+			},100);
 		});
 		/*$('body').on('click','.cl',function(){
 			var input = $(this).find('input');
