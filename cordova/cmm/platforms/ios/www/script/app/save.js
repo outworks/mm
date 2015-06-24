@@ -28,7 +28,7 @@ var Page = {
 	pageInit:function(){
 		var _ = this;
 
-		$('.b-back').bind('touchstart click',function(){
+		$('.b-back').bind('click',function(){
 			PG.close();
 		});
 	},

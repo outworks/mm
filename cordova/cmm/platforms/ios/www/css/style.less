@@ -124,7 +124,14 @@ body{
 	-webkit-font-smoothing: antialiased;
 }
 
-
+div,p,span,label,a,button {  
+    -webkit-touch-callout:none;  
+    -webkit-user-select:none;  
+    -khtml-user-select:none;  
+    -moz-user-select:none;  
+    -ms-user-select:none;  
+    user-select:none;  
+} 
 
 /* 
 page
@@ -1108,7 +1115,7 @@ pop
 		.audio-wrap{
 			margin-left: 150px;
 			.clearfix();
-			.audio-item{
+			/* .audio-item{
 				float: left;width: auto;margin-right: 20px;margin-bottom: 10px;margin-top:3px;
 				.b{
 					display: block;margin: 0 auto 10px;
@@ -1118,6 +1125,15 @@ pop
 				.time{
 					text-align: center;display: block;white-space:nowrap;
 					font-size: 18px;line-height: 1;color:#505050;margin: 0 auto;
+				}
+			} */
+			.audio-item{
+				float: left;width: auto;margin-right: 20px;margin-top: 0px;
+				.b{
+					display: block;margin: -10px auto 0px;
+					width: 64px;height: 64px;
+					background: url(../images/order/audio.png) center center no-repeat;
+					background-size: 100%;
 				}
 			}
 		}

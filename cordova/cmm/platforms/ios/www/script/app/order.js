@@ -9,7 +9,7 @@ var _first = true,
 		'down':'DESC'
 	},
 	userId , userInfo ,
-	_param = {
+	_param = $f.db.get('search')||{
 		userId : null,
 		billTitle : '',
 		createTimeBegin : '',
@@ -23,7 +23,9 @@ var _first = true,
 var Page = {
 	init : function(){
 		var _ = this;
-		_param.userId = userId = $f.db.get('userId');
+		// _param.userId = userId = $f.db.get('userId');
+		userId = $f.db.get('userId');
+		_.setParam({userId:userId});
 		_.cssInit();
 		_.render();
 		_.pageInit();
@@ -39,7 +41,8 @@ var Page = {
 			$(this).attr('class','b-time '+dir);
 			_.setParam({orderDirection:_orderDir[dir]});
 			_.render();
-		});
+		}).addClass(_param.orderDirection=='ASC'?'up':'down');
+
 		// dropmenu
 		$('.b-filter-type').bind('click', function(event) {
 			if(_flag)return;
@@ -135,15 +138,17 @@ var Page = {
 	pageInit:function(){
 		var _ = this;
 
-		$('.b-back').bind('touchstart click',function(){
+		$('.b-back').bind('click',function(){
 			PG.close();
 		});
-		$('.b-create').bind('touchstart click',function(){
+		$('.b-create').bind('click',function(){
 			PG.open('create.html'+$f.object.toUrlString({userId:userId}));
 		});
-		$('.orders').on('click', '.item', function(event) {
-			event.preventDefault();
+		$('.orders').on('click', '.item', function(e) {
+			// e.preventDefault();
 			PG.open('detail.html'+$f.object.toUrlString({userId:userId,billId:$(this).data('id')}));
+		}).on('touchstart','.item',function(e){
+			// e.preventDefault();
 		});
 	},
 	buttonInit:function(){
@@ -170,6 +175,7 @@ var Page = {
 		var _ = this;
 		_.resetParam(flag);
 		$.extend(_param,obj);
+		$f.db.set('search',_param);
 	},
 	render : function(){
 		if(!_has)return;
@@ -248,7 +254,7 @@ var Page = {
 $(function(){
 	$f.req.user(function(){
 		var $load = $f.pop.load().show();
-		$.when($f.req.type(),$f.req.channel()).always(function(){
+		$.when($f.req.type(),$f.req.channel()).always(function(){                                    
 			Page.init();
 			$load.hide();
 		});

@@ -112,7 +112,7 @@ var Page = {
 
 		var $audios = $('.audios'),
 			$tipaudio = $audios.find('.tip'),
-			tpl_audio = '<div class="audio-item"><a href="javascript:void(0);" data-src="{src}" class="b b-audio ad"></a> </div>';
+			tpl_audio = '<div class="audio-item"><div href="javascript:void(0);" data-src="{src}" class="b b-audio ad"></div> </div>';
 		
 		$tipaudio.html(_.tip(voice,PG.RS.voice));
 		$('.b-rec').bind('click',function(){
@@ -258,18 +258,28 @@ var Page = {
 		$('.b-back').bind('tap',function(){
 			PG.close();
 		});
-		$('.b-next').bind('tap',function(e){
+		$('.b-next').bind('click',function(e){
 			e.preventDefault();  
 			e.stopPropagation(); 
+
+			if(!$('.inp-title').val()){
+				$f.pop.tip(PG.info.CreateTitle,1500).show();
+				return;
+			}
 
 			var rc = $('input[name=relateChannel]:checked').val();
 			if(rc=='2'&&channel.length==0){
 				$f.pop.tip(PG.info.CreateChannel,1500).show();
 				return;
 			}
+//
+//			if(!$('.inp-work').val()){
+//				$f.pop.tip(PG.info.CreateText,1500).show();
+//				return;
+//			}
 
-			if(!PG.info.test&&!(video.length||image.length||voice.length)){
-				$f.pop.tip(PG.info.CreateContent,1500).show();
+			if(!($('.inp-work').val() || video.length||image.length||voice.length)){
+				$f.pop.tip(PG.info.CreateText,1500).show();
 				return;
 			};
 			

@@ -74,7 +74,7 @@
         TaskListVC *t_vc = [[TaskListVC alloc] init];
         UINavigationController *t_nav = [[UINavigationController alloc] initWithRootViewController:t_vc];
         [ApplicationDelegate.viewController presentViewController:t_nav animated:YES completion:nil];
-    }else{
+    }else if ([t_menu.menuName isEqualToString:@"问题反馈"]){
         LKNavController *nav = [[LKNavController alloc]init];
         nav.startPage = [NSString stringWithFormat:@"order.html?userId=%@",[ShareValue sharedShareValue].regiterUser.userId];
         UINavigationController *t_nav = [[UINavigationController alloc] initWithRootViewController:nav];

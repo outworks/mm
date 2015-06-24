@@ -213,6 +213,7 @@ a{-webkit-tap-highlight-color:rgba(0, 0, 0, 0);-webkit-tap-highlight-color:trans
 .obj-c{left:50%;top:50%;}
 html,body{width:100%;min-height:100%;}
 body{background:#f2f2f2;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif,"微软雅黑";-webkit-font-smoothing:antialiased;}
+div,p,span,label,a,button{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
 .page{width:100%;min-height:100%;background:#f3f3f3;}
 .animated.ffast{-webkit-animation-duration:.35s;animation-duration:.35s;}
 .animated.fffast{-webkit-animation-duration:.25s;animation-duration:.25s;}
@@ -381,8 +382,7 @@ a.b{box-sizing:content-box;}
 .pop-cont .body .tit{text-align:right;color:#5db039;margin-top:5px;}
 .pop-cont .body .audio-wrap{margin-left:150px;*zoom:1;}.pop-cont .body .audio-wrap:before,.pop-cont .body .audio-wrap:after{content:" ";display:table;line-height:0;}
 .pop-cont .body .audio-wrap:after{clear:both;}
-.pop-cont .body .audio-wrap .audio-item{float:left;width:auto;margin-right:20px;margin-bottom:10px;margin-top:3px;}.pop-cont .body .audio-wrap .audio-item .b{display:block;margin:0 auto 10px;width:37px;height:37px;background:url(../images/order/audio.png) center center no-repeat;}
-.pop-cont .body .audio-wrap .audio-item .time{text-align:center;display:block;white-space:nowrap;font-size:18px;line-height:1;color:#505050;margin:0 auto;}
+.pop-cont .body .audio-wrap .audio-item{float:left;width:auto;margin-right:20px;margin-top:0px;}.pop-cont .body .audio-wrap .audio-item .b{display:block;margin:-10px auto 0px;width:64px;height:64px;background:url(../images/order/audio.png) center center no-repeat;background-size:100%;}
 .pop-cont .body .b-image,.pop-cont .body .b-video{width:100%;height:100px;border-radius:5px;display:block;position:relative;border:1px #a3a2a2 solid;background:center center no-repeat;overflow:hidden;box-sizing:border-box;background-size:cover;margin-bottom:10px;}
 .pop-cont .body .vd{width:100%;height:100px;border-radius:5px;display:block;border:1px #a3a2a2 solid;background:#000000 url(../images/order/i_play.png) center center no-repeat;overflow:hidden;box-sizing:border-box;}
 .pop-cont .body .i-play{position:absolute;left:50%;margin-left:-23px;top:50%;margin-top:-24px;opacity:0.75;}

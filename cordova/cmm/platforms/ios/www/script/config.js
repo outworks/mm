@@ -104,7 +104,7 @@ var PG = {
 		return path+$f.object.toUrlString(obj);
 	},
 	path : function(){
-		var head = 'http://123.57.45.235:8090/fz_yxjl/';
+		var head = 'http://218.207.182.115:8090/fz_yxjl/';
 		var _path = {
 			'nextTchUser':'MobileService?requestType=getNextTchUser',
 			'userInfo':'MobileService?requestType=getSelfInfo',
@@ -122,12 +122,12 @@ var PG = {
 			return head+(_path[tar]||tar);
 		}
 	}(),
-	upload : 'http://123.57.45.235:8090/fz_yxjl/MobileService?requestType=upload',
+	upload : 'http://218.207.182.115:8090/fz_yxjl/MobileService?requestType=upload',
 	resource : function(){
-		return $f.db.get('serverUrl')||'http://123.57.45.235:8090/fz_yxjl/downloadFullPath?fullPath=';
+		return $f.db.get('serverUrl')||'http://218.207.182.115:8090/fz_yxjl/downloadFullPath?fullPath=';
 	},
 	playpath : function(){
-		return $f.db.get('playFileUrl')||'http://123.57.45.235:8090/file/';
+		return $f.db.get('playFileUrl')||'http://218.207.182.115:8090/file/';
 	},
 	RS : {
 		channel:5,
@@ -167,8 +167,10 @@ var PG = {
 	},
 	info:{
 		test : false,
-		CreateContent:'声音、图片、视频必须录入一个',
-		CreateChannel:'请选择渠道'
+		CreateContent:'请输入内容或声音、图片、视频必须录入一个',
+		CreateChannel:'请选择渠道',
+		CreateTitle:'请输入主题',
+		CreateText:'内容不能为空'
 	},
 	history : 'HISTORY'
 };
@@ -183,7 +185,7 @@ var TPL = {
 		<% }) %>\
 	</ul>',
 	order : '<% $.each(order,function(index,_order){ %>\
-		<a href="javascript:void(0);" data-id="<%=_order.id%>" class="item">\
+		<div href="javascript:void(0);" data-id="<%=_order.id%>" class="item">\
             <span class="state <%=_order.stateClass%>"><%=_order.stateString%></span>\
             <div class="info container">\
                 <div class="row">\
@@ -195,7 +197,7 @@ var TPL = {
             <p class="title">\
                 <%= _order.billTitle %>\
             </p>\
-        </a>\
+        </div>\
 	<% }) %>',
 	detail : '<div class="title">工单详情:</div>\
         <div class="form-wrap container">\
@@ -242,7 +244,7 @@ var TPL = {
             <div class="form-group">\
                 <label for="" class="col-xs-3 control-label">工单内容:</label>\
                 <div class="col-xs-9 clearfix control">\
-                    <a class="text opentext">点击展开<b class="caret"></b></a>\
+                    <div class="text opentext">点击展开<b class="caret"></b></div>\
                 </div>                                \
             </div>\
             <div class="form-group">\
@@ -925,12 +927,16 @@ var TPL = {
 							$f.db.set('playFileUrl',json.data.playFileUrl);
 						}
 					},
+                    error:function(){
+                        $load.hide();
+                        $f.pop.tip('请求失败').show();
+                    },
 					complete:function(){
 						// log($load);
 						$load.hide();
 						// alert(1)
 						$f.isFunction(func)&&func();
-					}
+                    }
 				})
 			}
 		},
@@ -984,6 +990,7 @@ if(PG.test || !$f.req.hasUpdate($f.db.get('updateTime'))){
 	var _temp = {
 		save : $f.db.get('save'),
 		detail : $f.db.get('detail'),
+		search : $f.db.get('search')
 	};
 	$f.db.empty();
 	$.each(_temp, function(index, val) {

@@ -23,13 +23,8 @@ var Page = {
 	pageInit:function(){
 		var _ = this;
 
-		$('.b-back').bind('touchstart click',function(){
+		$('.b-back').bind('click',function(){
 			PG.close();
-		});
-		$('.b-stop,.b-rollback').bind('touchstart click',function(e){
-			e.preventDefault();  
-			e.stopPropagation(); 
-			return false;
 		});
 	},
 	render:function(){
@@ -51,7 +46,7 @@ var Page = {
 					if(!!data.relateChannelIds){
 						data.relateChannelIds = data.relateChannelIds.split(',');
 						data.relateChannelArr = [];
-						var channels = $f.db.get('channel'); 
+						var channels = $f.db.get('channel');
 						$.each(data.relateChannelIds, function(index, val) {
 							var flag = false;
 							for(var i=0;i<channels.length;i++){
@@ -119,6 +114,9 @@ var Page = {
 				$elem.find('.b-fold').bind('click',function(){
 					$pop.hide();
 				});
+				return false;
+			}).bind('touchstart',function(event){
+				event.stopPropagation();
 			});
 		},
 		showeval:function(){
@@ -133,34 +131,36 @@ var Page = {
 			$btn.bind('click',function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				if(_flag)return;
-				_flag = true;
-				var $load = $f.pop.load().show();
-				$f.ajax({
-					url:PG.path('delBill'),
-					option:{
-						userId:userId,
-						billId:billId
-					},
-					success:function(json){
-						if(json.result=='0'){
-							$f.pop.tip(json.msg).show(function(){
-								// PG.close();
-								PG.back(PG.href('order.html',{userId:userId}),'true');
-							});
-						}else{
-							$f.pop.tip(json.msg).show();
+				$f.pop.confirm('确定删除？',function(){
+					if(_flag)return;
+					_flag = true;
+					var $load = $f.pop.load().show();
+					$f.ajax({
+						url:PG.path('delBill'),
+						option:{
+							userId:userId,
+							billId:billId
+						},
+						success:function(json){
+							if(json.result=='0'){
+								$f.pop.tip(json.msg).show(function(){
+									// PG.close();
+									PG.back(PG.href('order.html',{userId:userId}),'true');
+								});
+							}else{
+								$f.pop.tip(json.msg).show();
+							}
+						},
+						error:function(){
+							$f.pop.tip('请求失败').show();
+						},
+						complete:function(){
+							_flag = false;
+							$load.hide();
 						}
-					},
-					error:function(){
-						$f.pop.tip('请求失败').show();
-					},
-					complete:function(){
-						_flag = false;
-						$load.hide();
-					}
-				})
-				return false;
+					});
+					return false;
+				}).show();
 			})
 		},
 		eval:function(){//评价
