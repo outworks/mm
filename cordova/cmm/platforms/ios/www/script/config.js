@@ -104,7 +104,7 @@ var PG = {
 		return path+$f.object.toUrlString(obj);
 	},
 	path : function(){
-		var head = 'http://218.207.182.115:8090/fz_yxjl/';
+		var head = 'http://218.207.182.115:8080/fz_yxjl/';
 		var _path = {
 			'nextTchUser':'MobileService?requestType=getNextTchUser',
 			'userInfo':'MobileService?requestType=getSelfInfo',
@@ -122,12 +122,12 @@ var PG = {
 			return head+(_path[tar]||tar);
 		}
 	}(),
-	upload : 'http://218.207.182.115:8090/fz_yxjl/MobileService?requestType=upload',
+	upload : 'http://218.207.182.115:8080/fz_yxjl/MobileService?requestType=upload',
 	resource : function(){
-		return $f.db.get('serverUrl')||'http://218.207.182.115:8090/fz_yxjl/downloadFullPath?fullPath=';
+		return $f.db.get('serverUrl')||'http://218.207.182.115:8080/fz_yxjl/downloadFullPath?fullPath=';
 	},
 	playpath : function(){
-		return $f.db.get('playFileUrl')||'http://218.207.182.115:8090/file/';
+		return $f.db.get('playFileUrl')||'http://218.207.182.115:8080/file/';
 	},
 	RS : {
 		channel:5,
@@ -167,10 +167,10 @@ var PG = {
 	},
 	info:{
 		test : false,
-		CreateContent:'请输入内容或声音、图片、视频必须录入一个',
+		CreateContent:'声音、图片、视频必须录入一个',
 		CreateChannel:'请选择渠道',
 		CreateTitle:'请输入主题',
-		CreateText:'内容不能为空'
+		CreateText:'请输入内容'
 	},
 	history : 'HISTORY'
 };
@@ -927,16 +927,12 @@ var TPL = {
 							$f.db.set('playFileUrl',json.data.playFileUrl);
 						}
 					},
-                    error:function(){
-                        $load.hide();
-                        $f.pop.tip('请求失败').show();
-                    },
 					complete:function(){
 						// log($load);
 						$load.hide();
 						// alert(1)
 						$f.isFunction(func)&&func();
-                    }
+					}
 				})
 			}
 		},

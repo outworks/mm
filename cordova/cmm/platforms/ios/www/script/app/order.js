@@ -254,7 +254,7 @@ var Page = {
 $(function(){
 	$f.req.user(function(){
 		var $load = $f.pop.load().show();
-		$.when($f.req.type(),$f.req.channel()).always(function(){                                    
+		$.when($f.req.type(),$f.req.channel()).always(function(){
 			Page.init();
 			$load.hide();
 		});

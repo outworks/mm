@@ -272,11 +272,6 @@ var Page = {
 				$f.pop.tip(PG.info.CreateChannel,1500).show();
 				return;
 			}
-//
-//			if(!$('.inp-work').val()){
-//				$f.pop.tip(PG.info.CreateText,1500).show();
-//				return;
-//			}
 
 			if(!($('.inp-work').val() || video.length||image.length||voice.length)){
 				$f.pop.tip(PG.info.CreateText,1500).show();
