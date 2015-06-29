@@ -137,16 +137,15 @@ var Page = {
 		            		if(voice.length>=PG.RS.voice){
 		            			$('.b-rec').unbind('click').hide();
 		            		}
-		            	}else{
-		            		reset($load);
 		            	}
+		            	reset($load);
 		            },function(){
 		            	reset($load);
 		            },{
 		            	userId:userId
 		            });
 		        }
-		        if(mediaFiles||mediaFiles.length==0){
+		        if(!mediaFiles||mediaFiles.length==0){
 		        	reset($load);
 		        }
 			},function(){
@@ -180,16 +179,15 @@ var Page = {
 		            			$('.b-image').unbind('click');
 		            			$colimage.hide();
 		            		}
-		            	}else{
-		            		reset($load);
 		            	}
+		            	reset($load);
 		            },function(){
 		            	reset($load);
 		            },{
 		            	userId:userId
 		            });
 		        }
-		        if(mediaFiles||mediaFiles.length==0){
+		        if(!mediaFiles||mediaFiles.length==0){
 		        	reset($load);
 		        }
 			},function(){
@@ -222,16 +220,15 @@ var Page = {
 		            			$('.b-video').unbind('click');
 		            			$colvideo.hide();
 		            		}
-		            	}else{
-		            		reset($load);
 		            	}
+		            	reset($load);
 		            },function(){
 		            	reset($load);
 		            },{
 		            	userId:userId
 		            });
 		        }
-		        if(mediaFiles||mediaFiles.length==0){
+		        if(!mediaFiles||mediaFiles.length==0){
 		        	reset($load);
 		        }
 			},function(){
