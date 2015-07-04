@@ -16,6 +16,7 @@
 #import "Menu.h"
 #import "ShareFun.h"
 #import "UIImageView+WebCache.h"
+#import "AESCrypt.h"
 
 @interface LoginVC (){
 
@@ -118,9 +119,9 @@
     
     UserRequest * t_request = [[UserRequest alloc] init];
     t_request.username = _textF_userName.text;
-    t_request.pass = _textF_password.text;
     
-    
+    NSString *pwd = [AESCrypt encrypt:_textF_password.text password:@"fzyj_10086"];
+    t_request.pass = pwd;
     _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [_hud setLabelText:@"登录中"];
     [_hud show:YES];

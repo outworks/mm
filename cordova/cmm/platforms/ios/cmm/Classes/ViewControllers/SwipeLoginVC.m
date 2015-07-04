@@ -15,6 +15,7 @@
 #import "ShareValue.h"
 #import "LKDBHelper.h"
 #import "Menu.h"
+#import "AESCrypt.h"
 
 @interface SwipeLoginVC ()<YLSwipeLockViewDelegate>{
 
@@ -93,7 +94,8 @@
        
         UserRequest * t_request = [[UserRequest alloc] init];
         t_request.username = [ShareValue sharedShareValue].loginUserName;
-        t_request.pass = [ShareValue sharedShareValue].password;
+        NSString *pwd = [AESCrypt encrypt:[ShareValue sharedShareValue].password password:@"fzyj_10086"];
+        t_request.pass = pwd;
         
         _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [_hud setLabelText:@"登录中"];

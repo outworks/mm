@@ -14,6 +14,7 @@
 #import "ServerConfig.h"
 #import "ShareValue.h"
 #import <objc/runtime.h>
+#import "AESCrypt.h"
 
 #define TIMEOUT_DEFAULT 30
 
@@ -48,6 +49,12 @@
             NSData *responseData = (NSData *)responseObject;
             NSString *responseString = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
             NSLog(@"%@",responseString);
+            if (responseString) {
+                NSString *decryptString = [AESCrypt decrypt:responseString password:@"fzyj_10086"];
+                if(decryptString){
+                    responseData = [decryptString dataUsingEncoding:NSUTF8StringEncoding];
+                }
+            }
             NSError *error = nil;
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:&error];
             if (!error && dict) {
@@ -114,7 +121,6 @@
                         response1.data.result = array;
                         success(response1,response1.result,response1.msg);
                     }
-                    
                 }else{
                     fail(@"服务器异常");
                 }
