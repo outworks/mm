@@ -308,7 +308,7 @@ header
  */
 
 .header{
-	height: 72px;background: #0085d0;width: 100%;position: fixed;
+	height: 72px;background: #008cec;width: 100%;position: fixed;
 	z-index: 110;
 	.b{
 		z-index: 10;height: 72px;display: block;padding:0 22px;position: relative;
@@ -490,7 +490,7 @@ content
 		font-size: 26px;line-height: 50px;
 		margin-top: 20px;
 		.form-wrap{
-			background: #fff;padding-top:15px;padding-bottom:15px;
+			background: #fff;padding-top:15px;padding-bottom:15px;position: relative;
 		}
 		select{
 			border-bottom: 1px #989da3 solid;color:#989da3;
@@ -578,6 +578,19 @@ content
 						display: block;
 					}
 				}
+			}
+		}
+
+		.HDcb{
+			position: absolute;right: 20px;top:10px;
+			input[type="checkbox"], input[type="radio"]{
+				margin-top:16px;
+				transform:scale(1.5);
+				-webkit-transform:scale(1.5);
+				vertical-align: top;
+			}
+			.checkbox{
+				padding-top:0px;color:#989da3;
 			}
 		}
 		.form-images{

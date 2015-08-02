@@ -41,7 +41,7 @@ var Page = {
 							channelArr.push(channels[i]);
 							flag = true;
 						}
-					}	
+					}
 				});
 				$.each(channelArr,function(index,val){
 					var str = $f.TPL(TPL.cldiv,{
@@ -121,8 +121,8 @@ var Page = {
 			$load = $f.pop.load();
 			$load.show();
 			PG.native.audio(function(mediaFiles){
-				 for (var i = 0, len = mediaFiles.length; i < len; i += 1) {
-		            _.upload(mediaFiles[i],function(r){
+				for (var i = 0, len = mediaFiles.length; i < len; i += 1) {
+		            var ft = _.upload(mediaFiles[i],function(r){
 		            	// log(r);
 		            	// alert(JSON.stringify(r));
 		            	var json = $f.isObject(r.response)?r.response:JSON.parse(r.response);
@@ -144,6 +144,7 @@ var Page = {
 		            },{
 		            	userId:userId
 		            });
+		            abort(ft,$load);
 		        }
 		        if(!mediaFiles||mediaFiles.length==0){
 		        	reset($load);
@@ -161,12 +162,83 @@ var Page = {
 
 		$tipimage.html(_.tip(image,PG.RS.image));
 		$('.b-image').bind('click',function(){
-			if(_state)return;
-			_state = true;
-			$load = $f.pop.load();
-			$load.show();
-			PG.native.image(function(mediaFiles){
-				 for (var i = 0, len = mediaFiles.length; i < len; i += 1) {
+			var opt = {mediaType:0 , destinationType: 1,sourceType : 1};
+			if(!$images.find('.HDimg').prop("checked")){
+				opt.quality = 50;
+				opt.targetWidth = 960;
+				opt.targetHeight = 1280;
+			}
+			/*
+				
+				Camera.DestinationType = {
+			        DATA_URL : 0,                // Return image as base64 encoded string
+			        FILE_URI : 1                 // Return image file URI
+			    };
+				Camera.PictureSourceType = {
+				    PHOTOLIBRARY : 0,
+				    CAMERA : 1,
+				    SAVEDPHOTOALBUM : 2
+				};
+			*/
+			var confirm = $f.pop.confirm(
+					{tip:'选择图片',confirm:'相册',cancel:'拍照'},
+					function(){
+						opt.sourceType = 0;
+						_handle();
+					},
+					function(){
+						_handle();
+					},
+					true,function(){}
+				).show();
+			var _handle = function(){
+				if(_state)return;
+				_state = true;
+				$load = $f.pop.load();
+				$load.show();
+				PG.native.camera(
+					function(imageURI){
+						if(!imageURI){
+							reset($load);
+							return false;
+						};
+						var mediaFile = {
+							fullPath : imageURI,
+						    type : "image/jpeg"
+						};
+						// alert('imageURI:'+imageURI);
+			            var ft = _.upload(mediaFile,function(r){
+			            	// log(r);
+			            	// alert(JSON.stringify(r));
+			            	var json = $f.isObject(r.response)?r.response:JSON.parse(r.response);
+			            	if(json&&json.result=='0'){
+			            		image.push(json.data);
+			            		var $img = $($f.TPL(tpl_image,{src:PG.resource()+json.data})).insertBefore($colimage);
+			            		$tipimage.html(_.tip(image,PG.RS.image));
+
+			            		if(image.length>=PG.RS.image){
+			            			$('.b-image').unbind('click');
+			            			$colimage.hide();
+			            		}
+			            	}
+			            	reset($load);
+			            },function(){
+			            	reset($load);
+			            	$f.pop.tip('上传失败,请稍后尝试!',null,true).show();
+			            },{
+			            	userId:userId
+			            },'camera.jpg');
+			            abort(ft,$load);
+					},
+					function(){
+						reset($load);
+					},
+					opt
+				);
+			}
+			/**/
+			/*PG.native.image(function(mediaFiles){
+				for (var i = 0, len = mediaFiles.length; i < len; i += 1) {
 		            _.upload(mediaFiles[i],function(r){
 		            	// log(r);
 		            	var json = $f.isObject(r.response)?r.response:JSON.parse(r.response);
@@ -192,7 +264,7 @@ var Page = {
 		        }
 			},function(){
 				reset($load);
-			});
+			});*/
 		});
 		
 		var $videos = $('.form-videos'),
@@ -224,6 +296,7 @@ var Page = {
 		            	reset($load);
 		            },function(){
 		            	reset($load);
+		            	$f.pop.tip('上传失败,请稍后尝试!',null,true).show();
 		            },{
 		            	userId:userId
 		            });
@@ -237,17 +310,37 @@ var Page = {
 		});
 
 
-		var reset = function($load,func){
-			$load.hide();
-			_state = false;
-			$f.isFunction(func)&&func();
-		}
+		var timer = null,
+			stop = function(){
+				if(timer){
+					clearTimeout(timer);
+					timer = null;
+				};
+			},
+			reset = function($load,func){
+				stop();
+				$load.hide();
+				_state = false;
+				$f.isFunction(func)&&func();
+			},
+			abort = function(ft,$load,time){
+				time = time || 15000;
+				stop();
+				var timer = setTimeout(function(){
+					if(_state){
+						ft.abort();
+						reset($load,function(){
+							$f.pop.tip('请求超时',null,true).show();
+						});
+					}
+				},time);
+			};
 	},
 	tip : function(type,limit){
 		return '<em>'+($f.isArray(type)?type.length:0)+'</em>/'+(limit||0);
 	},
-	upload:function(file,suc,err,param){
-		PG.native.upload(file,suc,err,param);
+	upload:function(file,suc,err,param,fileName){
+		return PG.native.upload(file,suc,err,param,fileName);
 	},
 	pageInit:function(){
 		var _ = this;
