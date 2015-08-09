@@ -26,6 +26,8 @@
 #define SET_FILEBASEURL @"SET_FILEBASEURL"
 #define SET_POSTIONTIMEINTERVAL @"SET_POSTIONTIMEINTERVAL"
 #define SET_SELECTEDMENUID @"SET_SELECTEDMENUID"
+#define SET_ERRORTIME @"SET_ERRORTIME"
+#define SET_PWDERRORCOUNT @"SET_PWDERRORCOUNT"
 
 @implementation ShareValue
 
@@ -37,6 +39,43 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
        
     }
     return self;
+}
+
+-(BOOL)isFirstErrorTimeValid{
+    NSTimeInterval timeInterval = self.errorTimer;
+    if (timeInterval > 0  ) {
+        NSDate *date = [[NSDate alloc]initWithTimeIntervalSinceReferenceDate:timeInterval];
+        return [[date dateByAddingTimeInterval:60*60] laterDate:[NSDate date]];
+    }
+    return NO;
+}
+
+-(BOOL)isLocked{
+    return [self isFirstErrorTimeValid] && (self.pwderrorcount >=10);
+}
+
+-(void)clearErrorTime{
+    self.errorTimer = 0;
+    self.pwderrorcount = 0;
+}
+
+-(BOOL)addErrorTimerCount{
+    if(![self isFirstErrorTimeValid]){
+        self.errorTimer = [NSDate timeIntervalSinceReferenceDate];
+        self.pwderrorcount = 0;
+    }
+    int timecount = self.pwderrorcount;
+    timecount ++;
+    if (timecount == 1) {
+        [self setErrorTimer:[NSDate timeIntervalSinceReferenceDate]];
+    }
+    if(timecount <= 10){
+        self.pwderrorcount = timecount;
+        if (timecount == 10) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 -(void)setIsRember:(BOOL)isRember{
@@ -59,6 +98,31 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
     return [[NSUserDefaults standardUserDefaults]boolForKey:SET_LOGINOUT];
 
 }
+
+-(int)pwderrorcount{
+    return (int)[[NSUserDefaults standardUserDefaults]integerForKey:SET_PWDERRORCOUNT];
+}
+
+-(void)setPwderrorcount:(int)pwderrorcount{
+    [[NSUserDefaults standardUserDefaults]setInteger:pwderrorcount forKey:SET_PWDERRORCOUNT];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+}
+
+-(NSTimeInterval ) errorTimer{
+    NSString *errorTime = [[NSUserDefaults standardUserDefaults]stringForKey:SET_ERRORTIME];
+    if (!errorTime) {
+        return 0;
+    }
+    NSTimeInterval time = [errorTime doubleValue];
+    return time;
+}
+
+-(void)setErrorTimer:(NSTimeInterval)errorTimer{
+    NSString *timeString = [NSString stringWithFormat:@"%g",errorTimer];
+    [[NSUserDefaults standardUserDefaults]setObject:timeString forKey:SET_ERRORTIME];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+}
+
 
 -(void)setSelectedMenuId:(NSString *)selectedMenuId{
 

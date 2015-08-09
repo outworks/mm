@@ -18,7 +18,7 @@
 #import "UIImageView+WebCache.h"
 #import "AESCrypt.h"
 
-@interface LoginVC (){
+@interface LoginVC ()<UITextFieldDelegate>{
 
     MBProgressHUD * _hud;
 }
@@ -51,8 +51,8 @@
     [super viewDidLoad];
     _btn_login.layer.cornerRadius = 3.f;
     _btn_login.layer.masksToBounds = YES;
-    
-    
+    _textF_userName.delegate = self;
+    _textF_password.delegate = self;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -94,7 +94,10 @@
 #pragma mark - buttonAciton
 
 - (IBAction)loginAction:(id)sender {
-    
+    if ([[ShareValue sharedShareValue]isLocked]) {
+        [MBProgressHUD showError:@"对不起，您的系统已锁定" toView:self.view];
+        return;
+    }
     [_textF_password resignFirstResponder];
     [_textF_userName resignFirstResponder];
     
@@ -147,20 +150,25 @@
            self.sliderVC.mainVC = mainVC;
             [self.navigationController pushViewController:self.sliderVC animated:YES];
         }else{
-            
+             [[ShareValue sharedShareValue] clearErrorTime];
             [ShareValue sharedShareValue].password = _textF_password.text;
             [ShareValue sharedShareValue].loginUserName = _textF_userName.text;
             [ShareValue sharedShareValue].regiterUser
             = response.smUser;
             NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
             [userDefault setObject:nil forKey:@"gesturePassword"];
-            
             SwipePasswordVC *t_vc = [[SwipePasswordVC alloc] init];
             [self.navigationController pushViewController:t_vc animated:YES];
         }
-        
-        
     } fail:^(NSString *description) {
+        if ([description rangeOfString:@"无此"].length > 0 || [description rangeOfString:@"密码"].length > 0) {
+            [[ShareValue sharedShareValue]addErrorTimerCount];
+            if ([ShareValue sharedShareValue].pwderrorcount == 10) {
+                description = [NSString stringWithFormat:@"用户名或密码输入错误超过10次,系统将锁定1小时" ];
+            }else{
+                description = [NSString stringWithFormat:@"用户名或密码错误!再输错%d次，将锁定1小时",10 - [ShareValue sharedShareValue].pwderrorcount];
+            }
+        }
         [_hud hide:NO];
        [MBProgressHUD showError:description toView:self.view];
         
@@ -193,6 +201,30 @@
     }else{
         [_btn_remenber setImage:[UIImage imageNamed:@"登录页_背景_复选框_未选中"] forState:UIControlStateNormal];
     }
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField*)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if (textField == _textF_userName) {
+        NSString *regex = @"^[a-zA-Z0-9_]{1,}$";
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+        BOOL isValid = [predicate evaluateWithObject:string];
+        if (string.length == 0) {
+            return YES;
+        }
+        if ((textField.text.length + string.length)>20 || !isValid ) {
+            return NO;
+        }
+    }else{
+        if (string.length == 0) {
+            return YES;
+        }
+        if ((textField.text.length + string.length)>20 ) {
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 #pragma mark - dealloc

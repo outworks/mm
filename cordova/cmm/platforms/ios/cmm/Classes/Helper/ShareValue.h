@@ -38,6 +38,18 @@
 
 @property(nonatomic,assign) CLLocationCoordinate2D currentLocation;
 
+@property(nonatomic,assign) int pwderrorcount;
+
+@property(nonatomic,assign) NSTimeInterval errorTimer;
+
+-(BOOL)addErrorTimerCount;
+
+-(BOOL)isFirstErrorTimeValid;
+
+-(BOOL)isLocked;
+
+-(void)clearErrorTime;
+
 
 SYNTHESIZE_SINGLETON_FOR_HEADER(ShareValue)
 
