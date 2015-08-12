@@ -29,6 +29,9 @@
 #define SET_ERRORTIME @"SET_ERRORTIME"
 #define SET_PWDERRORCOUNT @"SET_PWDERRORCOUNT"
 
+
+#define MAXERRORCOUNT 5
+
 @implementation ShareValue
 
 SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
@@ -45,13 +48,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
     NSTimeInterval timeInterval = self.errorTimer;
     if (timeInterval > 0  ) {
         NSDate *date = [[NSDate alloc]initWithTimeIntervalSinceReferenceDate:timeInterval];
-        return [[date dateByAddingTimeInterval:60*60] laterDate:[NSDate date]];
+        return [[date dateByAddingTimeInterval:60*60] compare:[NSDate date]] == NSOrderedDescending;
     }
     return NO;
 }
 
 -(BOOL)isLocked{
-    return [self isFirstErrorTimeValid] && (self.pwderrorcount >=10);
+    return [self isFirstErrorTimeValid] && (self.pwderrorcount >=MAXERRORCOUNT);
 }
 
 -(void)clearErrorTime{
@@ -69,9 +72,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
     if (timecount == 1) {
         [self setErrorTimer:[NSDate timeIntervalSinceReferenceDate]];
     }
-    if(timecount <= 10){
+    if(timecount <= MAXERRORCOUNT){
         self.pwderrorcount = timecount;
-        if (timecount == 10) {
+        if (timecount == MAXERRORCOUNT) {
             return YES;
         }
     }

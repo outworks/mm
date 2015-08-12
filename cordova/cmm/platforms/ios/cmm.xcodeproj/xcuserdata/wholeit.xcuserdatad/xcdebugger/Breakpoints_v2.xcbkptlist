@@ -1022,7 +1022,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "112"
             endingLineNumber = "112"
-            landmarkName = "-errorTimer"
+            landmarkName = "-setPwderrorcount:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1038,7 +1038,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "54"
             endingLineNumber = "54"
-            landmarkName = "-isLocked"
+            landmarkName = "-isFirstErrorTimeValid"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1070,7 +1070,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "63"
             endingLineNumber = "63"
-            landmarkName = "-addErrorTimerCount"
+            landmarkName = "-clearErrorTime"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
