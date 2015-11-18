@@ -104,6 +104,14 @@
     [client postPath:path parameters:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if(responseObject){
             NSData *responseData = (NSData *)responseObject;
+            NSString *responseString = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
+            NSLog(@"%@",responseString);
+            if (responseString) {
+                NSString *decryptString = [AESCrypt decrypt:responseString password:@"fzyj_10086"];
+                if(decryptString){
+                    responseData = [decryptString dataUsingEncoding:NSUTF8StringEncoding];
+                }
+            }
             NSError *error = nil;
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:&error];
             if (!error && dict) {
@@ -143,6 +151,13 @@
             NSData *responseData = (NSData *)responseObject;
             NSString *responseString = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
             NSLog(@"%@",responseString);
+            if (responseString) {
+                NSString *decryptString = [AESCrypt decrypt:responseString password:@"fzyj_10086"];
+                if(decryptString){
+                    responseData = [decryptString dataUsingEncoding:NSUTF8StringEncoding];
+                }
+                responseString = decryptString;
+            }
             NSDictionary *dict = [responseString objectFromJSONString];
             if (dict) {
                 LK_HttpBaseResponse *response = [dict objectByClass:[LK_HttpBaseResponse class]];
