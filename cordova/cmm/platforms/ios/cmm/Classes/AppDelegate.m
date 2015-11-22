@@ -119,7 +119,7 @@
     
     
 //    LKNavController *loginVC = [[LKNavController alloc]init];
-//    loginVC.startPage = @"order.html?userId=1005992";
+//    loginVC.startPage = @"index.html?userId=1005992";
 //    loginVC.startPage = @"index.html";
 //
     LoginVC *loginVC = [[LoginVC alloc] init];

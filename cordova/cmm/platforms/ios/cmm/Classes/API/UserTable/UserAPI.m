@@ -56,4 +56,13 @@
     
 }
 
++(void) getMenuHttpAPIWithRequest:(void (^)(NSArray *result))sucess fail:(void (^)(NSString *description))fail{
+    [LK_APIUtil postHttpRequest:nil apiPath:[NSString stringWithFormat:@"%@%@",URLPATH_MENUS,[ShareValue sharedShareValue].regiterUser.userId] Success:^(NSObject *response, NSInteger result, NSString *msg) {
+        sucess((NSArray *)response);
+    } fail:^(NSString *description) {
+        fail(description);
+    } class:([Menu class])];
+}
+
+
 @end

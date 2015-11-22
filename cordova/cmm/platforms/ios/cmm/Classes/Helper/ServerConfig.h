@@ -35,5 +35,6 @@
 #define URLPATH_TRACKLIST @"trackList"
 #define URLPATH_UNITTASKS @"unFinishTask"
 #define URLPATH_CLIENTVERSION @"clientVersion"
+#define URLPATH_MENUS @"clientmenu&userId=?"
 
 #define HTTP_POSTMETHOD 1

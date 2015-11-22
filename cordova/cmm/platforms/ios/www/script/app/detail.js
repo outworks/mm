@@ -145,7 +145,7 @@ var Page = {
 							if(json.result=='0'){
 								$f.pop.tip(json.msg).show(function(){
 									// PG.close();
-									PG.back(PG.href('order.html',{userId:userId}),'true');
+									PG.back(PG.href('index.html',{userId:userId}),'true');
 								});
 							}else{
 								$f.pop.tip(json.msg).show();
@@ -192,7 +192,7 @@ var Page = {
 						if(json.result=='0'){
 							$f.pop.tip(json.msg).show(function(){
 								// PG.close();
-								PG.back(PG.href('order.html',{userId:userId}),'true');
+								PG.back(PG.href('index.html',{userId:userId}),'true');
 							});
 						}else{
 							$f.pop.tip(json.msg).show();
@@ -240,7 +240,7 @@ var Page = {
 								if(json.result=='0'){
 									$f.pop.tip(json.msg).show(function(){
 										// PG.close();
-										PG.back(PG.href('order.html',{userId:userId}),'true');
+										PG.back(PG.href('index.html',{userId:userId}),'true');
 									});
 								}else{
 									$f.pop.tip(json.msg).show();
@@ -293,7 +293,7 @@ var Page = {
 								if(json.result=='0'){
 									$f.pop.tip(json.msg).show(function(){
 										// PG.close();
-										PG.back(PG.href('order.html',{userId:userId}),'true');
+										PG.back(PG.href('index.html',{userId:userId}),'true');
 									});
 								}else{
 									$f.pop.tip(json.msg).show();

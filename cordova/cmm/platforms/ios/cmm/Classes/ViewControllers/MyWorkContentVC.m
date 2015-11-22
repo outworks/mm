@@ -87,7 +87,7 @@
         [ApplicationDelegate.viewController presentViewController:t_nav animated:YES completion:nil];
     }else if ([t_menu.menuName isEqualToString:@"问题反馈"]){
         LKNavController *nav = [[LKNavController alloc]init];
-        nav.startPage = [NSString stringWithFormat:@"order.html?userId=%@",[ShareValue sharedShareValue].regiterUser.userId];
+        nav.startPage = [NSString stringWithFormat:@"index.html?userId=%@",[ShareValue sharedShareValue].regiterUser.userId];
         UINavigationController *t_nav = [[UINavigationController alloc] initWithRootViewController:nav];
         nav.navHidden = YES;
          [ApplicationDelegate.viewController presentViewController:t_nav animated:YES completion:nil];
@@ -164,7 +164,7 @@
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,  NSUserDomainMask, YES);
     NSString *docPath = [path objectAtIndex:0];
     NSURL *fileUrl = [[NSURL alloc]initFileURLWithPath:[NSString stringWithFormat:@"%@/%@/%@",docPath,menu.menuId,@"www"] isDirectory:YES];
-    NSString *startPage = [NSString stringWithFormat:@"%@?userId=%@",@"order.html",[ShareValue sharedShareValue].regiterUser.userId];
+    NSString *startPage = [NSString stringWithFormat:@"%@?userId=%@",@"index.html",[ShareValue sharedShareValue].regiterUser.userId];
     LKNavController *nav = [[LKNavController alloc]init];
     nav.wwwFolderName = fileUrl.absoluteString;
     nav.startPage = startPage;

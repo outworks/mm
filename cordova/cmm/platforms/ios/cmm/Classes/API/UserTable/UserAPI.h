@@ -17,5 +17,6 @@
 +(void)updataSignNameHttpAPI:(UserSignRequest *)request Success:(void (^)(NSInteger result,NSString *msg))sucess fail:(void (^)(NSString *description))fail;
 
 
++(void) getMenuHttpAPIWithRequest:(void (^)(NSArray *result))sucess fail:(void (^)(NSString *description))fail;
 
 @end

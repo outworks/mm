@@ -12,6 +12,7 @@
 #import "MyWorkVC.h" // 我的工作
 #import "VisitsMapVC.h" //走访地图
 #import "MailListVC.h" // 通讯录
+#import "UserAPI.h"
 
 @interface MainVC ()
 
@@ -122,6 +123,11 @@ static MainVC *main;
     [self initTabBar];
     [_vc_tab setSelectedIndex:0];
     // Do any additional setup after loading the view from its nib.
+    [UserAPI getMenuHttpAPIWithRequest:^(NSArray *result) {
+        NSLog(@"%d",result.count);
+    } fail:^(NSString *description) {
+        
+    }];
 }
 
 -(void)viewWillAppear:(BOOL)animated{

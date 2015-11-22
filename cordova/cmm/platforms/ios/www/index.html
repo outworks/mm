@@ -1,41 +1,90 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="format-detection" content="telephone=no" />  
+<meta name="format-detection" content="email=no" /> 
+<!--<script>
+    if (navigator.userAgent.toLowerCase().match(/ipad/i) == "ipad") {
+        document.write('<meta name="viewport" content="width=device-width,maximum-scale=1,minimum-scale=1">');
+    } else if (/Android/.test(navigator.userAgent) && parseFloat(navigator.userAgent.match(/Android\s(\d|\.)+/g)[0].replace('Android ', '')) < 4) {
+        document.write('<meta name="viewport" content="width=640,maximum-scale=0.5,minimum-scale=0.5">');
+    } else {
+        document.write('<meta name="viewport" content="target-densitydpi=device-dpi,width=640,user-scalable=no">');
+    }
+</script>-->
 
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+<!-- <meta name="viewport" content="target-densitydpi=device-dpi,width=640,user-scalable=no"> -->
+<meta name="viewport" content="width=640,maximum-scale=0.5,minimum-scale=0.5">
+<title>问题反馈</title>
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body class="page p-order-list">
+    <div class="header container">
+        <div class="row">
+            <a href="javascript:void(0);" class="b b-back pull-left"></a>
+            <a href="javascript:void(0);" class="b b-create pull-right"></a>
+            <h1 class="title"><img src="images/order/title_order.png"></h1>
+        </div>
+    </div>
+    <!-- <a href="javascript:void(0);" class="b b-search"></a> -->
+    <div class="content">
+        <div class="toolbar-wrap">
+            <div class="toolbar">
+                <div class="col-xs-4">
+                    <button class="b-time">
+                        时间<i class="i i-sort"></i>
+                    </button>
+                </div>
+                <div class="col-xs-4 dropdonw-state">
+                    <button class="b-type"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        状态<i class="i i-down"></i>
+                    </button>
+                    <!-- <ul class="dropdown-menu" role="menu">
+                        <li role="presentation">
+                            <a href="javascript:void(0);" class="b-filter-type" role="menuitem" tabindex="-1">全部</a>
+                        </li>
+                    </ul> -->
+                </div>
+                <div class="col-xs-4">
+                    <button class="b-filter">
+                        筛选<i class="i i-search"></i>
+                    </button>
+                </div>
             </div>
         </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-    </body>
+        <div class="orders">
+            <!-- <div class="nocont">暂无数据</div> -->
+            <!-- <a href="javascript:void(0);" class="item">
+                <span class="state s-1">处理中</span>
+                <div class="info container">
+                    <div class="row">
+                        <span class="col-xs-4 oid">20140918000</span>
+                        <span class="col-xs-3 tc name">张三</span>
+                        <span class="col-xs-5 tr time">2014-9-18 10:12</span>
+                    </div>
+                </div>
+                <p class="title">
+                    关于渠道设备硬件故障反馈
+                </p>
+            </a> -->
+        </div>
+        <div class="load none">
+            <i class="i i-load-1"></i>正在获取，请稍后...
+        </div>
+    </div>
+    <!-- <div class="pop pop-load"></div> -->
+    <script type="text/javascript" src="cordova.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="script/plugin.js"></script>
+    <script src="script/i.js"></script>
+    <script src="script/config.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="script/bootstrap.min.js"></script>
+    <script src="script/app/order.js"></script>
+</body>
 </html>
