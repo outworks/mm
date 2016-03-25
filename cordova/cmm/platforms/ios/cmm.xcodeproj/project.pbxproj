@@ -45,6 +45,8 @@
 		8C34711EE8A0413A8A24BBD3 /* CDVCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C93361F453E49A58BF31467 /* CDVCamera.m */; };
 		97B3B7FD33444844B7B17DE7 /* CDVLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = A434FCD5E8874455BDBFA8C7 /* CDVLocation.m */; };
 		AC66884E1CA4D71000CD71E9 /* HomeMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = AC66884D1CA4D71000CD71E9 /* HomeMenu.m */; };
+		ACC7EF1E1CA4E5230048DC75 /* MyWebVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC7EF1C1CA4E5230048DC75 /* MyWebVC.m */; };
+		ACC7EF1F1CA4E5230048DC75 /* MyWebVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACC7EF1D1CA4E5230048DC75 /* MyWebVC.xib */; };
 		B23B5A8F3E3E418A93440B57 /* CDVContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 23B202287C8340F7BFF97F8B /* CDVContact.m */; };
 		B3EF9655C4754C69B27061B2 /* CDVBattery.m in Sources */ = {isa = PBXBuildFile; fileRef = 380F2EC0F79B4682B64C1E62 /* CDVBattery.m */; };
 		C14175D6BDB04FD58CE1F382 /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 04461227E2064DB3BD7E147C /* CDVLogger.m */; };
@@ -411,6 +413,9 @@
 		A7779AAE09324E3E8E8A68F9 /* CDVNotification.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CDVNotification.bundle; sourceTree = "<group>"; };
 		AC66884C1CA4D71000CD71E9 /* HomeMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeMenu.h; sourceTree = "<group>"; };
 		AC66884D1CA4D71000CD71E9 /* HomeMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeMenu.m; sourceTree = "<group>"; };
+		ACC7EF1B1CA4E5230048DC75 /* MyWebVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyWebVC.h; sourceTree = "<group>"; };
+		ACC7EF1C1CA4E5230048DC75 /* MyWebVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyWebVC.m; sourceTree = "<group>"; };
+		ACC7EF1D1CA4E5230048DC75 /* MyWebVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyWebVC.xib; sourceTree = "<group>"; };
 		B321BF996D034E7C904FC65D /* CDVLocalFilesystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVLocalFilesystem.h; path = org.apache.cordova.file/CDVLocalFilesystem.h; sourceTree = "<group>"; };
 		B41D779D1CEF4D9CB652CF7E /* CDVFileTransfer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVFileTransfer.h; path = "org.apache.cordova.file-transfer/CDVFileTransfer.h"; sourceTree = "<group>"; };
 		B97EAF98F4344ECB8EA92EB8 /* CDVLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVLogger.h; path = org.apache.cordova.console/CDVLogger.h; sourceTree = "<group>"; };
@@ -1658,6 +1663,9 @@
 				CED0BB3D1ABB6CCB004022A8 /* MainVC.h */,
 				CED0BB3E1ABB6CCB004022A8 /* MainVC.m */,
 				CED0BB3F1ABB6CCB004022A8 /* MainVC.xib */,
+				ACC7EF1B1CA4E5230048DC75 /* MyWebVC.h */,
+				ACC7EF1C1CA4E5230048DC75 /* MyWebVC.m */,
+				ACC7EF1D1CA4E5230048DC75 /* MyWebVC.xib */,
 			);
 			name = MainVC;
 			sourceTree = "<group>";
@@ -2312,6 +2320,7 @@
 				DF5732B11AC7DFAB007E4B8B /* micon-album@2x.png in Resources */,
 				CE6CEAF21AD3758700F19FE6 /* ItemImageView.xib in Resources */,
 				DF5732741AC7C253007E4B8B /* MyInfoVC.xib in Resources */,
+				ACC7EF1F1CA4E5230048DC75 /* MyWebVC.xib in Resources */,
 				CED6E7D31AD18E710023ECAC /* TaskListVC.xib in Resources */,
 				CED6E76A1AD18CE70023ECAC /* icon57.png in Resources */,
 				DFD0643E1B10553D00606C85 /* open.mp3 in Resources */,
@@ -2450,6 +2459,7 @@
 				CEC3F3BB1ABE08C40085FE06 /* IQBarButtonItem.m in Sources */,
 				CEC3F3C71ABE2A9D0085FE06 /* HCatCircleProgressView.m in Sources */,
 				DF5732731AC7C253007E4B8B /* MyInfoVC.m in Sources */,
+				ACC7EF1E1CA4E5230048DC75 /* MyWebVC.m in Sources */,
 				DF5732A61AC7D654007E4B8B /* UIImage+WebP.m in Sources */,
 				CEC3F3B41ABE08C40085FE06 /* IQNSArray+Sort.m in Sources */,
 				CED0BBA51ABBB4E2004022A8 /* CommonTabBar.m in Sources */,
