@@ -60,18 +60,23 @@ static MainVC *main;
     UIViewController *visitMapVC = nil;
     UIViewController *mailListVC = nil;
     
-    HomeMenu *menu = [[HomeMenu alloc]init];
-    menu.menuName = @"hello";
-    menu.menuIcon = @"http://www.easyicon.net/api/resizeApi.php?id=1158236&size=128";
-    menu.menuUrl = @"https://www.baidu.com?ii=1";
+//    HomeMenu *menu = [[HomeMenu alloc]init];
+//    menu.menuName = @"hello";
+//    menu.menuIcon = @"http://www.easyicon.net/api/resizeApi.php?id=1158236&size=128";
+//    menu.menuUrl = @"https://www.baidu.com?ii=1";
+//    
+//    [ShareValue sharedShareValue].module = @[menu];
+////    [ShareValue sharedShareValue].regiterUser.isManager = 0;
     
-    [ShareValue sharedShareValue].module = @[menu];
-    
-    if ([ShareValue sharedShareValue].module.count >0) {
+    if ([ShareValue sharedShareValue].module.count > 0) {
         HomeMenu *menu = [ShareValue sharedShareValue].module[0];
         homeVC  = [self controllerWithMenu:menu];
-    }else{
+    }else if([ShareValue sharedShareValue].regiterUser.isManager){
         homeVC = [[HomeVC alloc] init];
+        UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@"首页" image:[UIImage imageNamed:@"主菜单栏_图标_首页_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_首页_选中.png"]];
+        homeVC.tabBarItem = item;
+    }else{
+        homeVC = [[UIViewController alloc]init];
         UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@"首页" image:[UIImage imageNamed:@"主菜单栏_图标_首页_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_首页_选中.png"]];
         homeVC.tabBarItem = item;
     }
@@ -83,7 +88,7 @@ static MainVC *main;
     if ([ShareValue sharedShareValue].module.count >1) {
         HomeMenu *menu = [ShareValue sharedShareValue].module[1];
         visitMapVC  = [self controllerWithMenu:menu];
-    }else{
+    }else if([ShareValue sharedShareValue].regiterUser.isManager){
         visitMapVC = [[VisitsMapVC alloc] initWithNibName:@"VisitsMapVC" bundle:nil];
         UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@"走访地图" image:[UIImage imageNamed:@"主菜单栏_图标_走访地图_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_走访地图_选中.png"]];
         visitMapVC.tabBarItem = item;
@@ -91,7 +96,7 @@ static MainVC *main;
     if ([ShareValue sharedShareValue].module.count >2) {
         HomeMenu *menu = [ShareValue sharedShareValue].module[2];
         mailListVC  = [self controllerWithMenu:menu];
-    }else{
+    }else if([ShareValue sharedShareValue].regiterUser.isManager){
         mailListVC = [[MailListVC alloc] init];
         UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@"通讯录" image:[UIImage imageNamed:@"主菜单栏_图标_通讯录_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_通讯录_选中.png"]];        mailListVC.tabBarItem = item;
     }
@@ -102,8 +107,18 @@ static MainVC *main;
     UINavigationController *visitMapVNav = [[UINavigationController alloc]initWithRootViewController:visitMapVC];
     UINavigationController *mailListVCNav = [[UINavigationController alloc]initWithRootViewController:mailListVC];
      */
-
-    _vc_tab.viewControllers = @[homeVC, myWorkVC, visitMapVC,mailListVC];
+    if([ShareValue sharedShareValue].regiterUser.isManager){
+        _vc_tab.viewControllers = @[homeVC, myWorkVC, visitMapVC,mailListVC];
+    }else{
+        if (visitMapVC == nil) {
+            _vc_tab.viewControllers = @[homeVC, myWorkVC];
+        }else if(mailListVC == nil){
+            _vc_tab.viewControllers = @[homeVC, myWorkVC,visitMapVC];
+        }else{
+            _vc_tab.viewControllers = @[homeVC, myWorkVC,visitMapVC,mailListVC];
+        }
+    }
+    
     
 //    NSArray *ar = _vc_tab.viewControllers;
 //    NSMutableArray *arr_t = [NSMutableArray new];
