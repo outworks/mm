@@ -22,7 +22,7 @@
 }
 
 
-
+@property(nonatomic,strong) NSArray *module;
 @property(nonatomic,assign) BOOL isRember;
 @property(nonatomic,assign) BOOL isLoginOut;
 @property(nonatomic,strong) NSString *loginUserName;

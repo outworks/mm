@@ -7,6 +7,7 @@
 //
 
 #import "UserResponse.h"
+#import "HomeMenu.h"
 
 @implementation Configer
 
@@ -16,6 +17,10 @@
 
 +(Class)__menuClass{
     return [Menu class];
+}
+
++(Class)__moduleClass{
+    return [HomeMenu class];
 }
 
 @end

@@ -44,6 +44,7 @@
 		857B80DAB4D44216B4DB7A22 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EA45C4D35B841EAAA9D44AB /* ImageIO.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		8C34711EE8A0413A8A24BBD3 /* CDVCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C93361F453E49A58BF31467 /* CDVCamera.m */; };
 		97B3B7FD33444844B7B17DE7 /* CDVLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = A434FCD5E8874455BDBFA8C7 /* CDVLocation.m */; };
+		AC66884E1CA4D71000CD71E9 /* HomeMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = AC66884D1CA4D71000CD71E9 /* HomeMenu.m */; };
 		B23B5A8F3E3E418A93440B57 /* CDVContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 23B202287C8340F7BFF97F8B /* CDVContact.m */; };
 		B3EF9655C4754C69B27061B2 /* CDVBattery.m in Sources */ = {isa = PBXBuildFile; fileRef = 380F2EC0F79B4682B64C1E62 /* CDVBattery.m */; };
 		C14175D6BDB04FD58CE1F382 /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 04461227E2064DB3BD7E147C /* CDVLogger.m */; };
@@ -408,6 +409,8 @@
 		A1DA9D5FFE5E45118DCF9F9F /* CDVLocalFilesystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVLocalFilesystem.m; path = org.apache.cordova.file/CDVLocalFilesystem.m; sourceTree = "<group>"; };
 		A434FCD5E8874455BDBFA8C7 /* CDVLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVLocation.m; path = org.apache.cordova.geolocation/CDVLocation.m; sourceTree = "<group>"; };
 		A7779AAE09324E3E8E8A68F9 /* CDVNotification.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CDVNotification.bundle; sourceTree = "<group>"; };
+		AC66884C1CA4D71000CD71E9 /* HomeMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeMenu.h; sourceTree = "<group>"; };
+		AC66884D1CA4D71000CD71E9 /* HomeMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeMenu.m; sourceTree = "<group>"; };
 		B321BF996D034E7C904FC65D /* CDVLocalFilesystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVLocalFilesystem.h; path = org.apache.cordova.file/CDVLocalFilesystem.h; sourceTree = "<group>"; };
 		B41D779D1CEF4D9CB652CF7E /* CDVFileTransfer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVFileTransfer.h; path = "org.apache.cordova.file-transfer/CDVFileTransfer.h"; sourceTree = "<group>"; };
 		B97EAF98F4344ECB8EA92EB8 /* CDVLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVLogger.h; path = org.apache.cordova.console/CDVLogger.h; sourceTree = "<group>"; };
@@ -1395,6 +1398,8 @@
 			children = (
 				CEAAABCD1AC212F6003D5A89 /* Menu.h */,
 				CEAAABCE1AC212F6003D5A89 /* Menu.m */,
+				AC66884C1CA4D71000CD71E9 /* HomeMenu.h */,
+				AC66884D1CA4D71000CD71E9 /* HomeMenu.m */,
 			);
 			path = MenuTable;
 			sourceTree = "<group>";
@@ -2430,6 +2435,7 @@
 				CEAAABB51AC2099C003D5A89 /* NSObject+EasyCopy.m in Sources */,
 				4BA1BEFA9CC14C51B91BD380 /* CDVCompass.m in Sources */,
 				CE402DD91AF6C30F001B84E1 /* README.md in Sources */,
+				AC66884E1CA4D71000CD71E9 /* HomeMenu.m in Sources */,
 				CEAAABE61AC213F1003D5A89 /* AFImageRequestOperation.m in Sources */,
 				CED6E74E1AD18C880023ECAC /* UIScrollView+MJExtension.m in Sources */,
 				CE8CEA381ADAD49E002B28B1 /* VisitsMapVC.m in Sources */,
@@ -2575,6 +2581,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2600,6 +2607,7 @@
 					"-weak-lSystem",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ejs.hello;
 				PRODUCT_NAME = cmm;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2614,6 +2622,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cmm/cmm-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
@@ -2637,6 +2646,7 @@
 					"-weak-lSystem",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ejs.hello;
 				PRODUCT_NAME = cmm;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";

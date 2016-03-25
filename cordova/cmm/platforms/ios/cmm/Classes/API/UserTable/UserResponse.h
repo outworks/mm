@@ -23,5 +23,6 @@
 @property(nonatomic,strong)User *smUser;
 @property(nonatomic,strong)NSArray *menu;
 @property(nonatomic,strong)Configer *config;
+@property(nonatomic,strong) NSArray *module;
 
 @end

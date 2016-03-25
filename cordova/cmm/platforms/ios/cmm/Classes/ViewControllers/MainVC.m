@@ -13,6 +13,9 @@
 #import "VisitsMapVC.h" //走访地图
 #import "MailListVC.h" // 通讯录
 #import "UserAPI.h"
+#import "ShareValue.h"
+#import "SDWebImageManager.h"
+#import "UIImage+External.h"
 
 @interface MainVC ()
 
@@ -51,11 +54,18 @@ static MainVC *main;
     [_vc_tab.tabBar setTranslucent:NO];
     [_vc_tab setDelegate:(id<UITabBarControllerDelegate>)self];
     [self.view addSubview:_vc_tab.view];
+    UIViewController *homeVC = nil;
+    UIViewController *visitMapVC = nil;
+    UIViewController *mailListVC = nil;
     
-    HomeVC *homeVC = [[HomeVC alloc] init];
-    MyWorkVC *myWorkVC = [[MyWorkVC alloc] initWithNibName:@"MyWorkVC" bundle:nil];
-    VisitsMapVC *visitMapVC = [[VisitsMapVC alloc] initWithNibName:@"VisitsMapVC" bundle:nil];
-    MailListVC *mailListVC = [[MailListVC alloc] init];
+    if ([ShareValue sharedShareValue].module.count >0) {
+        
+    }else{
+       homeVC = [[HomeVC alloc] init];
+    }
+    UIViewController *myWorkVC = [[MyWorkVC alloc] initWithNibName:@"MyWorkVC" bundle:nil];
+    UIViewController *visitMapVC = [[VisitsMapVC alloc] initWithNibName:@"VisitsMapVC" bundle:nil];
+    UIViewController *mailListVC = [[MailListVC alloc] init];
     
     /*
     UINavigationController *homeVCNav = [[UINavigationController alloc]initWithRootViewController:homeVC];
@@ -75,8 +85,13 @@ static MainVC *main;
          {
              case 0:
              {
-                 ;
                  item = [[UITabBarItem alloc] initWithTitle:@"首页" image:[UIImage imageNamed:@"主菜单栏_图标_首页_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_首页_选中.png"]];
+                 [[SDWebImageManager sharedManager]downloadImageWithURL:[NSURL URLWithString:@"http://www.easyicon.net/api/resizeApi.php?id=1158236&size=128"] options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                     if (!error) {
+                         item.image = [image imageByScaleForSize:CGSizeMake(25, 25)];
+                         item.selectedImage = [image imageByScaleForSize:CGSizeMake(25, 25)];;
+                     }
+                 }];
                  break;
              }
              case 1:
