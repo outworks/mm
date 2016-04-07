@@ -10,7 +10,7 @@
 
 @interface User : NSObject
 
-@property(nonatomic,strong) NSString *token;
+@property(nonatomic,strong) NSString *key;
 @property(nonatomic,strong) NSString * userId;	//用户ID
 @property(nonatomic,strong) NSString * userName;	//	名字
 

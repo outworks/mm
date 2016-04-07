@@ -18,6 +18,7 @@
 #import "UIImage+External.h"
 #import "MyWebVC.h"
 #import "HomeMenu.h"
+#import "ShareFun.h"
 
 @interface MainVC ()
 
@@ -163,13 +164,14 @@ static MainVC *main;
 
 -(UIViewController *)controllerWithMenu:(HomeMenu *)menu{
     MyWebVC *webVC = [[MyWebVC alloc]init];
+    webVC.view.backgroundColor = [UIColor whiteColor];
     if ([menu.menuUrl rangeOfString:@"?"].length > 0) {
-        webVC.url = [NSString stringWithFormat:@"%@&userid=%@&token=%@",menu.menuUrl,[ShareValue sharedShareValue].regiterUser.userId,[ShareValue sharedShareValue].regiterUser.token];
+        webVC.url = [NSString stringWithFormat:@"%@&userid=%@&token=%@",menu.menuUrl,[ShareValue sharedShareValue].regiterUser.userId,[ShareValue sharedShareValue].regiterUser.key];
     }else{
-        webVC.url = [NSString stringWithFormat:@"%@?userid=%@&token=%@",menu.menuUrl,[ShareValue sharedShareValue].regiterUser.userId,[ShareValue sharedShareValue].regiterUser.token];
+        webVC.url = [NSString stringWithFormat:@"%@?userid=%@&token=%@",menu.menuUrl,[ShareValue sharedShareValue].regiterUser.userId,[ShareValue sharedShareValue].regiterUser.key];
     }
     UITabBarItem * item = [[UITabBarItem alloc] initWithTitle:menu.menuName image:[UIImage imageNamed:@"主菜单栏_图标_首页_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_首页_选中.png"]];
-    [[SDWebImageManager sharedManager]downloadImageWithURL:[NSURL URLWithString:menu.menuIcon] options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+    [[SDWebImageManager sharedManager]downloadImageWithURL:[ShareFun fileUrlFormPath:menu.menuIcon] options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
         if (!error) {
             UIImage *scaleImage = [image imageByScaleForSize:CGSizeMake(25, 25)];
             item.image = scaleImage;
