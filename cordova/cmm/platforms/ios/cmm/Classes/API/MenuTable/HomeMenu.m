@@ -10,4 +10,11 @@
 
 @implementation HomeMenu
 
+-(NSString *)menuUrl{
+    if (_menuUrl) {
+        return [_menuUrl stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    }
+    return _menuUrl;
+}
+
 @end

@@ -18,7 +18,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:_url]];
+    [_webView loadRequest:request];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -27,8 +28,9 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
+
+-(void)setUrl:(NSString *)url{
+    _url = url;
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:_url]];
     [_webView loadRequest:request];
 }
