@@ -15,7 +15,7 @@
 //#define BASE_UPLOADSERVERL @"http://123.57.45.235:8090/fz_yxjl"
 //
 #define BASE_SERVERLURL @"http://218.207.182.115:8080/fz_yxjl/MobileService?requestType="
-
+//
 #define BASE_UPLOADSERVERL @"http://218.207.182.115:8080/fz_yxjl"
 
 // URL

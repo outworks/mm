@@ -166,9 +166,9 @@ static MainVC *main;
     MyWebVC *webVC = [[MyWebVC alloc]init];
     webVC.view.backgroundColor = [UIColor whiteColor];
     if ([menu.menuUrl rangeOfString:@"?"].length > 0) {
-        webVC.url = [NSString stringWithFormat:@"%@&userid=%@&token=%@",menu.menuUrl,[ShareValue sharedShareValue].regiterUser.userId,[ShareValue sharedShareValue].regiterUser.key];
+        webVC.url = [NSString stringWithFormat:@"%@&userId=%@&token=%@",menu.menuUrl,[ShareValue sharedShareValue].regiterUser.userId,[ShareValue sharedShareValue].regiterUser.key];
     }else{
-        webVC.url = [NSString stringWithFormat:@"%@?userid=%@&token=%@",menu.menuUrl,[ShareValue sharedShareValue].regiterUser.userId,[ShareValue sharedShareValue].regiterUser.key];
+        webVC.url = [NSString stringWithFormat:@"%@?userId=%@&token=%@",menu.menuUrl,[ShareValue sharedShareValue].regiterUser.userId,[ShareValue sharedShareValue].regiterUser.key];
     }
     UITabBarItem * item = [[UITabBarItem alloc] initWithTitle:menu.menuName image:[UIImage imageNamed:@"主菜单栏_图标_首页_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_首页_选中.png"]];
     [[SDWebImageManager sharedManager]downloadImageWithURL:[ShareFun fileUrlFormPath:menu.menuIcon] options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {

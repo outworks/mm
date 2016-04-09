@@ -12,6 +12,7 @@
 #import "ShareFun.h"
 #import "ShareValue.h"
 #import "UIImageView+WebCache.h"
+#import "UIButton+WebCache.h"
 
 #import "Menu.h"
 #import "ShareValue.h"
@@ -50,15 +51,20 @@
     _menuid_1 = t_menu.menuId;
     _arr_menus_2 = [NSMutableArray array];
     _arr_contens = [NSMutableArray array];
-    
+    __weak MyWorkVC *weakself =  self;
     [self createNavWithTitle:_str_menu_1 withbgImage:nil createMenuItem:^UIView *(int index) {
         
         if (index == 0) {
+            UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(10, (self.v_nav.frame.size.height - 32)/2, 32, 32)];
+            [btn sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
+            btn.layer.cornerRadius = btn.frame.size.width/2;
+            btn.layer.masksToBounds = YES;
+            [btn addTarget:weakself action:@selector(showLeftViewController) forControlEvents:UIControlEventTouchUpInside];
             UIImageView * t_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, (self.v_nav.frame.size.height - 32)/2, 32, 32)];
             [t_image sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl] placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
             t_image.layer.cornerRadius = t_image.frame.size.width/2;
             t_image.layer.masksToBounds = YES;
-            return t_image;
+            return btn;
         }
         
         return nil;
@@ -72,6 +78,10 @@
     
     [self reloadView];
     
+}
+
+-(void)showLeftViewController{
+    [[SliderVC shareSliderVC]showLeftViewController];
 }
 
 -(void)reloadView{

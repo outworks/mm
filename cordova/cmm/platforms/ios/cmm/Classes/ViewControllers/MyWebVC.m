@@ -7,8 +7,9 @@
 //
 
 #import "MyWebVC.h"
+#import "SliderVC.h"
 
-@interface MyWebVC ()
+@interface MyWebVC ()<UIWebViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
@@ -20,6 +21,7 @@
     [super viewDidLoad];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:_url]];
     [_webView loadRequest:request];
+    _webView.delegate = self;
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -44,5 +46,13 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
+    if ([request.URL.absoluteString isEqual:@"native://left"]) {
+        [[SliderVC shareSliderVC]showLeftViewController];
+        return NO;
+    }
+    return YES;
+}
 
 @end
