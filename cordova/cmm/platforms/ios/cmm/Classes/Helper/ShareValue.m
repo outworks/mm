@@ -9,6 +9,7 @@
 #import "ShareValue.h"
 #import "NoticeMacro.h"
 #import "NSUserDefaults+Helpers.h"
+#import "HomeMenu.h"
 
 
 #define SET_MEMBER @"SET_MEMBER"
@@ -133,6 +134,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+
 -(NSString *)selectedMenuId{
     return [[NSUserDefaults standardUserDefaults] stringForKey:SET_SELECTEDMENUID];
 }
@@ -174,6 +176,16 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
 -(void)setPassword:(NSString *)password{
     [[NSUserDefaults standardUserDefaults]setValue:password forKey:SET_PASSWORD];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(NSArray *)getCurrentModules{
+    NSMutableArray *array = [NSMutableArray array];
+    for (HomeMenu * _menu in array) {
+        if ([_menu.parentId isEqual:self.selectedMenuId]) {
+            [array addObject:_menu];
+        }
+    }
+    return array;
 }
 
 #pragma mark - user

@@ -150,7 +150,7 @@
            self.sliderVC.mainVC = mainVC;
             [self.navigationController pushViewController:self.sliderVC animated:YES];
         }else{
-             [[ShareValue sharedShareValue] clearErrorTime];
+            [[ShareValue sharedShareValue] clearErrorTime];
             [ShareValue sharedShareValue].password = _textF_password.text;
             [ShareValue sharedShareValue].loginUserName = _textF_userName.text;
             [ShareValue sharedShareValue].regiterUser

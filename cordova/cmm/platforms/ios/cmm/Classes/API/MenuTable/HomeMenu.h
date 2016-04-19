@@ -15,5 +15,6 @@
 @property(nonatomic,strong) NSString *menuIcon;
 @property(nonatomic,strong) NSString *menuName;
 @property(nonatomic,strong) NSString *menuId;
+@property(nonatomic,strong) NSString *parentId;
 
 @end

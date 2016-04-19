@@ -50,6 +50,8 @@
 
 -(void)clearErrorTime;
 
+-(NSArray *)getCurrentModules;
+
 
 SYNTHESIZE_SINGLETON_FOR_HEADER(ShareValue)
 

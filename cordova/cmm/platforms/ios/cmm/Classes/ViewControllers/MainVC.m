@@ -23,7 +23,7 @@
 @interface MainVC ()
 
 @property(nonatomic,assign) BOOL isBack;
-
+@property(nonatomic,strong) NSMutableDictionary *tabDic;
 
 @end
 
@@ -44,35 +44,54 @@ static MainVC *main;
     self = [super init];
     
     main = self;
-    
+    _tabDic = [[NSMutableDictionary alloc]init];
     return self;
 }
 
 #pragma mark - initTabBar
 
--(void)initTabBar{
-    self.vc_tab = [[UITabBarController alloc] init];
-    [_vc_tab.tabBar setBackgroundColor:UIColorFromRGB(0xefefe)];
-    [_vc_tab.view setFrame:self.view.frame];
-    [_vc_tab.tabBar setTranslucent:NO];
-    [_vc_tab setDelegate:(id<UITabBarControllerDelegate>)self];
-    [self.view addSubview:_vc_tab.view];
+-(UITabBarController *)currentTabBarController{
+    UITabBarController *obj = [_tabDic objectForKey:[ShareValue sharedShareValue].selectedMenuId];
+    if (!obj) {
+        obj = [self newTabBar];
+        [_tabDic setObject:obj forKey:[ShareValue sharedShareValue].selectedMenuId];
+    }
+    return obj;
+}
+
+-(BOOL)isManagerSelected{
+    Menu *menu = [Menu searchSingleWithWhere:[NSString stringWithFormat:@"menuId=%@",[ShareValue sharedShareValue].selectedMenuId] orderBy:nil];
+    if ([menu.menuName isEqual:@"营销经理工作台"]) {
+        return YES;
+    }
+    return NO;
+}
+
+-(void)updateUI{
+    self.vc_tab = [self currentTabBarController];
+    if (_vc_tab.view.superview) {
+        [self.view bringSubviewToFront:_vc_tab.view];
+    }else{
+        [self.view addSubview:_vc_tab.view];
+    }
+    
+}
+
+
+-(UITabBarController *)newTabBar{
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    [tabBarController.tabBar setBackgroundColor:UIColorFromRGB(0xefefe)];
+    [tabBarController.view setFrame:self.view.frame];
+    [tabBarController.tabBar setTranslucent:NO];
+    [tabBarController setDelegate:(id<UITabBarControllerDelegate>)self];
     UIViewController *homeVC = nil;
     UIViewController *visitMapVC = nil;
     UIViewController *mailListVC = nil;
     
-//    HomeMenu *menu = [[HomeMenu alloc]init];
-//    menu.menuName = @"hello";
-//    menu.menuIcon = @"http://www.easyicon.net/api/resizeApi.php?id=1158236&size=128";
-//    menu.menuUrl = @"https://www.baidu.com?ii=1";
-//    
-//    [ShareValue sharedShareValue].module = @[menu];
-////    [ShareValue sharedShareValue].regiterUser.isManager = 0;
-    
-    if ([ShareValue sharedShareValue].module.count > 0) {
-        HomeMenu *menu = [ShareValue sharedShareValue].module[0];
+    if ([ShareValue sharedShareValue].getCurrentModules.count > 0) {
+        HomeMenu *menu = [ShareValue sharedShareValue].getCurrentModules[0];
         homeVC  = [self controllerWithMenu:menu];
-    }else if([ShareValue sharedShareValue].regiterUser.isManager){
+    }else if([self isManagerSelected]){
         homeVC = [[HomeVC alloc] init];
         UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@"首页" image:[UIImage imageNamed:@"主菜单栏_图标_首页_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_首页_选中.png"]];
         homeVC.tabBarItem = item;
@@ -85,81 +104,34 @@ static MainVC *main;
     UIViewController *myWorkVC = [[MyWorkVC alloc] initWithNibName:@"MyWorkVC" bundle:nil];
     UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:@"我的工作" image:[UIImage imageNamed:@"主菜单栏_图标_我的工作_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_我的工作_选中.png"]];
     myWorkVC.tabBarItem = item;
-    
-    if ([ShareValue sharedShareValue].module.count >1) {
-        HomeMenu *menu = [ShareValue sharedShareValue].module[1];
+    if ([ShareValue sharedShareValue].getCurrentModules.count >1) {
+        HomeMenu *menu = [ShareValue sharedShareValue].getCurrentModules[1];
         visitMapVC  = [self controllerWithMenu:menu];
-    }else if([ShareValue sharedShareValue].regiterUser.isManager){
+    }else if([self isManagerSelected]){
         visitMapVC = [[VisitsMapVC alloc] initWithNibName:@"VisitsMapVC" bundle:nil];
         UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@"走访地图" image:[UIImage imageNamed:@"主菜单栏_图标_走访地图_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_走访地图_选中.png"]];
         visitMapVC.tabBarItem = item;
     }
-    if ([ShareValue sharedShareValue].module.count >2) {
-        HomeMenu *menu = [ShareValue sharedShareValue].module[2];
+    if ([ShareValue sharedShareValue].getCurrentModules.count >2) {
+        HomeMenu *menu = [ShareValue sharedShareValue].getCurrentModules[2];
         mailListVC  = [self controllerWithMenu:menu];
-    }else if([ShareValue sharedShareValue].regiterUser.isManager){
+    }else if([self isManagerSelected]){
         mailListVC = [[MailListVC alloc] init];
-        UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@"通讯录" image:[UIImage imageNamed:@"主菜单栏_图标_通讯录_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_通讯录_选中.png"]];        mailListVC.tabBarItem = item;
+        UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@"通讯录" image:[UIImage imageNamed:@"主菜单栏_图标_通讯录_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_通讯录_选中.png"]];
+        mailListVC.tabBarItem = item;
     }
-    
-    /*
-    UINavigationController *homeVCNav = [[UINavigationController alloc]initWithRootViewController:homeVC];
-    UINavigationController *myWorkVCNav = [[UINavigationController  alloc]initWithRootViewController:myWorkVC];
-    UINavigationController *visitMapVNav = [[UINavigationController alloc]initWithRootViewController:visitMapVC];
-    UINavigationController *mailListVCNav = [[UINavigationController alloc]initWithRootViewController:mailListVC];
-     */
-    if([ShareValue sharedShareValue].regiterUser.isManager){
-        _vc_tab.viewControllers = @[homeVC, myWorkVC, visitMapVC,mailListVC];
+    if([self isManagerSelected]){
+        tabBarController.viewControllers = @[homeVC, myWorkVC, visitMapVC,mailListVC];
     }else{
         if (visitMapVC == nil) {
-            _vc_tab.viewControllers = @[homeVC, myWorkVC];
+            tabBarController.viewControllers = @[homeVC, myWorkVC];
         }else if(mailListVC == nil){
-            _vc_tab.viewControllers = @[homeVC, myWorkVC,visitMapVC];
+            tabBarController.viewControllers = @[homeVC, myWorkVC,visitMapVC];
         }else{
-            _vc_tab.viewControllers = @[homeVC, myWorkVC,visitMapVC,mailListVC];
+            tabBarController.viewControllers = @[homeVC, myWorkVC,visitMapVC,mailListVC];
         }
     }
-    
-    
-//    NSArray *ar = _vc_tab.viewControllers;
-//    NSMutableArray *arr_t = [NSMutableArray new];
-//    [ar enumerateObjectsUsingBlock:^(UIViewController *viewController, NSUInteger idx, BOOL *stop)
-//     {
-//         UITabBarItem *item = nil;
-//         switch (idx)
-//         {
-//             case 0:
-//             {
-//                 item = [[UITabBarItem alloc] initWithTitle:@"首页" image:[UIImage imageNamed:@"主菜单栏_图标_首页_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_首页_选中.png"]];
-//                 [[SDWebImageManager sharedManager]downloadImageWithURL:[NSURL URLWithString:@"http://www.easyicon.net/api/resizeApi.php?id=1158236&size=128"] options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-//                     if (!error) {
-//                         item.image = [image imageByScaleForSize:CGSizeMake(25, 25)];
-//                         item.selectedImage = [image imageByScaleForSize:CGSizeMake(25, 25)];;
-//                     }
-//                 }];
-//                 break;
-//             }
-//             case 1:
-//             {
-//                 item = [[UITabBarItem alloc] initWithTitle:@"我的工作" image:[UIImage imageNamed:@"主菜单栏_图标_我的工作_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_我的工作_选中.png"]];
-//                 break;
-//             }
-//             case 2:
-//             {
-//                 item = [[UITabBarItem alloc] initWithTitle:@"走访地图" image:[UIImage imageNamed:@"主菜单栏_图标_走访地图_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_走访地图_选中.png"]];
-//                 break;
-//             }
-//             case 3:
-//             {
-//                 item = [[UITabBarItem alloc] initWithTitle:@"通讯录" image:[UIImage imageNamed:@"主菜单栏_图标_通讯录_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_通讯录_选中.png"]];
-//                 break;
-//             }
-//         }
-//         viewController.tabBarItem = item;
-//         [arr_t addObject:viewController];
-//     }];
-//    _vc_tab.viewControllers = arr_t;
-    
+    return tabBarController;
 }
 
 -(UIViewController *)controllerWithMenu:(HomeMenu *)menu{
@@ -200,7 +172,7 @@ static MainVC *main;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(applicationWillBack) name:NOTIFICATION_APPWILLBACK object:nil];
-    [self initTabBar];
+    [self updateUI];
     [_vc_tab setSelectedIndex:0];
     // Do any additional setup after loading the view from its nib.
     [UserAPI getMenuHttpAPIWithRequest:^(NSArray *result) {
