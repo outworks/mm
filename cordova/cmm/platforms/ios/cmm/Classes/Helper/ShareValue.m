@@ -181,7 +181,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(ShareValue)
 -(NSArray *)getCurrentModules{
     NSMutableArray *array = [NSMutableArray array];
     for (HomeMenu * _menu in array) {
-        if ([_menu.parentId isEqual:self.selectedMenuId]) {
+        if ([_menu.menuWorkMenuId isEqual:self.selectedMenuId]) {
             [array addObject:_menu];
         }
     }
