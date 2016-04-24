@@ -42,7 +42,7 @@ static MainVC *main;
 - (id)init
 {
     self = [super init];
-    
+    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(updateMenu:) name:NOTIFICATION_UPDATAMENU object:nil];
     main = self;
     _tabDic = [[NSMutableDictionary alloc]init];
     return self;
@@ -76,7 +76,9 @@ static MainVC *main;
     }
     
 }
-
+-(void)updateMenu:(NSNotification *)note{
+    [self updateUI];
+}
 
 -(UITabBarController *)newTabBar{
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
@@ -97,6 +99,7 @@ static MainVC *main;
         homeVC.tabBarItem = item;
     }else{
         homeVC = [[UIViewController alloc]init];
+        homeVC.view.backgroundColor = [UIColor whiteColor];
         UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@"首页" image:[UIImage imageNamed:@"主菜单栏_图标_首页_未选中.png"] selectedImage:[UIImage imageNamed:@"主菜单栏_图标_首页_选中.png"]];
         homeVC.tabBarItem = item;
     }
