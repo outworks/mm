@@ -77,10 +77,10 @@
     Menu *t_menu = _arr_item[indexPath.row];
     
     //测试在线更新
-//    t_menu.menuName = nil;
-//    t_menu.isnavtive = @"0";
-//    t_menu.version = @"0.3";
-//    t_menu.iosurl = @"http://192.168.1.5:8080/www.zip";
+    t_menu.menuName = nil;
+    t_menu.isnavtive = @"0";
+    t_menu.version = @"0.3";
+    t_menu.iosurl = @"http://192.168.46.200:8080/test.zip";
     if ([t_menu.menuName isEqualToString:@"走访任务"]) {
         TaskListVC *t_vc = [[TaskListVC alloc] init];
         UINavigationController *t_nav = [[UINavigationController alloc] initWithRootViewController:t_vc];
@@ -91,9 +91,7 @@
         UINavigationController *t_nav = [[UINavigationController alloc] initWithRootViewController:nav];
         nav.navHidden = YES;
          [ApplicationDelegate.viewController presentViewController:t_nav animated:YES completion:nil];
-    }
-    /*
-    else{
+    }else{
         if (![@"1" isEqual:t_menu.isnavtive]) {
             if (t_menu.iosurl.length > 0 && [t_menu.iosurl.lastPathComponent.pathExtension isEqual:@"zip"]) {
                 OfflineMenu *offlineMenu = [OfflineMenu searchSingleWithWhere:[NSString stringWithFormat:@"menuid='%@'",t_menu.menuId] orderBy:nil];
@@ -155,15 +153,13 @@
                 }
             }
         }
-     
     }
-    */
 }
 
 -(void)openOfflineMenu:(Menu *)menu{
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,  NSUserDomainMask, YES);
     NSString *docPath = [path objectAtIndex:0];
-    NSURL *fileUrl = [[NSURL alloc]initFileURLWithPath:[NSString stringWithFormat:@"%@/%@/%@",docPath,menu.menuId,@"www"] isDirectory:YES];
+    NSURL *fileUrl = [[NSURL alloc]initFileURLWithPath:[NSString stringWithFormat:@"%@/%@",docPath,menu.menuId] isDirectory:YES];
     NSString *startPage = [NSString stringWithFormat:@"%@?userId=%@",@"index.html",[ShareValue sharedShareValue].regiterUser.userId];
     LKNavController *nav = [[LKNavController alloc]init];
     nav.wwwFolderName = fileUrl.absoluteString;
