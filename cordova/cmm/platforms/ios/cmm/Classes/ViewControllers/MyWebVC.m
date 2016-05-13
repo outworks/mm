@@ -52,6 +52,12 @@
         [[SliderVC shareSliderVC]showLeftViewController];
         return NO;
     }
+    if ([request.URL.absoluteString isEqual:@"native://close"]) {
+       [self dismissViewControllerAnimated:YES completion:^{
+           
+       }];
+       return NO;
+    }
     return YES;
 }
 
