@@ -227,7 +227,7 @@
         _lb_menu.text = t_menu.menuName;
         [ShareValue sharedShareValue].selectedMenuId = t_menu.menuId;
         [[NSNotificationCenter defaultCenter]  postNotificationName:NOTIFICATION_UPDATAMENU object:t_menu];
-        
+        [[SliderVC shareSliderVC]closeSideBar];
     }
     
 }
@@ -317,7 +317,7 @@
 -(void)handleUpdataUser:(NSNotification *)note{
     
     [_lb_userName setText:[ShareValue sharedShareValue].regiterUser.userName];
-    [_lb_regional setText:[ShareValue sharedShareValue].regiterUser.jobName];
+//    [_lb_regional setText:[ShareValue sharedShareValue].regiterUser.jobName];
     [_textf_signName setText:[ShareValue sharedShareValue].regiterUser.signName];
     [_imageV_userIcon sd_setImageWithURL:[ShareFun fileUrlFormPath:[ShareValue sharedShareValue].regiterUser.signImgUrl]  placeholderImage:[UIImage imageNamed:@"登录页_图标_logo"]];
 }

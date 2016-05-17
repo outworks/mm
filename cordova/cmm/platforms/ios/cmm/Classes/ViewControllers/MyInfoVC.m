@@ -47,7 +47,7 @@
 
 -(void)updateUserInterface{
     
-    _lb_mobile.text = [ShareValue sharedShareValue].regiterUser.mobilePhone;
+    _lb_mobile.text = [ShareValue sharedShareValue].regiterUser.loginName;
     
     _lb_nickname.text = [ShareValue sharedShareValue].regiterUser.userName;
     
