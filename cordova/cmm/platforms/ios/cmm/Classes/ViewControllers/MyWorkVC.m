@@ -86,7 +86,7 @@
 
 -(void)reloadView{
 
-    _arr_menus_2 = [Menu searchWithWhere:[NSString stringWithFormat:@"parentId=%@ and level=2",_menuid_1] orderBy:@"menuId" offset:0 count:0];
+    _arr_menus_2 = [Menu searchWithWhere:[NSString stringWithFormat:@"parentId=%@ and level=2",_menuid_1] orderBy:@"menuCatalog" offset:0 count:0];
     NSMutableArray *t_arr_menu = [NSMutableArray array];
     if ([_arr_menus_2 count] != 0) {
         for (Menu *t_menu in _arr_menus_2) {
@@ -176,7 +176,7 @@
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             
             Menu *t_menu = _arr_menus_2[index];
-            NSMutableArray *t_arr = [Menu searchWithWhere:[NSString stringWithFormat:@"parentId=%@ and level=3",t_menu.menuId] orderBy:@"menuId" offset:0 count:0];
+            NSMutableArray *t_arr = [Menu searchWithWhere:[NSString stringWithFormat:@"parentId=%@ and level=3",t_menu.menuId] orderBy:@"menuCatalog" offset:0 count:0];
             [self buildContentVC:t_arr with:t_menu withIndex:index];
            
         });

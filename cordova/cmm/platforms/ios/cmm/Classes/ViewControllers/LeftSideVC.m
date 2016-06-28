@@ -56,7 +56,7 @@
     [super viewDidLoad];
     
     
-    _arr_menus = [Menu searchWithWhere:[NSString stringWithFormat:@"level=1"] orderBy:@"menuId" offset:0 count:0];
+    _arr_menus = [Menu searchWithWhere:[NSString stringWithFormat:@"level=1"] orderBy:@"menuCatalog" offset:0 count:0];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataImage:) name:NOTIFICATION_UPDATAIMAGE object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleUpdataUser:) name:NOTIFICATION_UPDATAUSERINFO object:nil];
